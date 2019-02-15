@@ -5,18 +5,24 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.character_select_view.*
 
-class character_select_controller : AppCompatActivity() {
+class CharacterSelectController : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.character_select_view)
 
-        configure_buttons()
+        runSetup()
 
     }
 
-    fun configure_buttons(){
-        character_select_button.setOnClickListener {
-            val intent = Intent(this, game_controller::class.java)
+    fun runSetup(){
+        configureButtons()
+    }
+
+    fun configureButtons(){
+        characterSelectButton.setOnClickListener {
+            val intent = Intent(this, GameController::class.java)
+            val name = "Reggie"
+            intent.putExtra("name", name)
             this.startActivity(intent)
         }
     }

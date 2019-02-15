@@ -7,27 +7,26 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/title_text"
+        android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:contentDescription="Placeholder for where the title will go"
         android:text="Title Placeholder"
         android:textAlignment="center"
         android:textColor="@android:color/darker_gray"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/play_button"
+        app:layout_constraintBottom_toTopOf="@+id/playButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/play_button"
+        android:id="@+id/playButton"
         android:layout_width="500dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
@@ -35,12 +34,12 @@
         android:layout_marginBottom="32dp"
         android:text="Play"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@+id/shop_button"
+        app:layout_constraintBottom_toTopOf="@+id/shopButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/shop_button"
+        android:id="@+id/shopButton"
         android:layout_width="500dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
@@ -54,7 +53,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/settings_button"
+        android:id="@+id/settingsButton"
         android:layout_width="500dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
@@ -64,6 +63,6 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shop_button" />
+        app:layout_constraintTop_toBottomOf="@+id/shopButton" />
 
 </android.support.constraint.ConstraintLayout>

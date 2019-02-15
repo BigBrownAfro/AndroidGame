@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main_menu_controller">
+        <activity android:name=".MainMenuController">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,19 +17,19 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".character_select_controller">
+        <activity android:name=".CharacterSelectController">
 
         </activity>
 
-        <activity android:name=".game_controller">
+        <activity android:name=".GameController">
 
         </activity>
 
-        <activity android:name=".shop_controller">
+        <activity android:name=".ShopController">
 
         </activity>
 
-        <activity android:name=".settings_controller">
+        <activity android:name=".SettingsController">
 
         </activity>
     </application>
