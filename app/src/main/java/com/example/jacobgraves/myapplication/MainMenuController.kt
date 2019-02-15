@@ -8,16 +8,18 @@ import kotlinx.android.synthetic.main.main_menu_view.*
 
 class MainMenuController : AppCompatActivity() {
 
+    var hi = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_menu_view)
 
         runSetup()
-
     }
 
     fun runSetup(){
         configureButtons()
+        println("Setup Complete in menu")
     }
 
     fun configureButtons(){
@@ -30,8 +32,6 @@ class MainMenuController : AppCompatActivity() {
         settingsButton.setOnClickListener {
             settingsButtonClicked()
         }
-
-        //settings_button.setOnTouchListener()
     }
 
     fun playButtonClicked(){

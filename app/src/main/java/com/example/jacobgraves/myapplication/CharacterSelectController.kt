@@ -11,11 +11,11 @@ class CharacterSelectController : AppCompatActivity() {
         setContentView(R.layout.character_select_view)
 
         runSetup()
-
     }
 
     fun runSetup(){
         configureButtons()
+        println("Setup Complete in character select")
     }
 
     fun configureButtons(){
