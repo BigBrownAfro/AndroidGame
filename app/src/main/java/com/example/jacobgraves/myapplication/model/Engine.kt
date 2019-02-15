@@ -18,8 +18,10 @@ class Engine {
             println("It's been 60 frames")
             frameCount = 61
         }
-        imageX += 1F
-        imageY += 1F
+
+       // imageX += 1F
+       // imageY += 1F
+
         frameCount -= 1
     }
 }
