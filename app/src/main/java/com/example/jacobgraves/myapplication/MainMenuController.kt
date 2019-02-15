@@ -26,6 +26,8 @@ class main_menu_controller : AppCompatActivity() {
         settings_button.setOnClickListener {
             settings_button_clicked()
         }
+
+        //settings_button.setOnTouchListener()
     }
 
     fun play_button_clicked(){
