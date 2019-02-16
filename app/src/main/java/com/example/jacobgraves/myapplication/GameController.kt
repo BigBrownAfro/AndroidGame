@@ -20,6 +20,7 @@ class GameController : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game_view)
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         runInitSetup()
     }
@@ -105,6 +106,8 @@ class GameController : AppCompatActivity() {
         if (joystickImage.x > 500){
             gameEngine.player.moveRight()
         }
+        //print("" + joystickImage.x + " ")
+        //println(joystickImage.y)
         playerImage.x = gameEngine.player.getXPosition()
         playerImage.y = gameEngine.player.getYPosition()
     }

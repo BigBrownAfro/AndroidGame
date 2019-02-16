@@ -3,6 +3,7 @@ package com.example.jacobgraves.myapplication
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import com.example.jacobgraves.myapplication.model.Player
 import kotlinx.android.synthetic.main.main_menu_view.*
 
@@ -11,6 +12,7 @@ class MainMenuController : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_menu_view)
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         runSetup()
     }

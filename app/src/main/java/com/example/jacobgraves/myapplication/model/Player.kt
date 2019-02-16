@@ -14,7 +14,10 @@ class Player{
     var image = R.drawable.isaac
     lateinit var moveLeftAnimationSet:IntArray
     lateinit var moveRightAnimationSet:IntArray
+    lateinit var moveUpAnimationSet:IntArray
+    lateinit var moveDownAnimationSet:IntArray
     var animationCounter:Int = 0
+    var lastDirection = "up"
 
     constructor(characterName: String){
         name = characterName
@@ -119,8 +122,26 @@ class Player{
             moveRightAnimationSet[0] = (-1) * R.drawable.mario_stand
             moveRightAnimationSet[1] = (-1) * R.drawable.mario_run_1
             moveRightAnimationSet[2] = (-1) * R.drawable.mario_run_2
+            moveUpAnimationSet = IntArray(4)
+            moveUpAnimationSet[0] = R.drawable.mario_run_up_1
+            moveUpAnimationSet[1] = R.drawable.mario_run_up_2
+            moveUpAnimationSet[2] = R.drawable.mario_run_up_1
+            moveUpAnimationSet[3] = R.drawable.mario_run_up_3
+            moveDownAnimationSet = IntArray(4)
+            moveDownAnimationSet[0] = R.drawable.mario_face_forward
+            moveDownAnimationSet[1] = R.drawable.mario_run_down_1
+            moveDownAnimationSet[2] = R.drawable.mario_face_forward
+            moveDownAnimationSet[3] = R.drawable.mario_run_down_2
         }else{
             image = R.drawable.isaac
+            moveLeftAnimationSet = IntArray(1)
+            moveLeftAnimationSet[0] = R.drawable.isaac
+            moveRightAnimationSet = IntArray(1)
+            moveRightAnimationSet[0] = R.drawable.isaac
+            moveUpAnimationSet = IntArray(1)
+            moveUpAnimationSet[0] = R.drawable.isaac
+            moveDownAnimationSet = IntArray(1)
+            moveDownAnimationSet[0] = R.drawable.isaac
         }
     }
 
