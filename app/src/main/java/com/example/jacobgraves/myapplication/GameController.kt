@@ -7,26 +7,37 @@ import android.view.View
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.model.Engine
 import kotlinx.android.synthetic.main.game_view.*
-import kotlinx.android.synthetic.main.main_menu_view.*
 import java.util.*
 import kotlin.concurrent.schedule
 
 class GameController : AppCompatActivity() {
     lateinit var gameEngine: Engine
     var timer = Timer()
-    lateinit var image: ImageView
+    lateinit var joystickListener:View.OnTouchListener
+    var timerSetup = false
+    var tempImageResource = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game_view)
 
         runInitSetup()
+    }
 
-        println("x " + image.x)
-        println("y " + image.y)
 
-        var listener = View.OnTouchListener(function = { view, motionEvent ->
+    fun runInitSetup() {
+        gameEngine = Engine(intent.getStringExtra("name"))
+        timer.schedule(1,16) {
+            update()
+        }
+        setupImages()
+        setupButtons()
+        setupListeners()
+        println("Init Game Setup Complete")
+    }
 
+    fun setupListeners(){
+        joystickListener = View.OnTouchListener(function = { view, motionEvent ->
 
             if (motionEvent.action == MotionEvent.ACTION_MOVE) {
 
@@ -44,54 +55,25 @@ class GameController : AppCompatActivity() {
                 if (view.x > 600F){
                     view.x = 600F
                 }
-
             }
-
             true
-
         })
-
-
-        joystickImageView.setOnTouchListener(listener)
-
-
-
-    }
-
-
-    fun runInitSetup() {
-        gameEngine = Engine(intent.getStringExtra("name"))
-        timer.schedule(1,16) {
-            update()
-
-        }
-        setupImages()
-        println("Init Game Setup Complete")
-
-        moveUpButton.setOnClickListener {
-            playerMoveUp()
-        }
-        moveDownButton.setOnClickListener {
-            playerMoveDown()
-        }
-        moveRightButton.setOnClickListener {
-            playerMoveRight()
-        }
-        moveLeftButton.setOnClickListener() {
-            playerMoveLeft()
-        }
-    }
-
-    fun runSetup() {
-
-        timer.schedule(1,16) {
-            gameEngine.update()
-        }
-        println("Regular Game Setup Complete")
+        joystickImage.setOnTouchListener(joystickListener)
     }
 
     fun setupImages(){
-        image = charimageView
+        playerImage.setImageResource(gameEngine.player.image)
+        playerImage.scaleX = .5f
+        playerImage.scaleY = .5f
+        playerImage.x = gameEngine.player.getXPosition()
+        playerImage.y = gameEngine.player.getYPosition()
+
+        joystickImage.scaleX = .5f
+        joystickImage.scaleY = .5f
+    }
+
+    fun setupButtons(){
+
     }
 
     override fun onBackPressed() {
@@ -101,35 +83,41 @@ class GameController : AppCompatActivity() {
     }
 
     fun update(){
-        gameEngine.update()
-
-        if (joystickImageView.x > 500){
-            playerMoveRight()
-        }
-        if (joystickImageView.x < 0){
-            playerMoveLeft()
-        }
-        if (joystickImageView.y > 800){
-            playerMoveDown()
-        }
-        if (joystickImageView.y < 400){
-            playerMoveUp()
-        }
-       // image.x = gameEngine.imageX
-       // image.y = gameEngine.imageY
-    }
-    fun playerMoveUp(){
-        image.y = image.y - 10
-    }
-    fun playerMoveDown(){
-        image.y = image.y + 10
-    }
-    fun playerMoveRight(){
-        image.x = image.x + 10
-    }
-    fun playerMoveLeft(){
-        image.x = image.x - 10
+        runOnUiThread(Runnable() {
+            run() {
+                gameEngine.update()
+                movePlayer()
+                updateImages()
+            }
+        });
     }
 
+    fun movePlayer(){
+        if (joystickImage.y < 400){
+            gameEngine.player.moveUp()
+        }
+        if (joystickImage.y > 800){
+            gameEngine.player.moveDown()
+        }
+        if (joystickImage.x < 0){
+            gameEngine.player.moveLeft()
+        }
+        if (joystickImage.x > 500){
+            gameEngine.player.moveRight()
+        }
+        playerImage.x = gameEngine.player.getXPosition()
+        playerImage.y = gameEngine.player.getYPosition()
+    }
 
+    fun updateImages(){
+        tempImageResource = gameEngine.player.image
+        if (tempImageResource < 0){
+            tempImageResource *= -1
+            playerImage.setImageResource(tempImageResource)
+            playerImage.rotationY = 180f
+        }else{
+            playerImage.rotationY = 0f
+            playerImage.setImageResource(gameEngine.player.image)
+        }
+    }
 }
