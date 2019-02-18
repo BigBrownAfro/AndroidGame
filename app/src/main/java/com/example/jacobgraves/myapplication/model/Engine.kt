@@ -22,6 +22,8 @@ class Engine {
         frameCount += 1
 
         player.decelerate()
+        moveBullets()
+        checkHitboxes()
     }
 
     fun checkHitboxes(){
@@ -72,6 +74,23 @@ class Engine {
                 player.image = R.drawable.mario_stand * (-1)
             }else{
                 player.image = R.drawable.mario_peace
+            }
+        }
+        for (bullet in player.bulletArray){
+            if (bullet != null){
+                if (bullet.animationCounter >= bullet.animationSet.size){
+                    bullet.animationCounter = 0
+                }
+                bullet.image = bullet.animationSet[bullet.animationCounter]
+                bullet.animationCounter += 1
+            }
+        }
+    }
+
+    fun moveBullets(){
+        for (bullet in player.bulletArray){
+            if (bullet != null){
+                bullet.move()
             }
         }
     }

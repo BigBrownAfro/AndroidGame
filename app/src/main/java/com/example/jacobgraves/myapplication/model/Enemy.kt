@@ -2,8 +2,8 @@ package com.example.jacobgraves.myapplication.model
 
 import com.example.jacobgraves.myapplication.R
 
-class Player{
-    var name :String
+abstract class Enemy{
+    var name = "Enemy"
     private var healthValue :Int = 0
     private var attackValue :Int = 0
     private var movementSpeed :Float = 0.0f
@@ -18,38 +18,19 @@ class Player{
     lateinit var moveDownAnimationSet:IntArray
     var animationCounter:Int = 0
     var lastDirection = "down"
-    var bulletArray:Array<Bullet?>
-    var bulletCounter = 0
 
-    constructor(characterName: String){
-        name = characterName
-        if (name == "Dead Guy"){
-            setHealthValue(-100)
-            setAttackValue(1000)
-            setMovementSpeed(1.0f)
-        }else if(name == "Reggie"){
-            setHealthValue(3)
-            setAttackValue(1)
-            setMovementSpeed(1.5f)
-        }else if(name == "Frank"){
-            setHealthValue(2)
-            setAttackValue(2)
-            setMovementSpeed(2.0f)
-        }
-        else if(name == "Psychomantis") {
-            setHealthValue(1)
-            setAttackValue(3)
-            setMovementSpeed(1.5f)
-        }
+    constructor(){
+        setHealthValue(5)
+        setAttackValue(1)
+        setMovementSpeed(1.0f)
         setXPosition(50.0f)
         setYPosition(50.0f)
-        bulletArray = Array(100){null}
 
-        assignPictures(characterName)
+        //assignImages()
     }
 
 
-//Setters----------------------------
+    //Setters----------------------------
     fun setHealthValue(x: Int){
         if (x < 0){
             healthValue = 0
@@ -91,7 +72,7 @@ class Player{
     }
 
 
-//Getters----------------------------
+    //Getters----------------------------
     fun getHealthValue(): Int{
         return healthValue
     }
@@ -114,39 +95,28 @@ class Player{
 
 //Other Stuff------------------------
 
-    fun assignPictures(name:String){
-        if(name.equals("Reggie")){
-            image = R.drawable.mario_peace
-            moveLeftAnimationSet = IntArray(3)
-            moveLeftAnimationSet[0] = R.drawable.mario_stand
-            moveLeftAnimationSet[1] = R.drawable.mario_run_1
-            moveLeftAnimationSet[2] = R.drawable.mario_run_2
-            moveRightAnimationSet = IntArray(3)
-            moveRightAnimationSet[0] = (-1) * R.drawable.mario_stand
-            moveRightAnimationSet[1] = (-1) * R.drawable.mario_run_1
-            moveRightAnimationSet[2] = (-1) * R.drawable.mario_run_2
-            moveUpAnimationSet = IntArray(4)
-            moveUpAnimationSet[0] = R.drawable.mario_run_up_1
-            moveUpAnimationSet[1] = R.drawable.mario_run_up_2
-            moveUpAnimationSet[2] = R.drawable.mario_run_up_1
-            moveUpAnimationSet[3] = R.drawable.mario_run_up_3
-            moveDownAnimationSet = IntArray(4)
-            moveDownAnimationSet[0] = R.drawable.mario_face_forward
-            moveDownAnimationSet[1] = R.drawable.mario_run_down_1
-            moveDownAnimationSet[2] = R.drawable.mario_face_forward
-            moveDownAnimationSet[3] = R.drawable.mario_run_down_2
-        }else{
-            image = R.drawable.isaac
-            moveLeftAnimationSet = IntArray(1)
-            moveLeftAnimationSet[0] = R.drawable.isaac
-            moveRightAnimationSet = IntArray(1)
-            moveRightAnimationSet[0] = R.drawable.isaac
-            moveUpAnimationSet = IntArray(1)
-            moveUpAnimationSet[0] = R.drawable.isaac
-            moveDownAnimationSet = IntArray(1)
-            moveDownAnimationSet[0] = R.drawable.isaac
-        }
-    }
+    /*
+    fun assignImages(){
+        image = R.drawable.mario_peace
+        moveLeftAnimationSet = IntArray(3)
+        moveLeftAnimationSet[0] = R.drawable.mario_stand
+        moveLeftAnimationSet[1] = R.drawable.mario_run_1
+        moveLeftAnimationSet[2] = R.drawable.mario_run_2
+        moveRightAnimationSet = IntArray(3)
+        moveRightAnimationSet[0] = (-1) * R.drawable.mario_stand
+        moveRightAnimationSet[1] = (-1) * R.drawable.mario_run_1
+        moveRightAnimationSet[2] = (-1) * R.drawable.mario_run_2
+        moveUpAnimationSet = IntArray(4)
+        moveUpAnimationSet[0] = R.drawable.mario_run_up_1
+        moveUpAnimationSet[1] = R.drawable.mario_run_up_2
+        moveUpAnimationSet[2] = R.drawable.mario_run_up_1
+        moveUpAnimationSet[3] = R.drawable.mario_run_up_3
+        moveDownAnimationSet = IntArray(4)
+        moveDownAnimationSet[0] = R.drawable.mario_face_forward
+        moveDownAnimationSet[1] = R.drawable.mario_run_down_1
+        moveDownAnimationSet[2] = R.drawable.mario_face_forward
+        moveDownAnimationSet[3] = R.drawable.mario_run_down_2
+    }*/
 
     fun moveUp(){
         accelerationY -= 2f * movementSpeed;
@@ -191,13 +161,5 @@ class Player{
         }else {if (accelerationY > 0){
             accelerationY -= movementSpeed
         }}
-    }
-
-    fun shoot(direction:String){
-        if (bulletCounter > 99){
-            bulletCounter = 0
-        }
-        bulletArray[bulletCounter] = Bullet(this,direction)
-        bulletCounter++
     }
 }

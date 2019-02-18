@@ -1,6 +1,7 @@
 package com.example.jacobgraves.myapplication
 
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
@@ -16,6 +17,7 @@ class GameController : AppCompatActivity() {
     lateinit var joystickListener:View.OnTouchListener
     var timerSetup = false
     var tempImageResource = 0
+    lateinit var playerBullets:Array<ImageView>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,12 @@ class GameController : AppCompatActivity() {
         setupImages()
         setupButtons()
         setupListeners()
+        val constraintLayout = findViewById(R.id.constraintLayout) as ConstraintLayout
+        playerBullets = Array(100){ImageView(this)}
+        //playerBullets[0] = bulletImage
+        for (i in playerBullets){
+            constraintLayout.addView(i)
+        }
         println("Init Game Setup Complete")
     }
 
@@ -60,6 +68,10 @@ class GameController : AppCompatActivity() {
             true
         })
         joystickImage.setOnTouchListener(joystickListener)
+
+        fireButton.setOnClickListener {
+            gameEngine.player.shoot("right")
+        }
     }
 
     fun setupImages(){
@@ -121,6 +133,17 @@ class GameController : AppCompatActivity() {
         }else{
             playerImage.rotationY = 0f
             playerImage.setImageResource(gameEngine.player.image)
+        }
+        var count = 0
+        for (bullet in gameEngine.player.bulletArray){
+            if (bullet != null){
+                playerBullets[count].setImageResource(bullet.image)
+                playerBullets[count].x = bullet.xPosition
+                playerBullets[count].y = bullet.yPosition
+                playerBullets[count].isEnabled = true
+                playerBullets[count].isActivated = true
+            }
+            count++
         }
     }
 }
