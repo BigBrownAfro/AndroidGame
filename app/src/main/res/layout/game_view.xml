@@ -8,14 +8,6 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/playerImage"
-        android:layout_width="163dp"
-        android:layout_height="167dp"
-        app:srcCompat="@android:drawable/btn_star_big_on"
-        tools:layout_editor_absoluteX="165dp"
-        tools:layout_editor_absoluteY="31dp" />
-
-    <ImageView
         android:id="@+id/joystickImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -44,10 +36,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/bulletImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/bullet"
-        tools:layout_editor_absoluteX="430dp"
-        tools:layout_editor_absoluteY="46dp" />
+        android:id="@+id/playerImage"
+        android:layout_width="41dp"
+        android:layout_height="74dp"
+        app:srcCompat="@drawable/mario_peace"
+        tools:layout_editor_absoluteX="158dp"
+        tools:layout_editor_absoluteY="43dp" />
 </android.support.constraint.ConstraintLayout>

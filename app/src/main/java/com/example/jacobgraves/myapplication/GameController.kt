@@ -38,7 +38,6 @@ class GameController : AppCompatActivity() {
         setupListeners()
         val constraintLayout = findViewById(R.id.constraintLayout) as ConstraintLayout
         playerBullets = Array(100){ImageView(this)}
-        //playerBullets[0] = bulletImage
         for (i in playerBullets){
             constraintLayout.addView(i)
         }
@@ -138,10 +137,10 @@ class GameController : AppCompatActivity() {
         for (bullet in gameEngine.player.bulletArray){
             if (bullet != null){
                 playerBullets[count].setImageResource(bullet.image)
-                playerBullets[count].x = bullet.xPosition
-                playerBullets[count].y = bullet.yPosition
-                playerBullets[count].isEnabled = true
-                playerBullets[count].isActivated = true
+                playerBullets[count].x = bullet.xPosition + (playerImage.width/2)
+                playerBullets[count].y = bullet.yPosition + (playerImage.height/2)
+                //playerBullets[count].isEnabled = true
+                //playerBullets[count].isActivated = true
             }
             count++
         }

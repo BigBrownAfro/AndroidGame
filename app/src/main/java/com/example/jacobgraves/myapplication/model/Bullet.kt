@@ -22,7 +22,7 @@ class Bullet {
         friendly = true
         size = 1f
         type = "regular"
-        movementSpeed = 3f
+        movementSpeed = 10f
         xPosition = player.getXPosition()
         yPosition = player.getYPosition()
         direction = bulletDirection
