@@ -12,7 +12,8 @@ class Bullet {
     var type:String
     var xPosition:Float
     var yPosition:Float
-    var movementSpeed:Float
+    var xMovementSpeed:Float
+    var yMovementSpeed:Float
     var direction:String
     var animationCounter = 0
 
@@ -22,7 +23,16 @@ class Bullet {
         friendly = true
         size = 1f
         type = "regular"
-        movementSpeed = 10f
+        if(player.accelerationX < 0f){
+            xMovementSpeed = 10f
+        }else{
+            xMovementSpeed = player.accelerationX+10f
+        }
+        if (player.accelerationY < 0f){
+            yMovementSpeed = 10f
+        }else{
+            yMovementSpeed = player.accelerationY+10f
+        }
         xPosition = player.getXPosition()
         yPosition = player.getYPosition()
         direction = bulletDirection
@@ -37,7 +47,8 @@ class Bullet {
         friendly = true
         size = 1f
         type = bulletType
-        movementSpeed = 3f
+        xMovementSpeed = player.accelerationX+10f
+        yMovementSpeed = player.accelerationY+10f
         xPosition = player.getXPosition()
         yPosition = player.getYPosition()
         direction = bulletDirection
@@ -52,7 +63,8 @@ class Bullet {
         friendly = false
         size = 1f
         type = "regular"
-        movementSpeed = 3f
+        xMovementSpeed = enemy.accelerationX+10f
+        yMovementSpeed = enemy.accelerationY+10f
         xPosition = enemy.getXPosition()
         yPosition = enemy.getYPosition()
         direction = bulletDirection
@@ -67,7 +79,8 @@ class Bullet {
         friendly = false
         size = 1f
         type = bulletType
-        movementSpeed = 3f
+        xMovementSpeed = enemy.accelerationX+10f
+        yMovementSpeed = enemy.accelerationY+10f
         xPosition = enemy.getXPosition()
         yPosition = enemy.getYPosition()
         direction = bulletDirection
@@ -92,13 +105,13 @@ class Bullet {
 
     fun move(){
         if(direction == "up"){
-            yPosition -= movementSpeed
+            yPosition -= yMovementSpeed
         }else if(direction == "down"){
-            yPosition += movementSpeed
+            yPosition += yMovementSpeed
         }else if(direction == "left"){
-            xPosition -= movementSpeed
+            xPosition -= xMovementSpeed
         }else if(direction == "right"){
-            xPosition += movementSpeed
+            xPosition += xMovementSpeed
         }
     }
 
