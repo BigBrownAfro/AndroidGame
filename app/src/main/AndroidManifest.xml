@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainMenuController">
+        <activity android:name=".MainMenuController"
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,19 +18,23 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CharacterSelectController">
+        <activity android:name=".CharacterSelectController"
+            android:screenOrientation="sensorLandscape">
 
         </activity>
 
-        <activity android:name=".GameController">
+        <activity android:name=".GameController"
+            android:screenOrientation="sensorLandscape">
 
         </activity>
 
-        <activity android:name=".ShopController">
+        <activity android:name=".ShopController"
+            android:screenOrientation="sensorLandscape">
 
         </activity>
 
-        <activity android:name=".SettingsController">
+        <activity android:name=".SettingsController"
+            android:screenOrientation="sensorLandscape">
 
         </activity>
     </application>

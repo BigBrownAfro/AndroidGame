@@ -42,4 +42,12 @@
         app:srcCompat="@drawable/mario_peace"
         tools:layout_editor_absoluteX="158dp"
         tools:layout_editor_absoluteY="43dp" />
+
+    <ImageView
+        android:id="@+id/enemyImage"
+        android:layout_width="51dp"
+        android:layout_height="57dp"
+        tools:layout_editor_absoluteX="303dp"
+        tools:layout_editor_absoluteY="74dp"
+        tools:srcCompat="@tools:sample/avatars[0]" />
 </android.support.constraint.ConstraintLayout>

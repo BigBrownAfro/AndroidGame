@@ -5,9 +5,11 @@ import com.example.jacobgraves.myapplication.R
 class Engine {
     var player: Player
     var frameCount: Int
+    var enemy:Freezo
 
     constructor(name:String){
         player = Player(name)
+        enemy = Freezo()
         frameCount = 0
     }
 
@@ -24,6 +26,11 @@ class Engine {
         player.decelerate()
         moveBullets()
         checkHitboxes()
+        moveEnemies()
+    }
+
+    fun moveEnemies(){
+        enemy.pursuePlayer(player)
     }
 
     fun checkHitboxes(){

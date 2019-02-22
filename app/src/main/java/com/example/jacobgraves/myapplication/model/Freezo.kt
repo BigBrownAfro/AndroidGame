@@ -7,11 +7,12 @@ class Freezo(): Enemy() {
         setHealthValue(20)
         setAttackValue(1)
         setMovementSpeed(2.0f)
-
-        assignImages()
     }
 
-    fun assignImages(){
-        
+    fun pursuePlayer(player:Player){
+        if(player.getXPosition() < this.getXPosition() && this.getXPosition() - player.getXPosition() > 100){
+            moveLeft()
+        }
     }
+
 }

@@ -9,8 +9,8 @@ abstract class Enemy{
     private var movementSpeed :Float = 0.0f
     var accelerationX:Float = 0.0f
     var accelerationY:Float = 0.0f
-    private var xPosition :Float = 0.0f
-    private var yPosition :Float = 0.0f
+    private var xPosition :Float = 0f
+    private var yPosition :Float = 0f
     var image = R.drawable.isaac
     lateinit var moveLeftAnimationSet:IntArray
     lateinit var moveRightAnimationSet:IntArray
@@ -23,10 +23,10 @@ abstract class Enemy{
         setHealthValue(5)
         setAttackValue(1)
         setMovementSpeed(1.0f)
-        setXPosition(50.0f)
-        setYPosition(50.0f)
+        setXPosition(1000f)
+        setYPosition(300f)
 
-        //assignImages()
+        assignImages()
     }
 
 
@@ -95,7 +95,7 @@ abstract class Enemy{
 
 //Other Stuff------------------------
 
-    /*
+
     fun assignImages(){
         image = R.drawable.mario_peace
         moveLeftAnimationSet = IntArray(3)
@@ -116,7 +116,7 @@ abstract class Enemy{
         moveDownAnimationSet[1] = R.drawable.mario_run_down_1
         moveDownAnimationSet[2] = R.drawable.mario_face_forward
         moveDownAnimationSet[3] = R.drawable.mario_run_down_2
-    }*/
+    }
 
     fun moveUp(){
         accelerationY -= 2f * movementSpeed;

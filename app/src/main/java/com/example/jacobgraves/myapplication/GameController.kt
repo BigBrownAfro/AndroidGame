@@ -41,6 +41,9 @@ class GameController : AppCompatActivity() {
         for (i in playerBullets){
             constraintLayout.addView(i)
         }
+        enemyImage.setImageResource(gameEngine.enemy.image)
+        enemyImage.x = 1000f
+        enemyImage.y = 300f
         println("Init Game Setup Complete")
     }
 
@@ -124,6 +127,8 @@ class GameController : AppCompatActivity() {
     }
 
     fun updateImages(){
+        enemyImage.x = gameEngine.enemy.getXPosition()
+        enemyImage.y = gameEngine.enemy.getYPosition()
         tempImageResource = gameEngine.player.image
         if (tempImageResource < 0){
             tempImageResource *= -1
