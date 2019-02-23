@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/constraintLayout"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -37,17 +36,17 @@
 
     <ImageView
         android:id="@+id/playerImage"
-        android:layout_width="41dp"
-        android:layout_height="74dp"
+        android:layout_width="100dp"
+        android:layout_height="200dp"
         app:srcCompat="@drawable/mario_peace"
         tools:layout_editor_absoluteX="158dp"
         tools:layout_editor_absoluteY="43dp" />
 
     <ImageView
         android:id="@+id/enemyImage"
-        android:layout_width="51dp"
-        android:layout_height="57dp"
-        tools:layout_editor_absoluteX="303dp"
-        tools:layout_editor_absoluteY="74dp"
-        tools:srcCompat="@tools:sample/avatars[0]" />
+        android:layout_width="50dp"
+        android:layout_height="100dp"
+        tools:layout_editor_absoluteX="296dp"
+        tools:layout_editor_absoluteY="85dp"
+        tools:srcCompat="@drawable/mario_peace" />
 </android.support.constraint.ConstraintLayout>

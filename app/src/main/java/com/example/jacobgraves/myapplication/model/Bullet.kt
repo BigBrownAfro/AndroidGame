@@ -1,5 +1,7 @@
 package com.example.jacobgraves.myapplication.model
 
+import android.graphics.Rect
+import android.graphics.RectF
 import com.example.jacobgraves.myapplication.R
 
 class Bullet {
@@ -12,15 +14,20 @@ class Bullet {
     var type:String
     var xPosition:Float
     var yPosition:Float
+    private var width:Int = 0
+    private var height:Int = 0
     var xMovementSpeed:Float
     var yMovementSpeed:Float
     var direction:String
     var animationCounter = 0
+    lateinit private var hitbox:RectF
 
     constructor(player:Player, bulletDirection:String){
         attackValue = 1
         isAlive = true
         friendly = true
+        setHeight(50)
+        setWidth(50)
         size = 1f
         type = "regular"
         if(player.accelerationX < 0f){
@@ -36,6 +43,7 @@ class Bullet {
         xPosition = player.getXPosition()
         yPosition = player.getYPosition()
         direction = bulletDirection
+        hitbox = RectF(this.xPosition,this.yPosition,this.xPosition+this.getWidth(),this.yPosition+this.getHeight())
 
 
         assignPictures()
@@ -115,4 +123,43 @@ class Bullet {
         }
     }
 
+
+
+    fun setWidth(x: Int){
+        if (x < 0){
+            width = 50
+        }else{
+            width = x
+        }
+    }
+
+    fun setHeight(x: Int){
+        if (x < 0){
+            height = 50
+        }else{
+            height = x
+        }
+    }
+
+    fun setHitbox(x: RectF){
+        hitbox = x
+    }
+
+
+
+
+    //Getters----------------------------
+
+
+    fun getHeight(): Int{
+        return height
+    }
+
+    fun getWidth (): Int{
+        return width
+    }
+
+    fun getHitbox():RectF{
+        return hitbox
+    }
 }

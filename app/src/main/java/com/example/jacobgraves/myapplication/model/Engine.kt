@@ -1,17 +1,31 @@
 package com.example.jacobgraves.myapplication.model
 
+import android.graphics.Rect
+import android.graphics.RectF
+import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
+import kotlinx.android.synthetic.main.game_view.*
+import android.widget.ImageView
+
 
 class Engine {
     var player: Player
     var frameCount: Int
     var enemy:Freezo
+    var playerRect:RectF
+    var enemyRect:RectF
+    var bulletRectArray:Array<RectF?>
+
 
     constructor(name:String){
         player = Player(name)
         enemy = Freezo()
         frameCount = 0
+        playerRect = RectF(player.getXPosition(),player.getYPosition(),player.getXPosition()+player.getWidth(),player.getYPosition()+player.getHeight())
+        enemyRect = RectF(enemy.getXPosition(),enemy.getYPosition(),enemy.getXPosition()+enemy.getWidth(),enemy.getYPosition()+enemy.getHeight())
+        bulletRectArray = Array(100){null}
     }
+
 
     fun update(){
         if (frameCount == 60){
@@ -27,14 +41,34 @@ class Engine {
         moveBullets()
         checkHitboxes()
         moveEnemies()
+        updateHitboxes()
     }
 
     fun moveEnemies(){
-        enemy.pursuePlayer(player)
+        //enemy.pursuePlayer(player)
+
     }
 
+    fun updateHitboxes() {
+        playerRect.set(player.getXPosition(), player.getYPosition(), player.getXPosition() + player.getWidth(), player.getYPosition() + player.getHeight())
+        enemyRect.set(enemy.getXPosition(), enemy.getYPosition(), enemy.getXPosition() + enemy.getWidth(), enemy.getYPosition() + enemy.getHeight())
+
+        var count = 0
+        for (bullet in player.bulletArray) {
+            if (bullet != null) {
+                bulletRectArray[count]= RectF(bullet.xPosition,bullet.yPosition,bullet.xPosition+bullet.getWidth(),bullet.yPosition+bullet.getHeight())
+                if(enemyRect.intersect(bulletRectArray[count])){
+                    println("Bullet Collide")
+                }
+            }
+            count++
+        }
+    }
     fun checkHitboxes(){
 
+        if(enemyRect.intersect(playerRect)){
+            println("Collide")
+        }
     }
 
     fun updateAnimations(){

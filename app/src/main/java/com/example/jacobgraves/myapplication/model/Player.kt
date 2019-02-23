@@ -11,6 +11,8 @@ class Player{
     var accelerationY:Float = 0.0f
     private var xPosition :Float = 0.0f
     private var yPosition :Float = 0.0f
+    private var width:Int = 0
+    private var height:Int = 0
     var image = R.drawable.isaac
     lateinit var moveLeftAnimationSet:IntArray
     lateinit var moveRightAnimationSet:IntArray
@@ -27,19 +29,27 @@ class Player{
             setHealthValue(-100)
             setAttackValue(1000)
             setMovementSpeed(1.0f)
+            setHeight(400)
+            setWidth(200)
         }else if(name == "Reggie"){
             setHealthValue(3)
             setAttackValue(1)
             setMovementSpeed(1.5f)
+            setHeight(400)
+            setWidth(200)
         }else if(name == "Frank"){
             setHealthValue(2)
             setAttackValue(2)
             setMovementSpeed(2.0f)
+            setHeight(400)
+            setWidth(200)
         }
         else if(name == "Psychomantis") {
             setHealthValue(1)
             setAttackValue(3)
             setMovementSpeed(1.5f)
+            setHeight(400)
+            setWidth(200)
         }
         setXPosition(50.0f)
         setYPosition(50.0f)
@@ -90,6 +100,23 @@ class Player{
         }
     }
 
+    fun setWidth (x: Int){
+        if (x < 0){
+            width = 100
+        }else{
+            width = x
+        }
+    }
+
+    fun setHeight (x: Int){
+        if (x < 0){
+            height = 200
+        }else{
+            height = x
+        }
+    }
+
+
 
 //Getters----------------------------
     fun getHealthValue(): Int{
@@ -111,6 +138,16 @@ class Player{
     fun getYPosition (): Float{
         return yPosition
     }
+
+    fun getWidth (): Int{
+        return width
+    }
+
+    fun getHeight (): Int{
+        return height
+    }
+
+
 
 //Other Stuff------------------------
 

@@ -11,6 +11,8 @@ abstract class Enemy{
     var accelerationY:Float = 0.0f
     private var xPosition :Float = 0f
     private var yPosition :Float = 0f
+    private var width:Int = 0
+    private var height:Int = 0
     var image = R.drawable.isaac
     lateinit var moveLeftAnimationSet:IntArray
     lateinit var moveRightAnimationSet:IntArray
@@ -25,6 +27,8 @@ abstract class Enemy{
         setMovementSpeed(1.0f)
         setXPosition(1000f)
         setYPosition(300f)
+        setWidth(100)
+        setHeight(200)
 
         assignImages()
     }
@@ -71,6 +75,23 @@ abstract class Enemy{
         }
     }
 
+    fun setWidth (x: Int){
+        if (x < 0){
+            width = 100
+        }else{
+            width = x
+        }
+    }
+
+    fun setHeight (x: Int){
+        if (x < 0){
+            height = 200
+        }else{
+            height = x
+        }
+    }
+
+
 
     //Getters----------------------------
     fun getHealthValue(): Int{
@@ -92,6 +113,15 @@ abstract class Enemy{
     fun getYPosition (): Float{
         return yPosition
     }
+
+    fun getWidth (): Int{
+        return width
+    }
+
+    fun getHeight (): Int{
+        return height
+    }
+
 
 //Other Stuff------------------------
 

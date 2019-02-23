@@ -1,5 +1,6 @@
 package com.example.jacobgraves.myapplication
 
+import android.graphics.RectF
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
@@ -7,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.model.Engine
+import com.example.jacobgraves.myapplication.model.Player
 import kotlinx.android.synthetic.main.game_view.*
 import java.util.*
 import kotlin.concurrent.schedule
@@ -18,6 +20,7 @@ class GameController : AppCompatActivity() {
     var timerSetup = false
     var tempImageResource = 0
     lateinit var playerBullets:Array<ImageView>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +44,7 @@ class GameController : AppCompatActivity() {
         for (i in playerBullets){
             constraintLayout.addView(i)
         }
-        enemyImage.setImageResource(gameEngine.enemy.image)
-        enemyImage.x = 1000f
-        enemyImage.y = 300f
+
         println("Init Game Setup Complete")
     }
 
@@ -78,13 +79,28 @@ class GameController : AppCompatActivity() {
 
     fun setupImages(){
         playerImage.setImageResource(gameEngine.player.image)
-        playerImage.scaleX = .5f
-        playerImage.scaleY = .5f
+
         playerImage.x = gameEngine.player.getXPosition()
         playerImage.y = gameEngine.player.getYPosition()
 
+        enemyImage.setImageResource(gameEngine.enemy.image)
+        enemyImage.x = 1000f
+        enemyImage.y = 300f
+
+
+
         joystickImage.scaleX = .5f
         joystickImage.scaleY = .5f
+
+        playerImage.getLayoutParams().width = gameEngine.player.getWidth()
+        playerImage.getLayoutParams().height = gameEngine.player.getHeight()
+
+        enemyImage.getLayoutParams().width = gameEngine.enemy.getWidth()
+        enemyImage.getLayoutParams().height = gameEngine.enemy.getHeight()
+
+
+
+
     }
 
     fun setupButtons(){
@@ -129,6 +145,8 @@ class GameController : AppCompatActivity() {
     fun updateImages(){
         enemyImage.x = gameEngine.enemy.getXPosition()
         enemyImage.y = gameEngine.enemy.getYPosition()
+
+
         tempImageResource = gameEngine.player.image
         if (tempImageResource < 0){
             tempImageResource *= -1
@@ -144,8 +162,10 @@ class GameController : AppCompatActivity() {
                 playerBullets[count].setImageResource(bullet.image)
                 playerBullets[count].x = bullet.xPosition + (playerImage.width/2)
                 playerBullets[count].y = bullet.yPosition + (playerImage.height/2)
-                //playerBullets[count].isEnabled = true
-                //playerBullets[count].isActivated = true
+                playerBullets[count].getLayoutParams().width = bullet.getWidth()
+                playerBullets[count].getLayoutParams().height = bullet.getHeight()
+
+
             }
             count++
         }
