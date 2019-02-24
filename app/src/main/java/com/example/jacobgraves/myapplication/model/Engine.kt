@@ -1,11 +1,6 @@
 package com.example.jacobgraves.myapplication.model
 
-import android.graphics.Rect
 import android.graphics.RectF
-import com.example.jacobgraves.myapplication.GameController
-import com.example.jacobgraves.myapplication.R
-import kotlinx.android.synthetic.main.game_view.*
-import android.widget.ImageView
 
 
 class Engine {
@@ -15,6 +10,7 @@ class Engine {
     var playerRect:RectF
     var enemyRect:RectF
     var bulletRectArray:Array<RectF?>
+    var reloadTime:Int
 
 
     constructor(name:String){
@@ -24,6 +20,7 @@ class Engine {
         playerRect = RectF(player.getXPosition(),player.getYPosition(),player.getXPosition()+player.getWidth(),player.getYPosition()+player.getHeight())
         enemyRect = RectF(enemy.getXPosition(),enemy.getYPosition(),enemy.getXPosition()+enemy.getWidth(),enemy.getYPosition()+enemy.getHeight())
         bulletRectArray = Array(100){null}
+        reloadTime = 0
     }
 
 
@@ -38,14 +35,16 @@ class Engine {
         frameCount += 1
 
         player.decelerate()
+        enemy.decelerate()
         moveBullets()
-        checkHitboxes()
         moveEnemies()
         updateHitboxes()
+        checkHitboxes()
+        attackPlayer()
     }
 
     fun moveEnemies(){
-        //enemy.pursuePlayer(player)
+        enemy.pursuePlayer(player)
 
     }
 
@@ -64,75 +63,26 @@ class Engine {
             count++
         }
     }
-    fun checkHitboxes(){
 
+    fun checkHitboxes(){
         if(enemyRect.intersect(playerRect)){
-            println("Collide")
+            println("Enemy Collide")
         }
     }
 
     fun updateAnimations(){
-        if(player.accelerationX > 0){
-            if (player.animationCounter >= player.moveRightAnimationSet.size){
-                player.animationCounter = 0
-            }
-            player.image = player.moveRightAnimationSet[player.animationCounter]
-            player.lastDirection ="right"
-            player.animationCounter += 1
-        }else
-        if(player.accelerationX < 0){
-            if (player.animationCounter >= player.moveLeftAnimationSet.size){
-                player.animationCounter = 0
-            }
-            player.image = player.moveLeftAnimationSet[player.animationCounter]
-            player.lastDirection ="left"
-            player.animationCounter += 1
-        }else
-        if(player.accelerationY < 0){
-            if (player.animationCounter >= player.moveUpAnimationSet.size){
-                player.animationCounter = 0
-            }
-            player.image = player.moveUpAnimationSet[player.animationCounter]
-            player.lastDirection ="up"
-            player.animationCounter += 1
-        }else
-        if(player.accelerationY > 0){
-            if (player.animationCounter >= player.moveDownAnimationSet.size){
-                player.animationCounter = 0
-            }
-            player.image = player.moveDownAnimationSet[player.animationCounter]
-            player.lastDirection ="down"
-            player.animationCounter += 1
-        }else
-        if(player.accelerationX == 0f){
-            if(player.lastDirection.equals("up")){
-                player.image = R.drawable.mario_run_up_1
-            }else if(player.lastDirection.equals("down")){
-                player.image = R.drawable.mario_face_forward
-            }else if(player.lastDirection.equals("left")){
-                player.image = R.drawable.mario_stand
-            }else if(player.lastDirection.equals("right")){
-                player.image = R.drawable.mario_stand * (-1)
-            }else{
-                player.image = R.drawable.mario_peace
-            }
-        }
-        for (bullet in player.bulletArray){
-            if (bullet != null){
-                if (bullet.animationCounter >= bullet.animationSet.size){
-                    bullet.animationCounter = 0
-                }
-                bullet.image = bullet.animationSet[bullet.animationCounter]
-                bullet.animationCounter += 1
-            }
-        }
+        player.updateAnimations()
+        player.updateBulletAnimations()
+        enemy.updateAnimations()
+        enemy.updateBulletAnimations()
     }
 
     fun moveBullets(){
-        for (bullet in player.bulletArray){
-            if (bullet != null){
-                bullet.move()
-            }
-        }
+        player.moveBullets()
+        enemy.moveBullets()
+    }
+
+    fun attackPlayer(){
+        enemy.attack(player)
     }
 }

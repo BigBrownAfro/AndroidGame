@@ -68,11 +68,21 @@ class Bullet {
     constructor(enemy:Enemy, bulletDirection:String){
         attackValue = 1
         isAlive = true
-        friendly = false
+        friendly = true
+        setHeight(50)
+        setWidth(50)
         size = 1f
         type = "regular"
-        xMovementSpeed = enemy.accelerationX+10f
-        yMovementSpeed = enemy.accelerationY+10f
+        if(enemy.accelerationX < 0f){
+            xMovementSpeed = 10f
+        }else{
+            xMovementSpeed = enemy.accelerationX+10f
+        }
+        if (enemy.accelerationY < 0f){
+            yMovementSpeed = 10f
+        }else{
+            yMovementSpeed = enemy.accelerationY+10f
+        }
         xPosition = enemy.getXPosition()
         yPosition = enemy.getYPosition()
         direction = bulletDirection
@@ -96,6 +106,42 @@ class Bullet {
 
         assignPictures()
     }
+
+    //Setters----------------------------
+    fun setWidth(x: Int){
+        if (x < 0){
+            width = 50
+        }else{
+            width = x
+        }
+    }
+
+    fun setHeight(x: Int){
+        if (x < 0){
+            height = 50
+        }else{
+            height = x
+        }
+    }
+
+    fun setHitbox(x: RectF){
+        hitbox = x
+    }
+
+    //Getters----------------------------
+    fun getHeight(): Int{
+        return height
+    }
+
+    fun getWidth (): Int{
+        return width
+    }
+
+    fun getHitbox():RectF{
+        return hitbox
+    }
+
+    //Other Stuff-------------------------
 
     fun assignPictures(){
         if (type.equals("regular")){
@@ -123,43 +169,11 @@ class Bullet {
         }
     }
 
-
-
-    fun setWidth(x: Int){
-        if (x < 0){
-            width = 50
-        }else{
-            width = x
+    fun updateAnimations(){
+        if (animationCounter >= animationSet.size){
+            animationCounter = 0
         }
-    }
-
-    fun setHeight(x: Int){
-        if (x < 0){
-            height = 50
-        }else{
-            height = x
-        }
-    }
-
-    fun setHitbox(x: RectF){
-        hitbox = x
-    }
-
-
-
-
-    //Getters----------------------------
-
-
-    fun getHeight(): Int{
-        return height
-    }
-
-    fun getWidth (): Int{
-        return width
-    }
-
-    fun getHitbox():RectF{
-        return hitbox
+        image = animationSet[animationCounter]
+        animationCounter += 1
     }
 }

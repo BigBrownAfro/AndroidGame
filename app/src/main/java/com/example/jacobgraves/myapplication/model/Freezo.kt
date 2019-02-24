@@ -1,18 +1,49 @@
 package com.example.jacobgraves.myapplication.model
 
+import kotlin.math.asin
+import kotlin.math.hypot
+
 class Freezo(): Enemy() {
 
+    var maxReload = 30
+    var reloadTime = 0;
 
     init {
         setHealthValue(20)
         setAttackValue(1)
-        setMovementSpeed(2.0f)
+        setMovementSpeed(.75f)
     }
 
     fun pursuePlayer(player:Player){
-        if(player.getXPosition() < this.getXPosition() && this.getXPosition() - player.getXPosition() > 100){
+        if(player.getXPosition() < this.getXPosition() && this.getXPosition() - player.getXPosition() > 200){
             moveLeft()
         }
+        if(player.getXPosition() > this.getXPosition() && player.getXPosition() - this.getXPosition() > 200){
+            moveRight()
+        }
+        if(player.getYPosition() < this.getYPosition() && this.getYPosition() - player.getYPosition() > 200){
+            moveUp()
+        }
+        if(player.getYPosition() > this.getYPosition() && player.getYPosition() - this.getYPosition() > 200){
+            moveDown()
+        }
     }
+
+    fun attack(player: Player){
+        if(inRadius(player) && reloadTime <= 0){
+            shoot(lastDirection)
+            reloadTime = maxReload;
+            /*
+            var xDifference = player.getXPosition() - getXPosition()
+            var yDifference = getYPosition() - player.getYPosition()
+            var hypotenuse = hypot(xDifference, yDifference)
+            var angle = asin(yDifference/hypotenuse)
+            */
+
+        }
+        reloadTime--
+    }
+
+
 
 }

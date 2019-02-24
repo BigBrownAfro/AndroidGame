@@ -35,8 +35,8 @@ class Player{
             setHealthValue(3)
             setAttackValue(1)
             setMovementSpeed(1.5f)
-            setHeight(400)
-            setWidth(200)
+            setHeight(100)
+            setWidth(50)
         }else if(name == "Frank"){
             setHealthValue(2)
             setAttackValue(2)
@@ -51,8 +51,8 @@ class Player{
             setHeight(400)
             setWidth(200)
         }
-        setXPosition(50.0f)
-        setYPosition(50.0f)
+        setXPosition(300f)
+        setYPosition(300f)
         bulletArray = Array(100){null}
 
         assignPictures(characterName)
@@ -236,5 +236,69 @@ class Player{
         }
         bulletArray[bulletCounter] = Bullet(this,direction)
         bulletCounter++
+    }
+
+    fun updateAnimations(){
+        if(accelerationX > 0){
+            if (animationCounter >= moveRightAnimationSet.size){
+                animationCounter = 0
+            }
+            image = moveRightAnimationSet[animationCounter]
+            lastDirection ="right"
+            animationCounter += 1
+        }else
+        if(accelerationX < 0){
+            if (animationCounter >= moveLeftAnimationSet.size){
+                animationCounter = 0
+            }
+            image = moveLeftAnimationSet[animationCounter]
+            lastDirection ="left"
+            animationCounter += 1
+        }else
+        if(accelerationY < 0){
+            if (animationCounter >= moveUpAnimationSet.size){
+                animationCounter = 0
+            }
+            image = moveUpAnimationSet[animationCounter]
+            lastDirection ="up"
+            animationCounter += 1
+        }else
+        if(accelerationY > 0){
+            if (animationCounter >= moveDownAnimationSet.size){
+                animationCounter = 0
+            }
+            image = moveDownAnimationSet[animationCounter]
+            lastDirection ="down"
+            animationCounter += 1
+        }else
+        if(accelerationX == 0f){
+            if(lastDirection.equals("up")){
+                image = R.drawable.mario_run_up_1
+            }else if(lastDirection.equals("down")){
+                image = R.drawable.mario_face_forward
+            }else if(lastDirection.equals("left")){
+                image = R.drawable.mario_stand
+            }else if(lastDirection.equals("right")){
+                image = R.drawable.mario_stand * (-1)
+            }else{
+                image = R.drawable.mario_peace
+            }
+        }
+    }
+
+    fun moveBullets(){
+        for (bullet in bulletArray){
+            if (bullet != null){
+                bullet.move()
+            }
+        }
+    }
+
+    fun updateBulletAnimations(){
+        for (bullet in bulletArray){
+            if (bullet != null){
+                bullet.updateAnimations()
+            }
+        }
     }
 }

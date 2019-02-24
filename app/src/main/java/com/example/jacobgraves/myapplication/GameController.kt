@@ -1,5 +1,6 @@
 package com.example.jacobgraves.myapplication
 
+import android.graphics.Color
 import android.graphics.RectF
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
@@ -20,6 +21,7 @@ class GameController : AppCompatActivity() {
     var timerSetup = false
     var tempImageResource = 0
     lateinit var playerBullets:Array<ImageView>
+    lateinit var enemyBullets:Array<ImageView>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +44,10 @@ class GameController : AppCompatActivity() {
         val constraintLayout = findViewById(R.id.constraintLayout) as ConstraintLayout
         playerBullets = Array(100){ImageView(this)}
         for (i in playerBullets){
+            constraintLayout.addView(i)
+        }
+        enemyBullets = Array(100){ImageView(this)}
+        for (i in enemyBullets){
             constraintLayout.addView(i)
         }
 
@@ -71,10 +77,6 @@ class GameController : AppCompatActivity() {
             true
         })
         joystickImage.setOnTouchListener(joystickListener)
-
-        fireButton.setOnClickListener {
-            gameEngine.player.shoot("right")
-        }
     }
 
     fun setupImages(){
@@ -104,7 +106,9 @@ class GameController : AppCompatActivity() {
     }
 
     fun setupButtons(){
-
+        fireButton.setOnClickListener {
+            gameEngine.player.shoot("right")
+        }
     }
 
     override fun onBackPressed() {
@@ -136,17 +140,25 @@ class GameController : AppCompatActivity() {
         if (joystickImage.x > 500){
             gameEngine.player.moveRight()
         }
-        //print("" + joystickImage.x + " ")
-        //println(joystickImage.y)
-        playerImage.x = gameEngine.player.getXPosition()
-        playerImage.y = gameEngine.player.getYPosition()
     }
 
     fun updateImages(){
-        enemyImage.x = gameEngine.enemy.getXPosition()
-        enemyImage.y = gameEngine.enemy.getYPosition()
+        //update enemy image
+        enemyImage.x = gameEngine.enemy.getXPosition() - gameEngine.enemy.getWidth()/2f
+        enemyImage.y = gameEngine.enemy.getYPosition() - gameEngine.enemy.getHeight()/2f
+        tempImageResource = gameEngine.enemy.image
+        if (tempImageResource < 0){
+            tempImageResource *= -1
+            enemyImage.setImageResource(tempImageResource)
+            enemyImage.rotationY = 180f
+        }else{
+            enemyImage.rotationY = 0f
+            enemyImage.setImageResource(gameEngine.enemy.image)
+        }
 
-
+        //update player image
+        playerImage.x = gameEngine.player.getXPosition() - gameEngine.player.getWidth()/2f
+        playerImage.y = gameEngine.player.getYPosition() - gameEngine.player.getHeight()/2f
         tempImageResource = gameEngine.player.image
         if (tempImageResource < 0){
             tempImageResource *= -1
@@ -156,18 +168,34 @@ class GameController : AppCompatActivity() {
             playerImage.rotationY = 0f
             playerImage.setImageResource(gameEngine.player.image)
         }
+
+        //update bullet images
         var count = 0
         for (bullet in gameEngine.player.bulletArray){
             if (bullet != null){
                 playerBullets[count].setImageResource(bullet.image)
-                playerBullets[count].x = bullet.xPosition + (playerImage.width/2)
-                playerBullets[count].y = bullet.yPosition + (playerImage.height/2)
+                playerBullets[count].x = bullet.xPosition //+ (playerImage.width/2)
+                playerBullets[count].y = bullet.yPosition //+ (playerImage.height/2)
                 playerBullets[count].getLayoutParams().width = bullet.getWidth()
                 playerBullets[count].getLayoutParams().height = bullet.getHeight()
-
-
             }
             count++
         }
+
+        count = 0
+        for (bullet in gameEngine.enemy.bulletArray){
+            if (bullet != null){
+                enemyBullets[count].setImageResource(bullet.image)
+                enemyBullets[count].x = bullet.xPosition - bullet.getWidth()/2 //+ (playerImage.width/2)
+                enemyBullets[count].y = bullet.yPosition - bullet.getHeight()/2 //+ (playerImage.height/2)
+                enemyBullets[count].getLayoutParams().width = bullet.getWidth()
+                enemyBullets[count].getLayoutParams().height = bullet.getHeight()
+            }
+            count++
+        }
+
+        //To Delete
+        playerImage.setBackgroundColor(Color.rgb(0,200,50))
+        enemyImage.setBackgroundColor(Color.rgb(200,0,50))
     }
 }

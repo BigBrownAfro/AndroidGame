@@ -1,6 +1,11 @@
 package com.example.jacobgraves.myapplication.model
 
+import android.graphics.RectF
 import com.example.jacobgraves.myapplication.R
+import kotlin.math.PI
+import kotlin.math.absoluteValue
+import kotlin.math.asin
+import kotlin.math.hypot
 
 abstract class Enemy{
     var name = "Enemy"
@@ -20,15 +25,19 @@ abstract class Enemy{
     lateinit var moveDownAnimationSet:IntArray
     var animationCounter:Int = 0
     var lastDirection = "down"
+    var bulletArray:Array<Bullet?>
+    var bulletCounter = 0
+    var sensorRadius = 300
 
     constructor(){
         setHealthValue(5)
         setAttackValue(1)
         setMovementSpeed(1.0f)
         setXPosition(1000f)
-        setYPosition(300f)
-        setWidth(100)
-        setHeight(200)
+        setYPosition(500f)
+        setWidth(80)
+        setHeight(160)
+        bulletArray = Array(100){null}
 
         assignImages()
     }
@@ -125,6 +134,61 @@ abstract class Enemy{
 
 //Other Stuff------------------------
 
+    fun inRadius(player:Player): Boolean{
+        var inRadius = false
+        var xDifference = player.getXPosition() - xPosition
+        xDifference = xDifference.absoluteValue
+        var yDifference = yPosition - player.getYPosition()
+        yDifference = yDifference.absoluteValue
+        var hypotenuse = hypot(xDifference, yDifference)
+        if(hypotenuse <= sensorRadius){
+            inRadius = true
+        }
+
+        /*
+        //If enemy is to the Left of the player and enemy is below the player
+        if(getMidX() < player.getMidX() && getMidY() > player.getMidY()){
+            var xDifference = player.getMidX() - getMidX()
+            var yDifference = getMidY() - player.getMidY()
+            var hypotenuse = hypot(xDifference, yDifference)
+            if(hypotenuse <= sensorRadius){
+                inRadius = true
+            }
+            var angle = asin(yDifference/hypotenuse)
+        }
+        //If enemy is to the Right of the player and enemy is below the player
+        if(getMidX() > player.getMidX() && getMidY() > player.getMidY()){
+            var xDifference = getMidX() - player.getMidX()
+            var yDifference = getMidY() - player.getMidY()
+            var hypotenuse = hypot(xDifference, yDifference)
+            if(hypotenuse <= sensorRadius){
+                inRadius = true
+            }
+            //var angle = asin(yDifference/hypotenuse)
+        }
+        //If enemy is to the Right of the player and enemy is above the player
+        if(getMidX() > player.getMidX() && getMidY() < player.getMidY()){
+            var xDifference = player.getMidX() - getMidX()
+            var yDifference = getMidY() - player.getMidY()
+            var hypotenuse = hypot(xDifference, yDifference)
+            if(hypotenuse <= sensorRadius){
+                inRadius = true
+            }
+            //var angle = asin(yDifference/hypotenuse)
+        }
+        //If enemy is to the Left of the player and enemy is above the player
+        if(getMidX() < player.getMidX() && getMidY() < player.getMidY()){
+            var xDifference = player.getMidX() - getMidX()
+            var yDifference = getMidY() - player.getMidY()
+            var hypotenuse = hypot(xDifference, yDifference)
+            if(hypotenuse <= sensorRadius){
+                inRadius = true
+            }
+            //var angle = asin(yDifference/hypotenuse)
+        }
+        */
+        return inRadius
+    }
 
     fun assignImages(){
         image = R.drawable.mario_peace
@@ -191,5 +255,77 @@ abstract class Enemy{
         }else {if (accelerationY > 0){
             accelerationY -= movementSpeed
         }}
+    }
+
+    fun updateAnimations(){
+        if(accelerationX > 0f){
+            if (animationCounter >= moveRightAnimationSet.size){
+                animationCounter = 0
+            }
+            image = moveRightAnimationSet[animationCounter]
+            lastDirection ="right"
+            animationCounter += 1
+        }else
+        if(accelerationX < 0f){
+            if (animationCounter >= moveLeftAnimationSet.size){
+                animationCounter = 0
+            }
+            image = moveLeftAnimationSet[animationCounter]
+            lastDirection ="left"
+            animationCounter += 1
+        }else
+        if(accelerationY < 0f){
+            if (animationCounter >= moveUpAnimationSet.size){
+                animationCounter = 0
+            }
+            image = moveUpAnimationSet[animationCounter]
+            lastDirection ="up"
+            animationCounter += 1
+        }else
+        if(accelerationY > 0f){
+            if (animationCounter >= moveDownAnimationSet.size){
+                animationCounter = 0
+            }
+            image = moveDownAnimationSet[animationCounter]
+            lastDirection ="down"
+            animationCounter += 1
+        }else
+        if(accelerationX == 0f){
+            if(lastDirection.equals("up")){
+                image = R.drawable.mario_run_up_1
+            }else if(lastDirection.equals("down")){
+                image = R.drawable.mario_face_forward
+            }else if(lastDirection.equals("left")){
+                image = R.drawable.mario_stand
+            }else if(lastDirection.equals("right")){
+                image = R.drawable.mario_stand * (-1)
+            }else{
+                image = R.drawable.mario_peace
+            }
+        }
+    }
+
+    fun shoot(direction:String){
+        if (bulletCounter > 99){
+            bulletCounter = 0
+        }
+        bulletArray[bulletCounter] = Bullet(this,direction)
+        bulletCounter++
+    }
+
+    fun moveBullets(){
+        for (bullet in bulletArray){
+            if (bullet != null){
+                bullet.move()
+            }
+        }
+    }
+
+    fun updateBulletAnimations(){
+        for (bullet in bulletArray){
+            if (bullet != null){
+                bullet.updateAnimations()
+            }
+        }
     }
 }
