@@ -12,6 +12,11 @@ class Engine {
         player = Player(name)
         frameCount = 0
         freezos.add(Freezo())
+        freezos.add(Freezo())
+        freezos[1].setXPosition(1720f)
+        freezos[1].setYPosition(980f)
+        freezos.removeAt(0)
+        freezos.removeAt(0)
     }
 
 

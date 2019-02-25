@@ -35,6 +35,7 @@ class GameController : AppCompatActivity() {
     var joyStick2Y = joystick2OriginY
     var joystick2MoveRadius = 100f
     var joystick2PlayerMoveRadius = 50f
+    lateinit var enemies:Array<ImageView>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,18 +52,17 @@ class GameController : AppCompatActivity() {
         setupImages()
         setupButtons()
         setupListeners()
-        val constraintLayout = findViewById(R.id.constraintLayout) as ConstraintLayout
-        playerBullets = Array(100){ImageView(this)}
-        for (i in playerBullets){
-            constraintLayout.addView(i)
-        }
-        enemyBullets = Array(100){ImageView(this)}
-        for (i in enemyBullets){
-            constraintLayout.addView(i)
-        }
+
         println("Init Game Setup Complete")
+        Thread.sleep(3000)
         timer.schedule(1,16) {
-            update()
+            var start = System.currentTimeMillis()
+            runOnUiThread(Runnable() {
+                run() {
+                    update()
+                }
+            });
+            println(System.currentTimeMillis() - start)
         }
     }
 
@@ -142,6 +142,8 @@ class GameController : AppCompatActivity() {
     }
 
     fun setupImages(){
+        val constraintLayout = findViewById(R.id.constraintLayout) as ConstraintLayout
+
         //Player images
         playerImage.setImageResource(gameEngine.player.image)
         playerImage.getLayoutParams().width = gameEngine.player.getWidth()
@@ -150,6 +152,11 @@ class GameController : AppCompatActivity() {
         playerImage.y = gameEngine.player.getYPosition()
 
         //Enemies images
+        enemies = Array(50){ ImageView(this) }
+        for(image in enemies){
+            constraintLayout.addView(image)
+        }
+
         for(enemy in gameEngine.freezos) {
             enemyImage.setImageResource(enemy.image)
             enemyImage.getLayoutParams().width = enemy.getWidth()
@@ -170,6 +177,16 @@ class GameController : AppCompatActivity() {
         joystickImage.getLayoutParams().height = 100
         joystickImage2.getLayoutParams().width = 100
         joystickImage2.getLayoutParams().height = 100
+
+        //Setup Bullets
+        playerBullets = Array(200){ImageView(this)}
+        for (i in playerBullets){
+            constraintLayout.addView(i)
+        }
+        enemyBullets = Array(500){ImageView(this)}
+        for (i in enemyBullets){
+            constraintLayout.addView(i)
+        }
     }
 
     fun setupButtons(){
@@ -183,14 +200,10 @@ class GameController : AppCompatActivity() {
 
     //Updating------------------------------------------------------------------------------------------
     fun update(){
-        runOnUiThread(Runnable() {
-            run() {
-                gameEngine.update()
-                movePlayer()
-                shootPlayer()
-                updateImages()
-            }
-        });
+        gameEngine.update()
+        movePlayer()
+        shootPlayer()
+        updateImages()
     }
 
     fun movePlayer(){
@@ -280,18 +293,21 @@ class GameController : AppCompatActivity() {
 
     fun updateImages(){
         //update enemy images
+        var count = 0
         for(enemy in gameEngine.freezos) {
-            enemyImage.x = enemy.getXPosition() - enemy.getWidth()/2f
-            enemyImage.y = enemy.getYPosition() - enemy.getHeight()/2f
+            enemies[count].x
+            enemies[count].x = enemy.getXPosition() - enemy.getWidth()/2f
+            enemies[count].y = enemy.getYPosition() - enemy.getHeight()/2f
             tempImageResource = enemy.image
             if (tempImageResource < 0){
                 tempImageResource *= -1
-                enemyImage.setImageResource(tempImageResource)
-                enemyImage.rotationY = 180f
+                enemies[count].setImageResource(tempImageResource)
+                enemies[count].rotationY = 180f
             }else{
-                enemyImage.rotationY = 0f
-                enemyImage.setImageResource(enemy.image)
+                enemies[count].rotationY = 0f
+                enemies[count].setImageResource(enemy.image)
             }
+            count++
         }
         /* Old method using hardcoded enemy
         enemyImage.x = gameEngine.enemy.getXPosition() - gameEngine.enemy.getWidth()/2f
@@ -321,7 +337,7 @@ class GameController : AppCompatActivity() {
         }
 
         //update player bullet images
-        var count = 0
+        count = 0
         for (bullet in gameEngine.player.bulletArray){
             if (bullet != null){
                 playerBullets[count].setImageResource(bullet.image)
@@ -334,8 +350,8 @@ class GameController : AppCompatActivity() {
         }
 
         //update player bullet images
+        count = 0
         for(enemy in gameEngine.freezos) {
-            count = 0
             for (bullet in enemy.bulletArray){
                 if (bullet != null){
                     enemyBullets[count].setImageResource(bullet.image)
