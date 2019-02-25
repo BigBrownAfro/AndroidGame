@@ -1,5 +1,6 @@
 package com.example.jacobgraves.myapplication.model
 
+import android.graphics.RectF
 import com.example.jacobgraves.myapplication.R
 
 class Player{
@@ -22,6 +23,7 @@ class Player{
     var lastDirection = "down"
     var bulletArray:Array<Bullet?>
     var bulletCounter = 0
+    var hitBox: RectF
 
     constructor(characterName: String){
         name = characterName
@@ -54,6 +56,7 @@ class Player{
         setXPosition(300f)
         setYPosition(300f)
         bulletArray = Array(100){null}
+        hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
 
         assignPictures(characterName)
     }
@@ -299,6 +302,20 @@ class Player{
             if (bullet != null){
                 bullet.updateAnimations()
             }
+        }
+    }
+
+    fun updateHitbox(){
+        hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
+    }
+
+    fun updateBulletHitboxes(){
+        var count = 0
+        for (bullet in bulletArray) {
+            if (bullet != null) {
+                bullet.updateHitbox()
+            }
+            count++
         }
     }
 }

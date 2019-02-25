@@ -27,6 +27,7 @@ abstract class Enemy{
     var lastDirection = "down"
     var bulletArray:Array<Bullet?>
     var bulletCounter = 0
+    var hitBox: RectF
     var sensorRadius = 300
 
     constructor(){
@@ -38,6 +39,7 @@ abstract class Enemy{
         setWidth(80)
         setHeight(160)
         bulletArray = Array(100){null}
+        hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
 
         assignImages()
     }
@@ -144,49 +146,6 @@ abstract class Enemy{
         if(hypotenuse <= sensorRadius){
             inRadius = true
         }
-
-        /*
-        //If enemy is to the Left of the player and enemy is below the player
-        if(getMidX() < player.getMidX() && getMidY() > player.getMidY()){
-            var xDifference = player.getMidX() - getMidX()
-            var yDifference = getMidY() - player.getMidY()
-            var hypotenuse = hypot(xDifference, yDifference)
-            if(hypotenuse <= sensorRadius){
-                inRadius = true
-            }
-            var angle = asin(yDifference/hypotenuse)
-        }
-        //If enemy is to the Right of the player and enemy is below the player
-        if(getMidX() > player.getMidX() && getMidY() > player.getMidY()){
-            var xDifference = getMidX() - player.getMidX()
-            var yDifference = getMidY() - player.getMidY()
-            var hypotenuse = hypot(xDifference, yDifference)
-            if(hypotenuse <= sensorRadius){
-                inRadius = true
-            }
-            //var angle = asin(yDifference/hypotenuse)
-        }
-        //If enemy is to the Right of the player and enemy is above the player
-        if(getMidX() > player.getMidX() && getMidY() < player.getMidY()){
-            var xDifference = player.getMidX() - getMidX()
-            var yDifference = getMidY() - player.getMidY()
-            var hypotenuse = hypot(xDifference, yDifference)
-            if(hypotenuse <= sensorRadius){
-                inRadius = true
-            }
-            //var angle = asin(yDifference/hypotenuse)
-        }
-        //If enemy is to the Left of the player and enemy is above the player
-        if(getMidX() < player.getMidX() && getMidY() < player.getMidY()){
-            var xDifference = player.getMidX() - getMidX()
-            var yDifference = getMidY() - player.getMidY()
-            var hypotenuse = hypot(xDifference, yDifference)
-            if(hypotenuse <= sensorRadius){
-                inRadius = true
-            }
-            //var angle = asin(yDifference/hypotenuse)
-        }
-        */
         return inRadius
     }
 
@@ -326,6 +285,20 @@ abstract class Enemy{
             if (bullet != null){
                 bullet.updateAnimations()
             }
+        }
+    }
+
+    fun updateHitbox(){
+        hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
+    }
+
+    fun updateBulletHitboxes(){
+        var count = 0
+        for (bullet in bulletArray) {
+            if (bullet != null) {
+                bullet.updateHitbox()
+            }
+            count++
         }
     }
 }

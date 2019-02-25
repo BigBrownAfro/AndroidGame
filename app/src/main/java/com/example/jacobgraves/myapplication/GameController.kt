@@ -11,17 +11,30 @@ import android.widget.ImageView
 import com.example.jacobgraves.myapplication.model.Engine
 import com.example.jacobgraves.myapplication.model.Player
 import kotlinx.android.synthetic.main.game_view.*
+import java.lang.Thread.sleep
 import java.util.*
 import kotlin.concurrent.schedule
+import kotlin.math.*
 
 class GameController : AppCompatActivity() {
     lateinit var gameEngine: Engine
     var timer = Timer()
     lateinit var joystickListener:View.OnTouchListener
-    var timerSetup = false
     var tempImageResource = 0
     lateinit var playerBullets:Array<ImageView>
     lateinit var enemyBullets:Array<ImageView>
+    var joystickOriginX = 300f
+    var joystickOriginY = 1080f-300f
+    var joyStickX = joystickOriginX
+    var joyStickY = joystickOriginY
+    var joystickMoveRadius = 100f
+    var joystickPlayerMoveRadius = 50f
+    var joystick2OriginX = 1920f-400f
+    var joystick2OriginY = 1080f-300f
+    var joyStick2X = joystick2OriginX
+    var joyStick2Y = joystick2OriginY
+    var joystick2MoveRadius = 100f
+    var joystick2PlayerMoveRadius = 50f
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,12 +45,9 @@ class GameController : AppCompatActivity() {
         runInitSetup()
     }
 
-
+    //Setup------------------------------------------------------------------------------------------
     fun runInitSetup() {
         gameEngine = Engine(intent.getStringExtra("name"))
-        timer.schedule(1,16) {
-            update()
-        }
         setupImages()
         setupButtons()
         setupListeners()
@@ -50,8 +60,10 @@ class GameController : AppCompatActivity() {
         for (i in enemyBullets){
             constraintLayout.addView(i)
         }
-
         println("Init Game Setup Complete")
+        timer.schedule(1,16) {
+            update()
+        }
     }
 
     fun setupListeners(){
@@ -59,56 +71,108 @@ class GameController : AppCompatActivity() {
 
             if (motionEvent.action == MotionEvent.ACTION_MOVE) {
 
-                view.y = motionEvent.rawY - view.height/2
-                view.x = motionEvent.rawX - view.width/2
-                if (view.y < 300F){
-                    view.y = 300F
+                joyStickX = motionEvent.rawX
+                joyStickY = motionEvent.rawY
+
+                var xDifference = motionEvent.rawX - joystickOriginX
+                var yDifference = joystickOriginY - motionEvent.rawY
+                var hypotenuse = hypot(xDifference, yDifference)
+
+                if(hypotenuse > joystickMoveRadius){
+                    var angleC = acos(xDifference/hypotenuse)
+
+                    if(joyStickY < joystickOriginY){
+                    }else{
+                        angleC *= (-1f)
+                    }
+
+                    joyStickX = joystickOriginX + joystickMoveRadius * cos(angleC)
+                    joyStickY = joystickOriginY - joystickMoveRadius * sin(angleC)
                 }
-                if (view.y > 900F){
-                    view.y = 900F
-                }
-                if (view.x < -10F){
-                    view.x = -10F
-                }
-                if (view.x > 600F){
-                    view.x = 600F
-                }
+
+                joystickImage.x = joyStickX - joystickImage.width/2
+                joystickImage.y = joyStickY - joystickImage.height/2
+
+            }else{
+                joyStickX = joystickOriginX
+                joyStickY = joystickOriginY
+                joystickImage.x = joyStickX - joystickImage.width/2
+                joystickImage.y = joyStickY - joystickImage.height/2
             }
             true
         })
+
+        var joystick2Listener = View.OnTouchListener(function = { view, motionEvent ->
+
+            if (motionEvent.action == MotionEvent.ACTION_MOVE) {
+
+                joyStick2X = motionEvent.rawX
+                joyStick2Y = motionEvent.rawY
+
+                var xDifference = motionEvent.rawX - joystick2OriginX
+                var yDifference = joystick2OriginY - motionEvent.rawY
+                var hypotenuse = hypot(xDifference, yDifference)
+
+                if(hypotenuse > joystick2MoveRadius){
+                    var angleC = acos(xDifference/hypotenuse)
+
+                    if(joyStick2Y < joystick2OriginY){
+                    }else{
+                        angleC *= (-1f)
+                    }
+
+                    joyStick2X = joystick2OriginX + joystick2MoveRadius * cos(angleC)
+                    joyStick2Y = joystick2OriginY - joystick2MoveRadius * sin(angleC)
+                }
+
+                joystickImage2.x = joyStick2X - joystickImage2.width/2
+                joystickImage2.y = joyStick2Y - joystickImage2.height/2
+
+            }else{
+                joyStick2X = joystick2OriginX
+                joyStick2Y = joystick2OriginY
+                joystickImage2.x = joyStick2X - joystickImage2.width/2
+                joystickImage2.y = joyStick2Y - joystickImage2.height/2
+            }
+            true
+        })
+
         joystickImage.setOnTouchListener(joystickListener)
+        joystickImage2.setOnTouchListener(joystick2Listener)
     }
 
     fun setupImages(){
+        //Player images
         playerImage.setImageResource(gameEngine.player.image)
-
+        playerImage.getLayoutParams().width = gameEngine.player.getWidth()
+        playerImage.getLayoutParams().height = gameEngine.player.getHeight()
         playerImage.x = gameEngine.player.getXPosition()
         playerImage.y = gameEngine.player.getYPosition()
 
-        enemyImage.setImageResource(gameEngine.enemy.image)
-        enemyImage.x = 1000f
-        enemyImage.y = 300f
-
-
-
-        joystickImage.scaleX = .5f
-        joystickImage.scaleY = .5f
-
-        playerImage.getLayoutParams().width = gameEngine.player.getWidth()
-        playerImage.getLayoutParams().height = gameEngine.player.getHeight()
-
+        //Enemies images
+        for(enemy in gameEngine.freezos) {
+            enemyImage.setImageResource(enemy.image)
+            enemyImage.getLayoutParams().width = enemy.getWidth()
+            enemyImage.getLayoutParams().height = enemy.getHeight()
+            enemyImage.x = enemy.getXPosition()
+            enemyImage.y = enemy.getYPosition()
+        }
+        /*
         enemyImage.getLayoutParams().width = gameEngine.enemy.getWidth()
         enemyImage.getLayoutParams().height = gameEngine.enemy.getHeight()
+        enemyImage.setImageResource(gameEngine.enemy.image)
+        enemyImage.x = gameEngine.enemy.getXPosition()
+        enemyImage.y = gameEngine.enemy.getYPosition()
+        */
 
-
-
-
+        //Joysticks images
+        joystickImage.getLayoutParams().width = 100
+        joystickImage.getLayoutParams().height = 100
+        joystickImage2.getLayoutParams().width = 100
+        joystickImage2.getLayoutParams().height = 100
     }
 
     fun setupButtons(){
-        fireButton.setOnClickListener {
-            gameEngine.player.shoot("right")
-        }
     }
 
     override fun onBackPressed() {
@@ -117,33 +181,119 @@ class GameController : AppCompatActivity() {
         timer.cancel()
     }
 
+    //Updating------------------------------------------------------------------------------------------
     fun update(){
         runOnUiThread(Runnable() {
             run() {
                 gameEngine.update()
                 movePlayer()
+                shootPlayer()
                 updateImages()
             }
         });
     }
 
     fun movePlayer(){
-        if (joystickImage.y < 400){
-            gameEngine.player.moveUp()
+
+        var xDifference = joyStickX - joystickOriginX
+        var yDifference = joystickOriginY - joyStickY
+        var hypotenuse = hypot(xDifference, yDifference)
+
+        if(hypotenuse > joystickPlayerMoveRadius){
+            var angleC = acos(xDifference/hypotenuse)
+
+            if(joyStickY > joystickOriginY){
+                angleC *= (-1f)
+            }
+
+            if(angleC < PI*(1f/8f) && angleC >= PI*(-1f/8f)){
+                gameEngine.player.moveRight()
+            }
+            if(angleC < PI*(3f/8f) && angleC >= PI*(1f/8f)){
+                gameEngine.player.moveRight()
+                gameEngine.player.moveUp()
+            }
+            if(angleC < PI*(5f/8f) && angleC >= PI*(3f/8f)){
+                gameEngine.player.moveUp()
+            }
+            if(angleC < PI*(7f/8f) && angleC >= PI*(5f/8f)){
+                gameEngine.player.moveUp()
+                gameEngine.player.moveLeft()
+            }
+            if(angleC >= PI*(7f/8f) || angleC < PI*(-7f/8f)){
+                gameEngine.player.moveLeft()
+            }
+            if(angleC < PI*(-5f/8f) && angleC >= PI*(-7f/8f)){
+                gameEngine.player.moveLeft()
+                gameEngine.player.moveDown()
+            }
+            if(angleC < PI*(-3f/8f) && angleC >= PI*(-5f/8f)){
+                gameEngine.player.moveDown()
+            }
+            if(angleC < PI*(-1f/8f) && angleC >= PI*(-3f/8f)){
+                gameEngine.player.moveDown()
+                gameEngine.player.moveRight()
+            }
+
         }
-        if (joystickImage.y > 800){
-            gameEngine.player.moveDown()
-        }
-        if (joystickImage.x < 0){
-            gameEngine.player.moveLeft()
-        }
-        if (joystickImage.x > 500){
-            gameEngine.player.moveRight()
+    }
+
+    fun shootPlayer(){
+        var xDifference = joyStick2X - joystick2OriginX
+        var yDifference = joystick2OriginY - joyStick2Y
+        var hypotenuse = hypot(xDifference, yDifference)
+
+        if(hypotenuse > joystick2PlayerMoveRadius){
+            var angleC = acos(xDifference/hypotenuse)
+
+            if(joyStick2Y > joystick2OriginY){
+                angleC *= (-1f)
+            }
+
+            if(angleC < PI*(1f/8f) && angleC >= PI*(-1f/8f)){
+                gameEngine.player.shoot("right")
+            }
+            if(angleC < PI*(3f/8f) && angleC >= PI*(1f/8f)){
+
+            }
+            if(angleC < PI*(5f/8f) && angleC >= PI*(3f/8f)){
+                gameEngine.player.shoot("up")
+            }
+            if(angleC < PI*(7f/8f) && angleC >= PI*(5f/8f)){
+
+            }
+            if(angleC >= PI*(7f/8f) || angleC < PI*(-7f/8f)){
+                gameEngine.player.shoot("left")
+            }
+            if(angleC < PI*(-5f/8f) && angleC >= PI*(-7f/8f)){
+
+            }
+            if(angleC < PI*(-3f/8f) && angleC >= PI*(-5f/8f)){
+                gameEngine.player.shoot("down")
+            }
+            if(angleC < PI*(-1f/8f) && angleC >= PI*(-3f/8f)){
+
+            }
+
         }
     }
 
     fun updateImages(){
-        //update enemy image
+        //update enemy images
+        for(enemy in gameEngine.freezos) {
+            enemyImage.x = enemy.getXPosition() - enemy.getWidth()/2f
+            enemyImage.y = enemy.getYPosition() - enemy.getHeight()/2f
+            tempImageResource = enemy.image
+            if (tempImageResource < 0){
+                tempImageResource *= -1
+                enemyImage.setImageResource(tempImageResource)
+                enemyImage.rotationY = 180f
+            }else{
+                enemyImage.rotationY = 0f
+                enemyImage.setImageResource(enemy.image)
+            }
+        }
+        /* Old method using hardcoded enemy
         enemyImage.x = gameEngine.enemy.getXPosition() - gameEngine.enemy.getWidth()/2f
         enemyImage.y = gameEngine.enemy.getYPosition() - gameEngine.enemy.getHeight()/2f
         tempImageResource = gameEngine.enemy.image
@@ -155,6 +305,7 @@ class GameController : AppCompatActivity() {
             enemyImage.rotationY = 0f
             enemyImage.setImageResource(gameEngine.enemy.image)
         }
+        */
 
         //update player image
         playerImage.x = gameEngine.player.getXPosition() - gameEngine.player.getWidth()/2f
@@ -169,7 +320,7 @@ class GameController : AppCompatActivity() {
             playerImage.setImageResource(gameEngine.player.image)
         }
 
-        //update bullet images
+        //update player bullet images
         var count = 0
         for (bullet in gameEngine.player.bulletArray){
             if (bullet != null){
@@ -182,17 +333,39 @@ class GameController : AppCompatActivity() {
             count++
         }
 
+        //update player bullet images
+        for(enemy in gameEngine.freezos) {
+            count = 0
+            for (bullet in enemy.bulletArray){
+                if (bullet != null){
+                    enemyBullets[count].setImageResource(bullet.image)
+                    enemyBullets[count].x = bullet.xPosition - bullet.getWidth()/2
+                    enemyBullets[count].y = bullet.yPosition - bullet.getHeight()/2
+                    enemyBullets[count].getLayoutParams().width = bullet.getWidth()
+                    enemyBullets[count].getLayoutParams().height = bullet.getHeight()
+                }
+                count++
+            }
+        }
+        /* Old method using hardcoded enemy
         count = 0
         for (bullet in gameEngine.enemy.bulletArray){
             if (bullet != null){
                 enemyBullets[count].setImageResource(bullet.image)
-                enemyBullets[count].x = bullet.xPosition - bullet.getWidth()/2 //+ (playerImage.width/2)
-                enemyBullets[count].y = bullet.yPosition - bullet.getHeight()/2 //+ (playerImage.height/2)
+                enemyBullets[count].x = bullet.xPosition - bullet.getWidth()/2
+                enemyBullets[count].y = bullet.yPosition - bullet.getHeight()/2
                 enemyBullets[count].getLayoutParams().width = bullet.getWidth()
                 enemyBullets[count].getLayoutParams().height = bullet.getHeight()
             }
             count++
         }
+        */
+
+        //update Joystick images
+        joystickImage.x = joyStickX - joystickImage.width/2
+        joystickImage.y = joyStickY - joystickImage.height/2
+        joystickImage2.x = joyStick2X - joystickImage2.width/2
+        joystickImage2.y = joyStick2Y - joystickImage2.height/2
 
         //To Delete
         playerImage.setBackgroundColor(Color.rgb(0,200,50))

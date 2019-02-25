@@ -1,6 +1,5 @@
 package com.example.jacobgraves.myapplication.model
 
-import android.graphics.Rect
 import android.graphics.RectF
 import com.example.jacobgraves.myapplication.R
 
@@ -20,14 +19,14 @@ class Bullet {
     var yMovementSpeed:Float
     var direction:String
     var animationCounter = 0
-    lateinit private var hitbox:RectF
+    var hitBox :RectF
 
     constructor(player:Player, bulletDirection:String){
         attackValue = 1
         isAlive = true
         friendly = true
-        setHeight(50)
-        setWidth(50)
+        setHeight(7)
+        setWidth(20)
         size = 1f
         type = "regular"
         if(player.accelerationX < 0f){
@@ -43,7 +42,7 @@ class Bullet {
         xPosition = player.getXPosition()
         yPosition = player.getYPosition()
         direction = bulletDirection
-        hitbox = RectF(this.xPosition,this.yPosition,this.xPosition+this.getWidth(),this.yPosition+this.getHeight())
+        hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
 
 
         assignPictures()
@@ -53,6 +52,8 @@ class Bullet {
         attackValue = 1
         isAlive = true
         friendly = true
+        setHeight(7)
+        setWidth(20)
         size = 1f
         type = bulletType
         xMovementSpeed = player.accelerationX+10f
@@ -60,7 +61,7 @@ class Bullet {
         xPosition = player.getXPosition()
         yPosition = player.getYPosition()
         direction = bulletDirection
-
+        hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
 
         assignPictures()
     }
@@ -69,8 +70,8 @@ class Bullet {
         attackValue = 1
         isAlive = true
         friendly = true
-        setHeight(50)
-        setWidth(50)
+        setHeight(7)
+        setWidth(20)
         size = 1f
         type = "regular"
         if(enemy.accelerationX < 0f){
@@ -86,6 +87,7 @@ class Bullet {
         xPosition = enemy.getXPosition()
         yPosition = enemy.getYPosition()
         direction = bulletDirection
+        hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
 
 
         assignPictures()
@@ -95,6 +97,8 @@ class Bullet {
         attackValue = 1
         isAlive = true
         friendly = false
+        setHeight(7)
+        setWidth(20)
         size = 1f
         type = bulletType
         xMovementSpeed = enemy.accelerationX+10f
@@ -102,6 +106,7 @@ class Bullet {
         xPosition = enemy.getXPosition()
         yPosition = enemy.getYPosition()
         direction = bulletDirection
+        hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
 
 
         assignPictures()
@@ -124,9 +129,6 @@ class Bullet {
         }
     }
 
-    fun setHitbox(x: RectF){
-        hitbox = x
-    }
 
     //Getters----------------------------
     fun getHeight(): Int{
@@ -137,9 +139,6 @@ class Bullet {
         return width
     }
 
-    fun getHitbox():RectF{
-        return hitbox
-    }
 
     //Other Stuff-------------------------
 
@@ -175,5 +174,9 @@ class Bullet {
         }
         image = animationSet[animationCounter]
         animationCounter += 1
+    }
+
+    fun updateHitbox(){
+        hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
     }
 }
