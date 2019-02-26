@@ -14,14 +14,6 @@
         tools:layout_editor_absoluteX="158dp"
         tools:layout_editor_absoluteY="43dp" />
 
-    <ImageView
-        android:id="@+id/enemyImage"
-        android:layout_width="50dp"
-        android:layout_height="100dp"
-        tools:layout_editor_absoluteX="296dp"
-        tools:layout_editor_absoluteY="85dp"
-        tools:srcCompat="@drawable/mario_peace" />
-
     <Button
         android:id="@+id/joystickImage"
         android:layout_width="51dp"

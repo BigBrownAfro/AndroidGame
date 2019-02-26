@@ -3,6 +3,7 @@ package com.example.jacobgraves.myapplication
 import android.graphics.Color
 import android.graphics.RectF
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
@@ -20,6 +21,7 @@ class GameController : AppCompatActivity() {
     lateinit var gameEngine: Engine
     var timer = Timer()
     lateinit var joystickListener:View.OnTouchListener
+    lateinit var joystick2Listener:View.OnTouchListener
     var tempImageResource = 0
     lateinit var playerBullets:Array<ImageView>
     lateinit var enemyBullets:Array<ImageView>
@@ -36,6 +38,13 @@ class GameController : AppCompatActivity() {
     var joystick2MoveRadius = 100f
     var joystick2PlayerMoveRadius = 50f
     lateinit var enemies:Array<ImageView>
+    var lastLoopStart:Long = 0
+    var xDifference:Float = 0f
+    var yDifference:Float = 0f
+    var hypotenuse:Float = 0f
+    var angleC:Float = 0f
+    //val constraintLayout = findViewById(R.id.constraintLayout) as ConstraintLayout
+    var count = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +55,8 @@ class GameController : AppCompatActivity() {
         runInitSetup()
     }
 
+
+
     //Setup------------------------------------------------------------------------------------------
     fun runInitSetup() {
         gameEngine = Engine(intent.getStringExtra("name"))
@@ -54,16 +65,15 @@ class GameController : AppCompatActivity() {
         setupListeners()
 
         println("Init Game Setup Complete")
-        Thread.sleep(3000)
+
         timer.schedule(1,16) {
-            var start = System.currentTimeMillis()
             runOnUiThread(Runnable() {
                 run() {
                     update()
                 }
             });
-            println(System.currentTimeMillis() - start)
         }
+
     }
 
     fun setupListeners(){
@@ -74,12 +84,12 @@ class GameController : AppCompatActivity() {
                 joyStickX = motionEvent.rawX
                 joyStickY = motionEvent.rawY
 
-                var xDifference = motionEvent.rawX - joystickOriginX
-                var yDifference = joystickOriginY - motionEvent.rawY
-                var hypotenuse = hypot(xDifference, yDifference)
+                xDifference = motionEvent.rawX - joystickOriginX
+                yDifference = joystickOriginY - motionEvent.rawY
+                hypotenuse = hypot(xDifference, yDifference)
 
                 if(hypotenuse > joystickMoveRadius){
-                    var angleC = acos(xDifference/hypotenuse)
+                    angleC = acos(xDifference/hypotenuse)
 
                     if(joyStickY < joystickOriginY){
                     }else{
@@ -102,19 +112,19 @@ class GameController : AppCompatActivity() {
             true
         })
 
-        var joystick2Listener = View.OnTouchListener(function = { view, motionEvent ->
+        joystick2Listener = View.OnTouchListener(function = { view, motionEvent ->
 
             if (motionEvent.action == MotionEvent.ACTION_MOVE) {
 
                 joyStick2X = motionEvent.rawX
                 joyStick2Y = motionEvent.rawY
 
-                var xDifference = motionEvent.rawX - joystick2OriginX
-                var yDifference = joystick2OriginY - motionEvent.rawY
-                var hypotenuse = hypot(xDifference, yDifference)
+                xDifference = motionEvent.rawX - joystick2OriginX
+                yDifference = joystick2OriginY - motionEvent.rawY
+                hypotenuse = hypot(xDifference, yDifference)
 
                 if(hypotenuse > joystick2MoveRadius){
-                    var angleC = acos(xDifference/hypotenuse)
+                    angleC = acos(xDifference/hypotenuse)
 
                     if(joyStick2Y < joystick2OriginY){
                     }else{
@@ -128,7 +138,7 @@ class GameController : AppCompatActivity() {
                 joystickImage2.x = joyStick2X - joystickImage2.width/2
                 joystickImage2.y = joyStick2Y - joystickImage2.height/2
 
-            }else{
+            }else if(motionEvent.action == MotionEvent.ACTION_UP){
                 joyStick2X = joystick2OriginX
                 joyStick2Y = joystick2OriginY
                 joystickImage2.x = joyStick2X - joystickImage2.width/2
@@ -142,7 +152,7 @@ class GameController : AppCompatActivity() {
     }
 
     fun setupImages(){
-        val constraintLayout = findViewById(R.id.constraintLayout) as ConstraintLayout
+
 
         //Player images
         playerImage.setImageResource(gameEngine.player.image)
@@ -157,6 +167,7 @@ class GameController : AppCompatActivity() {
             constraintLayout.addView(image)
         }
 
+        /*
         for(enemy in gameEngine.freezos) {
             enemyImage.setImageResource(enemy.image)
             enemyImage.getLayoutParams().width = enemy.getWidth()
@@ -164,7 +175,7 @@ class GameController : AppCompatActivity() {
             enemyImage.x = enemy.getXPosition()
             enemyImage.y = enemy.getYPosition()
         }
-        /*
+
         enemyImage.getLayoutParams().width = gameEngine.enemy.getWidth()
         enemyImage.getLayoutParams().height = gameEngine.enemy.getHeight()
         enemyImage.setImageResource(gameEngine.enemy.image)
@@ -199,6 +210,18 @@ class GameController : AppCompatActivity() {
     }
 
     //Updating------------------------------------------------------------------------------------------
+    fun gameLoop(){
+        var run = true
+        while(run){
+            if(System.currentTimeMillis() - lastLoopStart >= 16){
+                lastLoopStart = System.currentTimeMillis()
+                update()
+            }else{
+                Thread.sleep(lastLoopStart + 16 - System.currentTimeMillis())
+            }
+        }
+    }
+
     fun update(){
         gameEngine.update()
         movePlayer()
@@ -208,17 +231,19 @@ class GameController : AppCompatActivity() {
 
     fun movePlayer(){
 
-        var xDifference = joyStickX - joystickOriginX
-        var yDifference = joystickOriginY - joyStickY
-        var hypotenuse = hypot(xDifference, yDifference)
+        xDifference = joyStickX - joystickOriginX
+        yDifference = joystickOriginY - joyStickY
+        hypotenuse = hypot(xDifference, yDifference)
 
         if(hypotenuse > joystickPlayerMoveRadius){
-            var angleC = acos(xDifference/hypotenuse)
+            angleC = acos(xDifference/hypotenuse)
 
             if(joyStickY > joystickOriginY){
                 angleC *= (-1f)
             }
 
+            gameEngine.player.move(angleC)
+            /*
             if(angleC < PI*(1f/8f) && angleC >= PI*(-1f/8f)){
                 gameEngine.player.moveRight()
             }
@@ -247,17 +272,18 @@ class GameController : AppCompatActivity() {
                 gameEngine.player.moveDown()
                 gameEngine.player.moveRight()
             }
+            */
 
         }
     }
 
     fun shootPlayer(){
-        var xDifference = joyStick2X - joystick2OriginX
-        var yDifference = joystick2OriginY - joyStick2Y
-        var hypotenuse = hypot(xDifference, yDifference)
+        xDifference = joyStick2X - joystick2OriginX
+        yDifference = joystick2OriginY - joyStick2Y
+        hypotenuse = hypot(xDifference, yDifference)
 
         if(hypotenuse > joystick2PlayerMoveRadius){
-            var angleC = acos(xDifference/hypotenuse)
+            angleC = acos(xDifference/hypotenuse)
 
             if(joyStick2Y > joystick2OriginY){
                 angleC *= (-1f)
@@ -293,7 +319,7 @@ class GameController : AppCompatActivity() {
 
     fun updateImages(){
         //update enemy images
-        var count = 0
+        count = 0
         for(enemy in gameEngine.freezos) {
             enemies[count].x
             enemies[count].x = enemy.getXPosition() - enemy.getWidth()/2f
@@ -385,6 +411,6 @@ class GameController : AppCompatActivity() {
 
         //To Delete
         playerImage.setBackgroundColor(Color.rgb(0,200,50))
-        enemyImage.setBackgroundColor(Color.rgb(200,0,50))
+        //enemyImage.setBackgroundColor(Color.rgb(200,0,50))
     }
 }

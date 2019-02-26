@@ -15,8 +15,6 @@ class Engine {
         freezos.add(Freezo())
         freezos[1].setXPosition(1720f)
         freezos[1].setYPosition(980f)
-        freezos.removeAt(0)
-        freezos.removeAt(0)
     }
 
 
@@ -30,12 +28,13 @@ class Engine {
         }
         frameCount += 1
 
+
+        moveBullets()
+        moveEnemies()
         player.decelerate()
         for(freezo in freezos){
             freezo.decelerate()
         }
-        moveBullets()
-        moveEnemies()
         updateHitboxes()
         checkForCollision()
         attackPlayer()

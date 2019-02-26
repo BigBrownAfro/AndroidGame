@@ -2,6 +2,7 @@ package com.example.jacobgraves.myapplication.model
 
 import android.graphics.RectF
 import com.example.jacobgraves.myapplication.R
+import kotlin.math.*
 
 class Player{
     var name :String
@@ -189,7 +190,7 @@ class Player{
     }
 
     fun moveUp(){
-        accelerationY -= 2f * movementSpeed;
+        accelerationY -= movementSpeed;
         if (accelerationY < (-1f) * 7f * movementSpeed){
             accelerationY = (-1f) * 7f * movementSpeed
         }
@@ -197,7 +198,7 @@ class Player{
     }
 
     fun moveDown(){
-        accelerationY += 2f * movementSpeed;
+        accelerationY += movementSpeed;
         if (accelerationY > 7f * movementSpeed){
             accelerationY = 7f * movementSpeed
         }
@@ -205,7 +206,7 @@ class Player{
     }
 
     fun moveLeft(){
-        accelerationX -= 2f * movementSpeed;
+        accelerationX -= movementSpeed;
         if (accelerationX < (-1f) * 7f * movementSpeed){
             accelerationX = (-1f) * 7f * movementSpeed
         }
@@ -213,15 +214,59 @@ class Player{
     }
 
     fun moveRight(){
-        accelerationX += 2f * movementSpeed;
+        accelerationX += movementSpeed;
         if (accelerationX > 7f * movementSpeed){
             accelerationX = 7f * movementSpeed
         }
         xPosition += accelerationX;
     }
 
+    fun move(angle:Float){
+        //xPosition += 4f * movementSpeed * cos(angle)
+        //yPosition -= 4f * movementSpeed * sin(angle)
+        /*
+        if(movementSpeed * cos(angle) > 0 && accelerationX < 0){
+            accelerationX = 0f
+        }
+        if(movementSpeed * cos(angle) < 0 && accelerationX > 0){
+            accelerationX = 0f
+        }
+        if(movementSpeed * sin(angle) > 0 && accelerationY < 0){
+            accelerationX = 0f
+        }
+        if(movementSpeed * sin(angle) > 0 && accelerationY > 0){
+            accelerationX = 0f
+        }*/
+
+        accelerationX += movementSpeed * cos(angle)
+        accelerationY -= movementSpeed * sin(angle)
+
+        if(hypot(xPosition,yPosition) > 4f * movementSpeed){
+            var newAngle = acos(accelerationX/ hypot(accelerationX,accelerationY))
+            if(accelerationY > 0){
+                newAngle *= -1f
+            }
+            accelerationX = 4f * movementSpeed * cos(angle)
+            accelerationY = -4f * movementSpeed * sin(angle)
+        }
+
+        xPosition += accelerationX
+        yPosition += accelerationY
+
+    }
+
     fun decelerate(){
-        if (accelerationX < 0) {
+        accelerationX *= .9f
+        accelerationY *= .9f
+        if(accelerationX < .1f && accelerationX > -.1f){
+            accelerationX = 0f
+        }
+        if(accelerationY < .1f && accelerationY > -.1f){
+            accelerationY = 0f
+        }
+        xPosition += accelerationX
+        yPosition += accelerationY
+        /*if (accelerationX < 0) {
             accelerationX += movementSpeed
         }else {if (accelerationX > 0){
             accelerationX -= movementSpeed
@@ -230,7 +275,7 @@ class Player{
             accelerationY += movementSpeed
         }else {if (accelerationY > 0){
             accelerationY -= movementSpeed
-        }}
+        }}*/
     }
 
     fun shoot(direction:String){
