@@ -12,9 +12,10 @@ class Engine {
         player = Player(name)
         frameCount = 0
         freezos.add(Freezo())
-        freezos.add(Freezo())
+        /*freezos.add(Freezo())
         freezos[1].setXPosition(1720f)
         freezos[1].setYPosition(980f)
+        freezos[1].followRadius += 100*/
     }
 
 
@@ -63,7 +64,7 @@ class Engine {
         for(freezo in freezos){
             //check enemy player collision
             if(freezo.hitBox.intersect(player.hitBox)){
-                println("Enemy Collided With Player")
+                //println("Enemy Collided With Player")
             }
 
             //check player bullet collisions
@@ -71,7 +72,7 @@ class Engine {
             for (bullet in player.bulletArray) {
                 if (bullet != null) {
                     if(freezo.hitBox.intersect(bullet.hitBox)){
-                        println("Bullet Collided With Enemy")
+                        //println("Bullet Collided With Enemy")
                     }
                 }
                 count++
@@ -82,7 +83,7 @@ class Engine {
             for (bullet in freezo.bulletArray) {
                 if (bullet != null) {
                     if(player.hitBox.intersect(bullet.hitBox)){
-                        println("Bullet Collided With Player")
+                        //println("Bullet Collided With Player")
                     }
                 }
                 count++

@@ -64,12 +64,31 @@ class GameController : AppCompatActivity() {
         setupButtons()
         setupListeners()
 
+
+        var start = System.currentTimeMillis()
+        var start2 = start
+        var buffer = start + 3000
+        var end = start
+        var longest:Long = 0
+        var longest2:Long = 0
+
         println("Init Game Setup Complete")
 
-        timer.schedule(1,16) {
+        timer.schedule(1,16) {//60 frames per second
             runOnUiThread(Runnable() {
                 run() {
+                    start2 = System.currentTimeMillis()
+                    if (start2 - start > longest && start > buffer){
+                        longest = start2 - start
+                    }
+                    frameTimeText.text = "frame space: " + (start2 - start) + "\nLongest: " + longest
+                    start = System.currentTimeMillis()
                     update()
+                    end = System.currentTimeMillis()
+                    if (end - start > longest2 && start > buffer){
+                        longest2 = end - start
+                    }
+                    frameTimeText2.text = "update time: " + (end - start) + "\nLongest: " + longest2
                 }
             });
         }
@@ -167,15 +186,17 @@ class GameController : AppCompatActivity() {
             constraintLayout.addView(image)
         }
 
-        /*
+        count = 0
         for(enemy in gameEngine.freezos) {
-            enemyImage.setImageResource(enemy.image)
-            enemyImage.getLayoutParams().width = enemy.getWidth()
-            enemyImage.getLayoutParams().height = enemy.getHeight()
-            enemyImage.x = enemy.getXPosition()
-            enemyImage.y = enemy.getYPosition()
+            enemies[count].setImageResource(enemy.image)
+            enemies[count].getLayoutParams().width = enemy.getWidth()
+            enemies[count].getLayoutParams().height = enemy.getHeight()
+            enemies[count].x = enemy.getXPosition()
+            enemies[count].y = enemy.getYPosition()
+            count ++
         }
 
+        /*
         enemyImage.getLayoutParams().width = gameEngine.enemy.getWidth()
         enemyImage.getLayoutParams().height = gameEngine.enemy.getHeight()
         enemyImage.setImageResource(gameEngine.enemy.image)
@@ -190,11 +211,11 @@ class GameController : AppCompatActivity() {
         joystickImage2.getLayoutParams().height = 100
 
         //Setup Bullets
-        playerBullets = Array(200){ImageView(this)}
+        playerBullets = Array(500){ImageView(this)}
         for (i in playerBullets){
             constraintLayout.addView(i)
         }
-        enemyBullets = Array(500){ImageView(this)}
+        enemyBullets = Array(1000){ImageView(this)}
         for (i in enemyBullets){
             constraintLayout.addView(i)
         }
@@ -210,7 +231,7 @@ class GameController : AppCompatActivity() {
     }
 
     //Updating------------------------------------------------------------------------------------------
-    fun gameLoop(){
+    fun gameLoop(){ //Doesn't Run
         var run = true
         while(run){
             if(System.currentTimeMillis() - lastLoopStart >= 16){
@@ -243,37 +264,6 @@ class GameController : AppCompatActivity() {
             }
 
             gameEngine.player.move(angleC)
-            /*
-            if(angleC < PI*(1f/8f) && angleC >= PI*(-1f/8f)){
-                gameEngine.player.moveRight()
-            }
-            if(angleC < PI*(3f/8f) && angleC >= PI*(1f/8f)){
-                gameEngine.player.moveRight()
-                gameEngine.player.moveUp()
-            }
-            if(angleC < PI*(5f/8f) && angleC >= PI*(3f/8f)){
-                gameEngine.player.moveUp()
-            }
-            if(angleC < PI*(7f/8f) && angleC >= PI*(5f/8f)){
-                gameEngine.player.moveUp()
-                gameEngine.player.moveLeft()
-            }
-            if(angleC >= PI*(7f/8f) || angleC < PI*(-7f/8f)){
-                gameEngine.player.moveLeft()
-            }
-            if(angleC < PI*(-5f/8f) && angleC >= PI*(-7f/8f)){
-                gameEngine.player.moveLeft()
-                gameEngine.player.moveDown()
-            }
-            if(angleC < PI*(-3f/8f) && angleC >= PI*(-5f/8f)){
-                gameEngine.player.moveDown()
-            }
-            if(angleC < PI*(-1f/8f) && angleC >= PI*(-3f/8f)){
-                gameEngine.player.moveDown()
-                gameEngine.player.moveRight()
-            }
-            */
-
         }
     }
 
@@ -335,19 +325,6 @@ class GameController : AppCompatActivity() {
             }
             count++
         }
-        /* Old method using hardcoded enemy
-        enemyImage.x = gameEngine.enemy.getXPosition() - gameEngine.enemy.getWidth()/2f
-        enemyImage.y = gameEngine.enemy.getYPosition() - gameEngine.enemy.getHeight()/2f
-        tempImageResource = gameEngine.enemy.image
-        if (tempImageResource < 0){
-            tempImageResource *= -1
-            enemyImage.setImageResource(tempImageResource)
-            enemyImage.rotationY = 180f
-        }else{
-            enemyImage.rotationY = 0f
-            enemyImage.setImageResource(gameEngine.enemy.image)
-        }
-        */
 
         //update player image
         playerImage.x = gameEngine.player.getXPosition() - gameEngine.player.getWidth()/2f
@@ -379,29 +356,20 @@ class GameController : AppCompatActivity() {
         count = 0
         for(enemy in gameEngine.freezos) {
             for (bullet in enemy.bulletArray){
-                if (bullet != null){
+                if (bullet != null && bullet.isAlive){
                     enemyBullets[count].setImageResource(bullet.image)
                     enemyBullets[count].x = bullet.xPosition - bullet.getWidth()/2
                     enemyBullets[count].y = bullet.yPosition - bullet.getHeight()/2
                     enemyBullets[count].getLayoutParams().width = bullet.getWidth()
                     enemyBullets[count].getLayoutParams().height = bullet.getHeight()
                 }
+                /*
+                if(bullet != null && !bullet.isAlive){
+                    count--
+                }*/
                 count++
             }
         }
-        /* Old method using hardcoded enemy
-        count = 0
-        for (bullet in gameEngine.enemy.bulletArray){
-            if (bullet != null){
-                enemyBullets[count].setImageResource(bullet.image)
-                enemyBullets[count].x = bullet.xPosition - bullet.getWidth()/2
-                enemyBullets[count].y = bullet.yPosition - bullet.getHeight()/2
-                enemyBullets[count].getLayoutParams().width = bullet.getWidth()
-                enemyBullets[count].getLayoutParams().height = bullet.getHeight()
-            }
-            count++
-        }
-        */
 
         //update Joystick images
         joystickImage.x = joyStickX - joystickImage.width/2

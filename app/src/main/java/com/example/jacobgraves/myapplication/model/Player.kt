@@ -25,6 +25,8 @@ class Player{
     var bulletArray:Array<Bullet?>
     var bulletCounter = 0
     var hitBox: RectF
+    var maxReload = 20
+    var reloadTime = 0;
 
     constructor(characterName: String){
         name = characterName
@@ -56,7 +58,7 @@ class Player{
         }
         setXPosition(300f)
         setYPosition(300f)
-        bulletArray = Array(100){null}
+        bulletArray = Array(500){null}
         hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
 
         assignPictures(characterName)
@@ -279,11 +281,15 @@ class Player{
     }
 
     fun shoot(direction:String){
-        if (bulletCounter > 99){
-            bulletCounter = 0
+        if(reloadTime <= 0){
+            if (bulletCounter >= bulletArray.size){
+                bulletCounter = 0
+            }
+            bulletArray[bulletCounter] = Bullet(this,direction)
+            bulletCounter++
+            reloadTime = maxReload
         }
-        bulletArray[bulletCounter] = Bullet(this,direction)
-        bulletCounter++
+        reloadTime--
     }
 
     fun updateAnimations(){
@@ -337,7 +343,14 @@ class Player{
     fun moveBullets(){
         for (bullet in bulletArray){
             if (bullet != null){
-                bullet.move()
+                if(!bullet.isAlive){
+                    bulletArray[bulletArray.indexOf(bullet)] = null
+                }else{
+                    bullet.move()
+                    if(bullet.xPosition > 2200 || bullet.xPosition < -100 || bullet.yPosition > 1200 || bullet.yPosition < -100){
+                        bullet.isAlive = false
+                    }
+                }
             }
         }
     }

@@ -7,6 +7,7 @@ class Freezo(): Enemy() {
 
     var maxReload = 30
     var reloadTime = 0;
+    var followRadius = 200
 
     init {
         setHealthValue(20)
@@ -15,16 +16,16 @@ class Freezo(): Enemy() {
     }
 
     fun pursuePlayer(player:Player){
-        if(player.getXPosition() < this.getXPosition() && this.getXPosition() - player.getXPosition() > 200){
+        if(player.getXPosition() < this.getXPosition() && this.getXPosition() - player.getXPosition() > followRadius){
             moveLeft()
         }
-        if(player.getXPosition() > this.getXPosition() && player.getXPosition() - this.getXPosition() > 200){
+        if(player.getXPosition() > this.getXPosition() && player.getXPosition() - this.getXPosition() > followRadius){
             moveRight()
         }
-        if(player.getYPosition() < this.getYPosition() && this.getYPosition() - player.getYPosition() > 200){
+        if(player.getYPosition() < this.getYPosition() && this.getYPosition() - player.getYPosition() > followRadius){
             moveUp()
         }
-        if(player.getYPosition() > this.getYPosition() && player.getYPosition() - this.getYPosition() > 200){
+        if(player.getYPosition() > this.getYPosition() && player.getYPosition() - this.getYPosition() > followRadius){
             moveDown()
         }
     }

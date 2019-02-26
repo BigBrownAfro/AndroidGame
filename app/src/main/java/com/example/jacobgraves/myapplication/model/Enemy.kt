@@ -275,7 +275,14 @@ abstract class Enemy{
     fun moveBullets(){
         for (bullet in bulletArray){
             if (bullet != null){
-                bullet.move()
+                if(!bullet.isAlive){
+                    bulletArray[bulletArray.indexOf(bullet)] = null
+                }else{
+                    bullet.move()
+                    if(bullet.xPosition > 2200 || bullet.xPosition < -100 || bullet.yPosition > 1200 || bullet.yPosition < -100){
+                        bullet.isAlive = false
+                    }
+                }
             }
         }
     }
