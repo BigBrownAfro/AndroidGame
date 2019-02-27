@@ -1,6 +1,7 @@
 package com.example.jacobgraves.myapplication.model
 
 import android.graphics.RectF
+import android.widget.ImageView
 import com.example.jacobgraves.myapplication.R
 import kotlin.math.PI
 import kotlin.math.absoluteValue

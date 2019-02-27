@@ -32,10 +32,7 @@ class Engine {
 
         moveBullets()
         moveEnemies()
-        player.decelerate()
-        for(freezo in freezos){
-            freezo.decelerate()
-        }
+        decelerate()
         updateHitboxes()
         checkForCollision()
         attackPlayer()
@@ -44,6 +41,13 @@ class Engine {
     fun moveEnemies(){
         for(freezo in freezos){
             freezo.pursuePlayer(player)
+        }
+    }
+
+    fun decelerate(){
+        player.decelerate()
+        for(freezo in freezos){
+            freezo.decelerate()
         }
     }
 

@@ -46,6 +46,20 @@ class GameController : AppCompatActivity() {
     //val constraintLayout = findViewById(R.id.constraintLayout) as ConstraintLayout
     var count = 0
 
+    //timing
+    var start1 :Long = 0
+    var start2 :Long = 0
+    var start3 :Long = 0
+    var dur1 :Long = 0
+    var dur2 :Long = 0
+    var dur3 :Long = 0
+    var buffer :Long = 0
+    var end1 :Long = 0
+    var end3 :Long = 0
+    var longest1:Long = 0
+    var longest2:Long = 0
+    var longest3:Long = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,16 +78,24 @@ class GameController : AppCompatActivity() {
         setupButtons()
         setupListeners()
 
-
-        var start = System.currentTimeMillis()
-        var start2 = start
-        var buffer = start + 3000
-        var end = start
-        var longest:Long = 0
-        var longest2:Long = 0
-
         println("Init Game Setup Complete")
 
+        timer.schedule(1,16) {//60 frames per second
+            start2 = System.currentTimeMillis()
+            dur2 = start2 - start1;
+            if(dur2 > longest2 && start1 != buffer){
+                longest2 = dur2
+            }
+            start1 = System.currentTimeMillis()
+            update()
+            end1 = System.currentTimeMillis()
+            dur1 = end1-start1
+            if(dur1 > longest1){
+                longest1 = dur1
+            }
+        }
+
+        /*
         timer.schedule(1,16) {//60 frames per second
             runOnUiThread(Runnable() {
                 run() {
@@ -92,6 +114,7 @@ class GameController : AppCompatActivity() {
                 }
             });
         }
+         */
 
     }
 
@@ -122,7 +145,7 @@ class GameController : AppCompatActivity() {
                 joystickImage.x = joyStickX - joystickImage.width/2
                 joystickImage.y = joyStickY - joystickImage.height/2
 
-            }else{
+            }else if(motionEvent.action == MotionEvent.ACTION_UP){
                 joyStickX = joystickOriginX
                 joyStickY = joystickOriginY
                 joystickImage.x = joyStickX - joystickImage.width/2
@@ -218,6 +241,13 @@ class GameController : AppCompatActivity() {
         enemyBullets = Array(1000){ImageView(this)}
         for (i in enemyBullets){
             constraintLayout.addView(i)
+            /*
+            i.setImageResource(R.drawable.bullet)
+            i.x = -500f
+            i.y = -500f
+            i.getLayoutParams().width = 1
+            i.getLayoutParams().height = 1
+            */
         }
     }
 
@@ -247,7 +277,20 @@ class GameController : AppCompatActivity() {
         gameEngine.update()
         movePlayer()
         shootPlayer()
-        updateImages()
+        runOnUiThread(Runnable() {
+            run() {
+                start3 = System.currentTimeMillis()
+                updateImages()
+                frameTimeText.text = "Update time: " + (dur1) + "\nLongest: " + longest1
+                frameTimeText2.text = "frame space: " + (dur2) + "\nLongest: " + longest2
+                end3 = System.currentTimeMillis()
+                dur3 = end3 - start3
+                if(dur3 > longest3){
+                    longest3 = dur3
+                }
+                frameTimeText3.text = "Update Image Time: " + (dur3) + "\nLongest: " + longest3
+            }
+        });
     }
 
     fun movePlayer(){
@@ -311,7 +354,6 @@ class GameController : AppCompatActivity() {
         //update enemy images
         count = 0
         for(enemy in gameEngine.freezos) {
-            enemies[count].x
             enemies[count].x = enemy.getXPosition() - enemy.getWidth()/2f
             enemies[count].y = enemy.getYPosition() - enemy.getHeight()/2f
             tempImageResource = enemy.image
@@ -352,7 +394,7 @@ class GameController : AppCompatActivity() {
             count++
         }
 
-        //update player bullet images
+        //update enemy bullet images
         count = 0
         for(enemy in gameEngine.freezos) {
             for (bullet in enemy.bulletArray){
@@ -362,6 +404,7 @@ class GameController : AppCompatActivity() {
                     enemyBullets[count].y = bullet.yPosition - bullet.getHeight()/2
                     enemyBullets[count].getLayoutParams().width = bullet.getWidth()
                     enemyBullets[count].getLayoutParams().height = bullet.getHeight()
+
                 }
                 /*
                 if(bullet != null && !bullet.isAlive){
