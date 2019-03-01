@@ -1,23 +1,21 @@
 package com.example.jacobgraves.myapplication
 
-import android.graphics.Color
-import android.graphics.RectF
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
-import android.view.MotionEvent
-import android.view.View
-import android.widget.ImageView
-import com.example.jacobgraves.myapplication.model.Engine
-import com.example.jacobgraves.myapplication.model.Player
-import kotlinx.android.synthetic.main.game_view.*
-import java.lang.Thread.sleep
-import java.util.*
-import kotlin.concurrent.schedule
-import kotlin.math.*
+import android.view.WindowManager
 
 class GameController : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
+        setContentView(R.layout.game_view)
+    }
+}
+
+
+    /*
     lateinit var gameEngine: Engine
     var timer = Timer()
     lateinit var joystickListener:View.OnTouchListener
@@ -424,4 +422,4 @@ class GameController : AppCompatActivity() {
         playerImage.setBackgroundColor(Color.rgb(0,200,50))
         //enemyImage.setBackgroundColor(Color.rgb(200,0,50))
     }
-}
+}*/

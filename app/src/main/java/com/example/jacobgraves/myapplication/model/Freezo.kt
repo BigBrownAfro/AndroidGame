@@ -1,9 +1,10 @@
 package com.example.jacobgraves.myapplication.model
 
+import android.content.res.Resources
 import kotlin.math.asin
 import kotlin.math.hypot
 
-class Freezo(): Enemy() {
+class Freezo(resources: Resources): Enemy(resources) {
 
     var maxReload = 30
     var reloadTime = 0;

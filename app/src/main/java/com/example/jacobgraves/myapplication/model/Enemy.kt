@@ -1,11 +1,12 @@
 package com.example.jacobgraves.myapplication.model
 
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.RectF
-import android.widget.ImageView
 import com.example.jacobgraves.myapplication.R
-import kotlin.math.PI
 import kotlin.math.absoluteValue
-import kotlin.math.asin
 import kotlin.math.hypot
 
 abstract class Enemy{
@@ -30,8 +31,9 @@ abstract class Enemy{
     var bulletCounter = 0
     var hitBox: RectF
     var sensorRadius = 300
+    var bitmapImage:Bitmap
 
-    constructor(){
+    constructor(resources: Resources){
         setHealthValue(5)
         setAttackValue(1)
         setMovementSpeed(1.0f)
@@ -41,6 +43,7 @@ abstract class Enemy{
         setHeight(160)
         bulletArray = Array(100){null}
         hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
+        bitmapImage = BitmapFactory.decodeResource(resources,R.drawable.mario_peace)
 
         assignImages()
     }
@@ -308,5 +311,9 @@ abstract class Enemy{
             }
             count++
         }
+    }
+
+    fun draw(canvas: Canvas){
+        canvas.drawBitmap(bitmapImage,xPosition,yPosition,null)
     }
 }

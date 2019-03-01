@@ -1,5 +1,7 @@
 package com.example.jacobgraves.myapplication.model
 
+import android.content.res.Resources
+import android.graphics.Canvas
 import android.graphics.RectF
 
 
@@ -8,10 +10,10 @@ class Engine {
     var frameCount: Int
     var freezos = ArrayList<Freezo>()
 
-    constructor(name:String){
+    constructor(name:String, resources: Resources){
         player = Player(name)
         frameCount = 0
-        freezos.add(Freezo())
+        freezos.add(Freezo(resources))
         /*freezos.add(Freezo())
         freezos[1].setXPosition(1720f)
         freezos[1].setYPosition(980f)
@@ -116,6 +118,12 @@ class Engine {
     fun attackPlayer(){
         for(freezo in freezos) {
             freezo.attack(player)
+        }
+    }
+
+    fun draw(canvas: Canvas){
+        for(freezo in freezos) {
+            freezo.draw(canvas)
         }
     }
 }
