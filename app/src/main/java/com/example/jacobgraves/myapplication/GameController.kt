@@ -23,6 +23,7 @@ class GameController : AppCompatActivity() {
     lateinit var joystickListener:View.OnTouchListener
     lateinit var joystick2Listener:View.OnTouchListener
     var tempImageResource = 0
+    var healthImageTemp = 0
     lateinit var playerBullets:Array<ImageView>
     lateinit var enemyBullets:Array<ImageView>
     var joystickOriginX = 300f
@@ -275,6 +276,7 @@ class GameController : AppCompatActivity() {
 
     fun update(){
         gameEngine.update()
+        updateGUI()
         movePlayer()
         shootPlayer()
         runOnUiThread(Runnable() {
@@ -291,6 +293,10 @@ class GameController : AppCompatActivity() {
                 frameTimeText3.text = "Update Image Time: " + (dur3) + "\nLongest: " + longest3
             }
         });
+    }
+
+    fun updateGUI(){
+
     }
 
     fun movePlayer(){
@@ -419,6 +425,10 @@ class GameController : AppCompatActivity() {
         joystickImage.y = joyStickY - joystickImage.height/2
         joystickImage2.x = joyStick2X - joystickImage2.width/2
         joystickImage2.y = joyStick2Y - joystickImage2.height/2
+
+        //update Healthbar Images
+        healthImageTemp = gameEngine.player.playerHealthImage
+        healthImage.setImageResource(healthImageTemp)
 
         //To Delete
         playerImage.setBackgroundColor(Color.rgb(0,200,50))

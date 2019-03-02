@@ -1,6 +1,7 @@
 package com.example.jacobgraves.myapplication.model
 
 import android.graphics.RectF
+import android.media.Image
 import com.example.jacobgraves.myapplication.R
 import kotlin.math.*
 
@@ -11,6 +12,7 @@ class Player{
     private var movementSpeed :Float = 0.0f
     var accelerationX:Float = 0.0f
     var accelerationY:Float = 0.0f
+    var playerHealthImage = R.drawable.health6
     private var xPosition :Float = 0.0f
     private var yPosition :Float = 0.0f
     private var width:Int = 0
@@ -37,7 +39,7 @@ class Player{
             setHeight(400)
             setWidth(200)
         }else if(name == "Reggie"){
-            setHealthValue(3)
+            setHealthValue(6)
             setAttackValue(1)
             setMovementSpeed(1.5f)
             setHeight(100)
@@ -339,7 +341,17 @@ class Player{
             }
         }
     }
-
+    fun updateGUI(){
+        when(healthValue){
+            6 -> playerHealthImage = R.drawable.health6
+            5 -> playerHealthImage = R.drawable.health5
+            4 -> playerHealthImage = R.drawable.health4
+            3 -> playerHealthImage = R.drawable.health3
+            2 -> playerHealthImage = R.drawable.health2
+            1 -> playerHealthImage = R.drawable.health1
+            0 -> playerHealthImage = R.drawable.health0
+        }
+    }
     fun moveBullets(){
         for (bullet in bulletArray){
             if (bullet != null){

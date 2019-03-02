@@ -1,6 +1,7 @@
 package com.example.jacobgraves.myapplication.model
 
 import android.graphics.RectF
+import com.example.jacobgraves.myapplication.R
 
 
 class Engine {
@@ -31,11 +32,16 @@ class Engine {
 
 
         moveBullets()
+        updateGUI()
         moveEnemies()
         decelerate()
         updateHitboxes()
         checkForCollision()
         attackPlayer()
+    }
+
+    fun updateGUI(){
+        player.updateGUI()
     }
 
     fun moveEnemies(){
@@ -68,7 +74,7 @@ class Engine {
         for(freezo in freezos){
             //check enemy player collision
             if(freezo.hitBox.intersect(player.hitBox)){
-                //println("Enemy Collided With Player")
+                println("Enemy Collided With Player")
             }
 
             //check player bullet collisions
@@ -76,7 +82,7 @@ class Engine {
             for (bullet in player.bulletArray) {
                 if (bullet != null) {
                     if(freezo.hitBox.intersect(bullet.hitBox)){
-                        //println("Bullet Collided With Enemy")
+                        println("Bullet Collided With Enemy")
                     }
                 }
                 count++
@@ -87,7 +93,12 @@ class Engine {
             for (bullet in freezo.bulletArray) {
                 if (bullet != null) {
                     if(player.hitBox.intersect(bullet.hitBox)){
-                        //println("Bullet Collided With Player")
+                        println("Bullet Collided With Player")
+                        bullet.xPosition = -1000f
+
+
+                        player.setHealthValue(player.getHealthValue()-1)
+                        println(player.getHealthValue())
                     }
                 }
                 count++
