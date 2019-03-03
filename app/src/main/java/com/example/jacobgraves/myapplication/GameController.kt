@@ -80,7 +80,15 @@ class GameController : AppCompatActivity() {
         setupListeners()
 
         println("Init Game Setup Complete")
-
+        // I don't want to do this for you, so I'll leave a note here.
+        // I figured it out, so I'll give you some hints.
+        // Don't use timer.schedule. Use timer.scheduleAtFixedRate.
+        // You'll need to pass in a TimerTask, which is abstract so
+        // You'll need to make a new class, (I called mine GameTask)
+        // and pass a lambda function to call inside the 'run' method.
+        // use the code you have here as the lambda function, but make 
+        // sure to put it all inside runOnUiThread { ... } 
+        // If you have questions, we can talk about it in class!
         timer.schedule(1,16) {//60 frames per second
             start2 = System.currentTimeMillis()
             dur2 = start2 - start1;
