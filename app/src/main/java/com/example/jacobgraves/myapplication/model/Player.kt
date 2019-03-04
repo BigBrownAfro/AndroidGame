@@ -2,10 +2,15 @@ package com.example.jacobgraves.myapplication.model
 
 import android.graphics.RectF
 import android.media.Image
+import android.provider.ContactsContract
+import android.widget.ImageView
+import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
+import kotlinx.android.synthetic.main.game_view.*
+import kotlinx.android.synthetic.main.game_view.view.*
 import kotlin.math.*
 
-class Player{
+class Player(val gameController: GameController, characterName: String){
     var name :String
     private var healthValue :Int = 0
     private var attackValue :Int = 0
@@ -30,7 +35,9 @@ class Player{
     var maxReload = 20
     var reloadTime = 0;
 
-    constructor(characterName: String){
+    val imageView:ImageView
+
+    init{
         name = characterName
         if (name == "Dead Guy"){
             setHealthValue(-100)
@@ -64,6 +71,9 @@ class Player{
         hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
 
         assignPictures(characterName)
+
+        imageView = ImageView(gameController)
+        setupImageView()
     }
 
 
@@ -256,7 +266,6 @@ class Player{
 
         xPosition += accelerationX
         yPosition += accelerationY
-
     }
 
     fun decelerate(){
@@ -287,7 +296,7 @@ class Player{
             if (bulletCounter >= bulletArray.size){
                 bulletCounter = 0
             }
-            bulletArray[bulletCounter] = Bullet(this,direction)
+            bulletArray[bulletCounter] = Bullet(gameController,this,direction)
             bulletCounter++
             reloadTime = maxReload
         }
@@ -341,6 +350,7 @@ class Player{
             }
         }
     }
+
     fun updateGUI(){
         when(healthValue){
             6 -> playerHealthImage = R.drawable.health6
@@ -356,6 +366,7 @@ class Player{
         for (bullet in bulletArray){
             if (bullet != null){
                 if(!bullet.isAlive){
+                    bullet.kill()
                     bulletArray[bulletArray.indexOf(bullet)] = null
                 }else{
                     bullet.move()
@@ -386,6 +397,48 @@ class Player{
                 bullet.updateHitbox()
             }
             count++
+        }
+    }
+
+    fun setupImageView(){
+        gameController.runOnUiThread{
+            run{
+                gameController.constraintLayout.addView(imageView)
+                imageView.layoutParams.width = width
+                imageView.layoutParams.height = height
+
+                imageView.x = getXPosition() - getWidth()/2f
+                imageView.y = getYPosition() - getHeight()/2f
+                var tempImageResource = image
+                if (tempImageResource < 0){
+                    tempImageResource *= -1
+                    imageView.setImageResource(tempImageResource)
+                    imageView.rotationY = 180f
+                }else{
+                    imageView.rotationY = 0f
+                    imageView.setImageResource(image)
+                }
+            }
+        }
+    }
+
+    fun updateImageView(){
+        gameController.runOnUiThread{
+            run{
+                imageView.layoutParams.width = width
+                imageView.layoutParams.height = height
+                imageView.x = getXPosition() - getWidth()/2f
+                imageView.y = getYPosition() - getHeight()/2f
+                var tempImageResource = image
+                if (tempImageResource < 0){
+                    tempImageResource *= -1
+                    imageView.setImageResource(tempImageResource)
+                    imageView.rotationY = 180f
+                }else{
+                    imageView.rotationY = 0f
+                    imageView.setImageResource(image)
+                }
+            }
         }
     }
 }

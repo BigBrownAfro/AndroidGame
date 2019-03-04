@@ -1,6 +1,7 @@
 package com.example.jacobgraves.myapplication.model
 
 import android.graphics.RectF
+import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
 
 
@@ -9,10 +10,10 @@ class Engine {
     var frameCount: Int
     var freezos = ArrayList<Freezo>()
 
-    constructor(name:String){
-        player = Player(name)
+    constructor(gameController: GameController, name:String){
+        player = Player(gameController,name)
         frameCount = 0
-        freezos.add(Freezo())
+        freezos.add(Freezo(gameController))
         /*freezos.add(Freezo())
         freezos[1].setXPosition(1720f)
         freezos[1].setYPosition(980f)
@@ -32,12 +33,13 @@ class Engine {
 
 
         moveBullets()
-        updateGUI()
         moveEnemies()
+        updateImageViews()
         decelerate()
         updateHitboxes()
         checkForCollision()
         attackPlayer()
+        updateGUI()
     }
 
     fun updateGUI(){
@@ -127,6 +129,25 @@ class Engine {
     fun attackPlayer(){
         for(freezo in freezos) {
             freezo.attack(player)
+        }
+    }
+
+    fun updateImageViews(){
+        player.updateImageView()
+
+        for(bullet in player.bulletArray){
+            if(bullet != null){
+                bullet.updateImageView()
+            }
+        }
+
+        for (enemy in freezos){
+            enemy.updateImageView()
+            for(bullet in enemy.bulletArray){
+                if(bullet != null){
+                    bullet.updateImageView()
+                }
+            }
         }
     }
 }

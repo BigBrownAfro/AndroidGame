@@ -6,14 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/playerImage"
-        android:layout_width="100dp"
-        android:layout_height="200dp"
-        app:srcCompat="@drawable/mario_peace"
-        tools:layout_editor_absoluteX="158dp"
-        tools:layout_editor_absoluteY="43dp" />
-
     <Button
         android:id="@+id/joystickImage"
         android:layout_width="51dp"
@@ -88,7 +80,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/health6"
-        tools:layout_editor_absoluteX="307dp"
-        tools:layout_editor_absoluteY="243dp" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="1dp" />
 
 </android.support.constraint.ConstraintLayout>

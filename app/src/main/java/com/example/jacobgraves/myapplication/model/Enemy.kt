@@ -2,13 +2,15 @@ package com.example.jacobgraves.myapplication.model
 
 import android.graphics.RectF
 import android.widget.ImageView
+import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
+import kotlinx.android.synthetic.main.game_view.*
 import kotlin.math.PI
 import kotlin.math.absoluteValue
 import kotlin.math.asin
 import kotlin.math.hypot
 
-abstract class Enemy{
+abstract class Enemy(val gameController: GameController) {
     var name = "Enemy"
     private var healthValue :Int = 0
     private var attackValue :Int = 0
@@ -31,7 +33,9 @@ abstract class Enemy{
     var hitBox: RectF
     var sensorRadius = 300
 
-    constructor(){
+    val imageView:ImageView
+
+    init{
         setHealthValue(5)
         setAttackValue(1)
         setMovementSpeed(1.0f)
@@ -43,6 +47,9 @@ abstract class Enemy{
         hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
 
         assignImages()
+
+        imageView = ImageView(gameController)
+        setupImageView()
     }
 
 
@@ -269,7 +276,7 @@ abstract class Enemy{
         if (bulletCounter > 99){
             bulletCounter = 0
         }
-        bulletArray[bulletCounter] = Bullet(this,direction)
+        bulletArray[bulletCounter] = Bullet(gameController, this,direction)
         bulletCounter++
     }
 
@@ -277,6 +284,7 @@ abstract class Enemy{
         for (bullet in bulletArray){
             if (bullet != null){
                 if(!bullet.isAlive){
+                    bullet.kill()
                     bulletArray[bulletArray.indexOf(bullet)] = null
                 }else{
                     bullet.move()
@@ -307,6 +315,48 @@ abstract class Enemy{
                 bullet.updateHitbox()
             }
             count++
+        }
+    }
+
+    fun setupImageView(){
+        gameController.runOnUiThread{
+            run{
+                gameController.constraintLayout.addView(imageView)
+                imageView.layoutParams.width = width
+                imageView.layoutParams.height = height
+
+                imageView.x = getXPosition() - getWidth()/2f
+                imageView.y = getYPosition() - getHeight()/2f
+                var tempImageResource = image
+                if (tempImageResource < 0){
+                    tempImageResource *= -1
+                    imageView.setImageResource(tempImageResource)
+                    imageView.rotationY = 180f
+                }else{
+                    imageView.rotationY = 0f
+                    imageView.setImageResource(image)
+                }
+            }
+        }
+    }
+
+    fun updateImageView(){
+        gameController.runOnUiThread{
+            run{
+                imageView.layoutParams.width = width
+                imageView.layoutParams.height = height
+                imageView.x = getXPosition() - getWidth()/2f
+                imageView.y = getYPosition() - getHeight()/2f
+                var tempImageResource = image
+                if (tempImageResource < 0){
+                    tempImageResource *= -1
+                    imageView.setImageResource(tempImageResource)
+                    imageView.rotationY = 180f
+                }else{
+                    imageView.rotationY = 0f
+                    imageView.setImageResource(image)
+                }
+            }
         }
     }
 }

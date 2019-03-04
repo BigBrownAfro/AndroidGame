@@ -1,9 +1,10 @@
 package com.example.jacobgraves.myapplication.model
 
+import com.example.jacobgraves.myapplication.GameController
 import kotlin.math.asin
 import kotlin.math.hypot
 
-class Freezo(): Enemy() {
+class Freezo(gameController: GameController): Enemy(gameController) {
 
     var maxReload = 30
     var reloadTime = 0;

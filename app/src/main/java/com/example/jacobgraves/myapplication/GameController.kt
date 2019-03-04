@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
+import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
@@ -71,14 +72,22 @@ class GameController : AppCompatActivity() {
         runInitSetup()
     }
 
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        println("Did you press the back button?")
+        timer.cancel()
+    }
 
     //Setup------------------------------------------------------------------------------------------
     fun runInitSetup() {
-        gameEngine = Engine(intent.getStringExtra("name"))
+        gameEngine = Engine(this, intent.getStringExtra("name"))
         setupImages()
         setupButtons()
         setupListeners()
+        var displayMetrics = DisplayMetrics()
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics)
+        println(displayMetrics.widthPixels)
+        println(displayMetrics.heightPixels)
 
         println("Init Game Setup Complete")
         // I don't want to do this for you, so I'll leave a note here.
@@ -186,7 +195,13 @@ class GameController : AppCompatActivity() {
 
     fun setupImages(){
 
+        //Joysticks images
+        joystickImage.getLayoutParams().width = 100
+        joystickImage.getLayoutParams().height = 100
+        joystickImage2.getLayoutParams().width = 100
+        joystickImage2.getLayoutParams().height = 100
 
+        /*
         //Player images
         playerImage.setImageResource(gameEngine.player.image)
         playerImage.getLayoutParams().width = gameEngine.player.getWidth()
@@ -218,12 +233,6 @@ class GameController : AppCompatActivity() {
         enemyImage.y = gameEngine.enemy.getYPosition()
         */
 
-        //Joysticks images
-        joystickImage.getLayoutParams().width = 100
-        joystickImage.getLayoutParams().height = 100
-        joystickImage2.getLayoutParams().width = 100
-        joystickImage2.getLayoutParams().height = 100
-
         //Setup Bullets
         playerBullets = Array(500){ImageView(this)}
         for (i in playerBullets){
@@ -240,15 +249,11 @@ class GameController : AppCompatActivity() {
             i.getLayoutParams().height = 1
             */
         }
+        */
     }
 
     fun setupButtons(){
-    }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        println("Did you press the back button?")
-        timer.cancel()
     }
 
     //Updating------------------------------------------------------------------------------------------
@@ -347,7 +352,18 @@ class GameController : AppCompatActivity() {
     }
 
     fun updateImages(){
+        //update Joystick images
+        joystickImage.x = joyStickX - joystickImage.width/2
+        joystickImage.y = joyStickY - joystickImage.height/2
+        joystickImage2.x = joyStick2X - joystickImage2.width/2
+        joystickImage2.y = joyStick2Y - joystickImage2.height/2
+
+        //update Healthbar Images
+        healthImageTemp = gameEngine.player.playerHealthImage
+        healthImage.setImageResource(healthImageTemp)
+
         //update enemy images
+        /*
         count = 0
         for(enemy in gameEngine.freezos) {
             enemies[count].x = enemy.getXPosition() - enemy.getWidth()/2f
@@ -416,12 +432,9 @@ class GameController : AppCompatActivity() {
         joystickImage2.x = joyStick2X - joystickImage2.width/2
         joystickImage2.y = joyStick2Y - joystickImage2.height/2
 
-        //update Healthbar Images
-        healthImageTemp = gameEngine.player.playerHealthImage
-        healthImage.setImageResource(healthImageTemp)
-
         //To Delete
         playerImage.setBackgroundColor(Color.rgb(0,200,50))
         //enemyImage.setBackgroundColor(Color.rgb(200,0,50))
+        */
     }
 }

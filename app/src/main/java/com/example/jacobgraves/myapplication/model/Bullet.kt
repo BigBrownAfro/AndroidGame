@@ -1,9 +1,12 @@
 package com.example.jacobgraves.myapplication.model
 
 import android.graphics.RectF
+import android.widget.ImageView
+import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
+import kotlinx.android.synthetic.main.game_view.*
 
-class Bullet {
+class Bullet{
     var attackValue:Int
     var isAlive:Boolean
     var friendly:Boolean
@@ -21,7 +24,11 @@ class Bullet {
     var animationCounter = 0
     var hitBox :RectF
 
-    constructor(player:Player, bulletDirection:String){
+    val gameController:GameController
+
+    val imageView:ImageView
+
+    constructor(gameController: GameController, player:Player, bulletDirection:String){
         attackValue = 1
         isAlive = true
         friendly = true
@@ -44,11 +51,13 @@ class Bullet {
         direction = bulletDirection
         hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
 
-
         assignPictures()
+        this.gameController = gameController
+        imageView = ImageView(gameController)
+        setupImageView()
     }
 
-    constructor(bulletType:String, player:Player, bulletDirection:String){
+    constructor(gameController: GameController, bulletType:String, player:Player, bulletDirection:String){
         attackValue = 1
         isAlive = true
         friendly = true
@@ -64,9 +73,12 @@ class Bullet {
         hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
 
         assignPictures()
+        this.gameController = gameController
+        imageView = ImageView(gameController)
+        setupImageView()
     }
 
-    constructor(enemy:Enemy, bulletDirection:String){
+    constructor(gameController: GameController, enemy:Enemy, bulletDirection:String){
         attackValue = 1
         isAlive = true
         friendly = true
@@ -91,9 +103,12 @@ class Bullet {
 
 
         assignPictures()
+        this.gameController = gameController
+        imageView = ImageView(gameController)
+        setupImageView()
     }
 
-    constructor(bulletType:String, enemy:Enemy, bulletDirection:String){
+    constructor(gameController: GameController, bulletType:String, enemy:Enemy, bulletDirection:String){
         attackValue = 1
         isAlive = true
         friendly = false
@@ -110,6 +125,9 @@ class Bullet {
 
 
         assignPictures()
+        this.gameController = gameController
+        imageView = ImageView(gameController)
+        setupImageView()
     }
 
     //Setters----------------------------
@@ -141,6 +159,14 @@ class Bullet {
 
 
     //Other Stuff-------------------------
+
+    fun kill(){
+        gameController.runOnUiThread{
+            run{
+                gameController.constraintLayout.removeView(imageView)
+            }
+        }
+    }
 
     fun assignPictures(){
         if (type.equals("regular")){
@@ -178,5 +204,47 @@ class Bullet {
 
     fun updateHitbox(){
         hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
+    }
+
+    fun setupImageView(){
+        gameController.runOnUiThread{
+            run{
+                gameController.constraintLayout.addView(imageView)
+                imageView.layoutParams.width = width
+                imageView.layoutParams.height = height
+
+                imageView.x = xPosition - getWidth()/2f
+                imageView.y = yPosition - getHeight()/2f
+                var tempImageResource = image
+                if (tempImageResource < 0){
+                    tempImageResource *= -1
+                    imageView.setImageResource(tempImageResource)
+                    imageView.rotationY = 180f
+                }else{
+                    imageView.rotationY = 0f
+                    imageView.setImageResource(image)
+                }
+            }
+        }
+    }
+
+    fun updateImageView(){
+        gameController.runOnUiThread{
+            run{
+                imageView.layoutParams.width = width
+                imageView.layoutParams.height = height
+                imageView.x = xPosition - getWidth()/2f
+                imageView.y = yPosition - getHeight()/2f
+                var tempImageResource = image
+                if (tempImageResource < 0){
+                    tempImageResource *= -1
+                    imageView.setImageResource(tempImageResource)
+                    imageView.rotationY = 180f
+                }else{
+                    imageView.rotationY = 0f
+                    imageView.setImageResource(image)
+                }
+            }
+        }
     }
 }
