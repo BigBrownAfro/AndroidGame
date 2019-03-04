@@ -12,6 +12,7 @@ import android.widget.ImageView
 import com.example.jacobgraves.myapplication.model.Engine
 import com.example.jacobgraves.myapplication.model.Player
 import kotlinx.android.synthetic.main.game_view.*
+import java.lang.Exception
 import java.lang.Thread.sleep
 import java.util.*
 import kotlin.concurrent.schedule
@@ -19,7 +20,7 @@ import kotlin.math.*
 
 class GameController : AppCompatActivity() {
     lateinit var gameEngine: Engine
-    var timer = Timer()
+    //var timer = Timer()
     lateinit var joystickListener:View.OnTouchListener
     lateinit var joystick2Listener:View.OnTouchListener
     var tempImageResource = 0
@@ -61,6 +62,7 @@ class GameController : AppCompatActivity() {
     var longest2:Long = 0
     var longest3:Long = 0
 
+    val gameLoop:GameLoop = GameLoop(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +70,11 @@ class GameController : AppCompatActivity() {
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         runInitSetup()
+
+        println("Starting Game Loop Thread")
+
+        gameLoop.setRunning(true)
+        gameLoop.start()
     }
 
 
@@ -81,6 +88,7 @@ class GameController : AppCompatActivity() {
 
         println("Init Game Setup Complete")
 
+        /*
         timer.schedule(1,16) {//60 frames per second
             start2 = System.currentTimeMillis()
             dur2 = start2 - start1;
@@ -94,29 +102,7 @@ class GameController : AppCompatActivity() {
             if(dur1 > longest1){
                 longest1 = dur1
             }
-        }
-
-        /*
-        timer.schedule(1,16) {//60 frames per second
-            runOnUiThread(Runnable() {
-                run() {
-                    start2 = System.currentTimeMillis()
-                    if (start2 - start > longest && start > buffer){
-                        longest = start2 - start
-                    }
-                    frameTimeText.text = "frame space: " + (start2 - start) + "\nLongest: " + longest
-                    start = System.currentTimeMillis()
-                    update()
-                    end = System.currentTimeMillis()
-                    if (end - start > longest2 && start > buffer){
-                        longest2 = end - start
-                    }
-                    frameTimeText2.text = "update time: " + (end - start) + "\nLongest: " + longest2
-                }
-            });
-        }
-         */
-
+        }*/
     }
 
     fun setupListeners(){
@@ -220,14 +206,6 @@ class GameController : AppCompatActivity() {
             count ++
         }
 
-        /*
-        enemyImage.getLayoutParams().width = gameEngine.enemy.getWidth()
-        enemyImage.getLayoutParams().height = gameEngine.enemy.getHeight()
-        enemyImage.setImageResource(gameEngine.enemy.image)
-        enemyImage.x = gameEngine.enemy.getXPosition()
-        enemyImage.y = gameEngine.enemy.getYPosition()
-        */
-
         //Joysticks images
         joystickImage.getLayoutParams().width = 100
         joystickImage.getLayoutParams().height = 100
@@ -257,34 +235,34 @@ class GameController : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+
+        var retry = true
+        while(retry){
+            try{
+                gameLoop.setRunning(false)
+                gameLoop.join()
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
+
+            retry = false
+        }
+
         println("Did you press the back button?")
-        timer.cancel()
+        //timer.cancel()
     }
 
     //Updating------------------------------------------------------------------------------------------
-    fun gameLoop(){ //Doesn't Run
-        var run = true
-        while(run){
-            if(System.currentTimeMillis() - lastLoopStart >= 16){
-                lastLoopStart = System.currentTimeMillis()
-                update()
-            }else{
-                Thread.sleep(lastLoopStart + 16 - System.currentTimeMillis())
-            }
-        }
-    }
-
     fun update(){
         gameEngine.update()
-        updateGUI()
         movePlayer()
         shootPlayer()
         runOnUiThread(Runnable() {
             run() {
                 start3 = System.currentTimeMillis()
                 updateImages()
-                frameTimeText.text = "Update time: " + (dur1) + "\nLongest: " + longest1
-                frameTimeText2.text = "frame space: " + (dur2) + "\nLongest: " + longest2
+                frameTimeText.text = "Update time: " + (gameLoop.updateTime) + "\nLongest: " + gameLoop.longestUpdateTime
+                frameTimeText2.text = "frame space: " + (gameLoop.frameSpace) + "\nLongest: " + gameLoop.longestFrameSpace
                 end3 = System.currentTimeMillis()
                 dur3 = end3 - start3
                 if(dur3 > longest3){
@@ -293,10 +271,6 @@ class GameController : AppCompatActivity() {
                 frameTimeText3.text = "Update Image Time: " + (dur3) + "\nLongest: " + longest3
             }
         });
-    }
-
-    fun updateGUI(){
-
     }
 
     fun movePlayer(){
