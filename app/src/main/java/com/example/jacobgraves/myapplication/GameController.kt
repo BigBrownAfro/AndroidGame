@@ -229,7 +229,6 @@ class GameController : AppCompatActivity() {
     }
 
     fun movePlayer(){
-
         xDifference = joyStickX - joystickOriginX
         yDifference = joystickOriginY - joyStickY
         hypotenuse = hypot(xDifference, yDifference)
@@ -257,33 +256,30 @@ class GameController : AppCompatActivity() {
                 angleC *= (-1f)
             }
 
-            gameEngine.player.shoot(angleC)
-
-            /*
             if(angleC < PI*(1f/8f) && angleC >= PI*(-1f/8f)){
-                gameEngine.player.shoot("right")
+                gameEngine.player.shoot(0f)
             }
             if(angleC < PI*(3f/8f) && angleC >= PI*(1f/8f)){
-
+                gameEngine.player.shoot(PI.toFloat()/4f)
             }
             if(angleC < PI*(5f/8f) && angleC >= PI*(3f/8f)){
-                gameEngine.player.shoot("up")
+                gameEngine.player.shoot(PI.toFloat()/2f)
             }
             if(angleC < PI*(7f/8f) && angleC >= PI*(5f/8f)){
-
+                gameEngine.player.shoot(3f*PI.toFloat()/4f)
             }
             if(angleC >= PI*(7f/8f) || angleC < PI*(-7f/8f)){
-                gameEngine.player.shoot("left")
+                gameEngine.player.shoot(PI.toFloat())
             }
             if(angleC < PI*(-5f/8f) && angleC >= PI*(-7f/8f)){
-
+                gameEngine.player.shoot(-3f*PI.toFloat()/4f)
             }
             if(angleC < PI*(-3f/8f) && angleC >= PI*(-5f/8f)){
-                gameEngine.player.shoot("down")
+                gameEngine.player.shoot(-PI.toFloat()/2f)
             }
             if(angleC < PI*(-1f/8f) && angleC >= PI*(-3f/8f)){
-
-            }*/
+                gameEngine.player.shoot(-PI.toFloat()/4f)
+            }
         }
     }
 
