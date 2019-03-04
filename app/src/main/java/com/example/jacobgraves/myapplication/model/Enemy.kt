@@ -118,7 +118,7 @@ abstract class Enemy(val gameController: GameController) {
     }
 
     fun getAttackValue(): Int{
-        return healthValue
+        return attackValue
     }
 
     fun getMovementSpeed(): Float{
@@ -143,6 +143,14 @@ abstract class Enemy(val gameController: GameController) {
 
 
 //Other Stuff------------------------
+
+    fun kill(){
+        gameController.runOnUiThread{
+            run{
+                gameController.constraintLayout.removeView(imageView)
+            }
+        }
+    }
 
     fun inRadius(player:Player): Boolean{
         var inRadius = false
@@ -272,11 +280,11 @@ abstract class Enemy(val gameController: GameController) {
         }
     }
 
-    fun shoot(direction:String){
+    fun shoot(angle:Float){
         if (bulletCounter > 99){
             bulletCounter = 0
         }
-        bulletArray[bulletCounter] = Bullet(gameController, this,direction)
+        bulletArray[bulletCounter] = Bullet(gameController, this,angle)
         bulletCounter++
     }
 
@@ -322,11 +330,11 @@ abstract class Enemy(val gameController: GameController) {
         gameController.runOnUiThread{
             run{
                 gameController.constraintLayout.addView(imageView)
-                imageView.layoutParams.width = width
-                imageView.layoutParams.height = height
 
-                imageView.x = getXPosition() - getWidth()/2f
-                imageView.y = getYPosition() - getHeight()/2f
+                imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
+                imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
+                imageView.x = (getXPosition() - getWidth()/2f) * gameController.screenXRatio
+                imageView.y = (getYPosition() - getHeight()/2f) * gameController.screenYRatio
                 var tempImageResource = image
                 if (tempImageResource < 0){
                     tempImageResource *= -1
@@ -343,10 +351,10 @@ abstract class Enemy(val gameController: GameController) {
     fun updateImageView(){
         gameController.runOnUiThread{
             run{
-                imageView.layoutParams.width = width
-                imageView.layoutParams.height = height
-                imageView.x = getXPosition() - getWidth()/2f
-                imageView.y = getYPosition() - getHeight()/2f
+                imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
+                imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
+                imageView.x = (getXPosition() - getWidth()/2f) * gameController.screenXRatio
+                imageView.y = (getYPosition() - getHeight()/2f) * gameController.screenYRatio
                 var tempImageResource = image
                 if (tempImageResource < 0){
                     tempImageResource *= -1

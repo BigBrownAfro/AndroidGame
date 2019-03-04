@@ -1,6 +1,7 @@
 package com.example.jacobgraves.myapplication.model
 
 import com.example.jacobgraves.myapplication.GameController
+import kotlin.math.acos
 import kotlin.math.asin
 import kotlin.math.hypot
 
@@ -8,12 +9,13 @@ class Freezo(gameController: GameController): Enemy(gameController) {
 
     var maxReload = 30
     var reloadTime = 0;
-    var followRadius = 200
+    var followRadius = 500
 
     init {
-        setHealthValue(20)
+        setHealthValue(5)
         setAttackValue(1)
         setMovementSpeed(.75f)
+        sensorRadius = 800
     }
 
     fun pursuePlayer(player:Player){
@@ -33,15 +35,18 @@ class Freezo(gameController: GameController): Enemy(gameController) {
 
     fun attack(player: Player){
         if(inRadius(player) && reloadTime <= 0){
-            shoot(lastDirection)
             reloadTime = maxReload;
-            /*
+
             var xDifference = player.getXPosition() - getXPosition()
             var yDifference = getYPosition() - player.getYPosition()
             var hypotenuse = hypot(xDifference, yDifference)
-            var angle = asin(yDifference/hypotenuse)
-            */
+            var angle = acos(xDifference/hypotenuse)
 
+            if(getYPosition() < player.getYPosition()){
+                angle *= -1f
+            }
+
+            shoot(angle)
         }
         reloadTime--
     }

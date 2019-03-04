@@ -5,6 +5,10 @@ import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
 import kotlinx.android.synthetic.main.game_view.*
+import kotlin.math.acos
+import kotlin.math.cos
+import kotlin.math.hypot
+import kotlin.math.sin
 
 class Bullet{
     var attackValue:Int
@@ -20,16 +24,16 @@ class Bullet{
     private var height:Int = 0
     var xMovementSpeed:Float
     var yMovementSpeed:Float
-    var direction:String
     var animationCounter = 0
     var hitBox :RectF
+    var angle:Float
 
     val gameController:GameController
 
     val imageView:ImageView
 
-    constructor(gameController: GameController, player:Player, bulletDirection:String){
-        attackValue = 1
+    constructor(gameController: GameController, player:Player, angle:Float){
+        attackValue = player.getAttackValue()
         isAlive = true
         friendly = true
         setHeight(7)
@@ -48,8 +52,8 @@ class Bullet{
         }
         xPosition = player.getXPosition()
         yPosition = player.getYPosition()
-        direction = bulletDirection
         hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
+        this.angle = angle
 
         assignPictures()
         this.gameController = gameController
@@ -57,8 +61,8 @@ class Bullet{
         setupImageView()
     }
 
-    constructor(gameController: GameController, bulletType:String, player:Player, bulletDirection:String){
-        attackValue = 1
+    constructor(gameController: GameController, bulletType:String, player:Player, angle:Float){
+        attackValue = player.getAttackValue()
         isAlive = true
         friendly = true
         setHeight(7)
@@ -69,8 +73,8 @@ class Bullet{
         yMovementSpeed = player.accelerationY+10f
         xPosition = player.getXPosition()
         yPosition = player.getYPosition()
-        direction = bulletDirection
         hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
+        this.angle = angle
 
         assignPictures()
         this.gameController = gameController
@@ -78,8 +82,8 @@ class Bullet{
         setupImageView()
     }
 
-    constructor(gameController: GameController, enemy:Enemy, bulletDirection:String){
-        attackValue = 1
+    constructor(gameController: GameController, enemy:Enemy, angle:Float){
+        attackValue = enemy.getAttackValue()
         isAlive = true
         friendly = true
         setHeight(7)
@@ -98,9 +102,8 @@ class Bullet{
         }
         xPosition = enemy.getXPosition()
         yPosition = enemy.getYPosition()
-        direction = bulletDirection
         hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
-
+        this.angle = angle
 
         assignPictures()
         this.gameController = gameController
@@ -108,8 +111,8 @@ class Bullet{
         setupImageView()
     }
 
-    constructor(gameController: GameController, bulletType:String, enemy:Enemy, bulletDirection:String){
-        attackValue = 1
+    constructor(gameController: GameController, bulletType:String, enemy:Enemy, angle:Float){
+        attackValue = enemy.getAttackValue()
         isAlive = true
         friendly = false
         setHeight(7)
@@ -120,9 +123,8 @@ class Bullet{
         yMovementSpeed = enemy.accelerationY+10f
         xPosition = enemy.getXPosition()
         yPosition = enemy.getYPosition()
-        direction = bulletDirection
         hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
-
+        this.angle = angle
 
         assignPictures()
         this.gameController = gameController
@@ -182,7 +184,7 @@ class Bullet{
         }
     }
 
-    fun move(){
+    /*fun move(){
         if(direction == "up"){
             yPosition -= yMovementSpeed
         }else if(direction == "down"){
@@ -192,6 +194,11 @@ class Bullet{
         }else if(direction == "right"){
             xPosition += xMovementSpeed
         }
+    }*/
+
+    fun move(){
+        xPosition += cos(angle)*xMovementSpeed
+        yPosition -= sin(angle)*yMovementSpeed
     }
 
     fun updateAnimations(){
@@ -210,11 +217,10 @@ class Bullet{
         gameController.runOnUiThread{
             run{
                 gameController.constraintLayout.addView(imageView)
-                imageView.layoutParams.width = width
-                imageView.layoutParams.height = height
-
-                imageView.x = xPosition - getWidth()/2f
-                imageView.y = yPosition - getHeight()/2f
+                imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
+                imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
+                imageView.x = (xPosition - getWidth()/2f) * gameController.screenXRatio
+                imageView.y = (yPosition - getHeight()/2f) * gameController.screenYRatio
                 var tempImageResource = image
                 if (tempImageResource < 0){
                     tempImageResource *= -1
@@ -231,10 +237,10 @@ class Bullet{
     fun updateImageView(){
         gameController.runOnUiThread{
             run{
-                imageView.layoutParams.width = width
-                imageView.layoutParams.height = height
-                imageView.x = xPosition - getWidth()/2f
-                imageView.y = yPosition - getHeight()/2f
+                imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
+                imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
+                imageView.x = (xPosition - getWidth()/2f) * gameController.screenXRatio
+                imageView.y = (yPosition - getHeight()/2f) * gameController.screenYRatio
                 var tempImageResource = image
                 if (tempImageResource < 0){
                     tempImageResource *= -1

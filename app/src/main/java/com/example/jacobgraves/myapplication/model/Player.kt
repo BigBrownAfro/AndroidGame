@@ -48,7 +48,7 @@ class Player(val gameController: GameController, characterName: String){
         }else if(name == "Reggie"){
             setHealthValue(6)
             setAttackValue(1)
-            setMovementSpeed(1.5f)
+            setMovementSpeed(1.2f)
             setHeight(100)
             setWidth(50)
         }else if(name == "Frank"){
@@ -142,7 +142,7 @@ class Player(val gameController: GameController, characterName: String){
     }
 
     fun getAttackValue(): Int{
-        return healthValue
+        return attackValue
     }
 
     fun getMovementSpeed(): Float{
@@ -203,55 +203,7 @@ class Player(val gameController: GameController, characterName: String){
         }
     }
 
-    fun moveUp(){
-        accelerationY -= movementSpeed;
-        if (accelerationY < (-1f) * 7f * movementSpeed){
-            accelerationY = (-1f) * 7f * movementSpeed
-        }
-        yPosition += accelerationY;
-    }
-
-    fun moveDown(){
-        accelerationY += movementSpeed;
-        if (accelerationY > 7f * movementSpeed){
-            accelerationY = 7f * movementSpeed
-        }
-        yPosition += accelerationY;
-    }
-
-    fun moveLeft(){
-        accelerationX -= movementSpeed;
-        if (accelerationX < (-1f) * 7f * movementSpeed){
-            accelerationX = (-1f) * 7f * movementSpeed
-        }
-        xPosition += accelerationX;
-    }
-
-    fun moveRight(){
-        accelerationX += movementSpeed;
-        if (accelerationX > 7f * movementSpeed){
-            accelerationX = 7f * movementSpeed
-        }
-        xPosition += accelerationX;
-    }
-
     fun move(angle:Float){
-        //xPosition += 4f * movementSpeed * cos(angle)
-        //yPosition -= 4f * movementSpeed * sin(angle)
-        /*
-        if(movementSpeed * cos(angle) > 0 && accelerationX < 0){
-            accelerationX = 0f
-        }
-        if(movementSpeed * cos(angle) < 0 && accelerationX > 0){
-            accelerationX = 0f
-        }
-        if(movementSpeed * sin(angle) > 0 && accelerationY < 0){
-            accelerationX = 0f
-        }
-        if(movementSpeed * sin(angle) > 0 && accelerationY > 0){
-            accelerationX = 0f
-        }*/
-
         accelerationX += movementSpeed * cos(angle)
         accelerationY -= movementSpeed * sin(angle)
 
@@ -279,24 +231,27 @@ class Player(val gameController: GameController, characterName: String){
         }
         xPosition += accelerationX
         yPosition += accelerationY
-        /*if (accelerationX < 0) {
-            accelerationX += movementSpeed
-        }else {if (accelerationX > 0){
-            accelerationX -= movementSpeed
-        }}
-        if (accelerationY < 0){
-            accelerationY += movementSpeed
-        }else {if (accelerationY > 0){
-            accelerationY -= movementSpeed
-        }}*/
     }
 
+    /*
     fun shoot(direction:String){
         if(reloadTime <= 0){
             if (bulletCounter >= bulletArray.size){
                 bulletCounter = 0
             }
             bulletArray[bulletCounter] = Bullet(gameController,this,direction)
+            bulletCounter++
+            reloadTime = maxReload
+        }
+        reloadTime--
+    }*/
+
+    fun shoot(angle: Float){
+        if(reloadTime <= 0){
+            if (bulletCounter >= bulletArray.size){
+                bulletCounter = 0
+            }
+            bulletArray[bulletCounter] = Bullet(gameController,this,angle)
             bulletCounter++
             reloadTime = maxReload
         }
@@ -404,11 +359,11 @@ class Player(val gameController: GameController, characterName: String){
         gameController.runOnUiThread{
             run{
                 gameController.constraintLayout.addView(imageView)
-                imageView.layoutParams.width = width
-                imageView.layoutParams.height = height
 
-                imageView.x = getXPosition() - getWidth()/2f
-                imageView.y = getYPosition() - getHeight()/2f
+                imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
+                imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
+                imageView.x = (getXPosition() - getWidth()/2f) * gameController.screenXRatio
+                imageView.y = (getYPosition() - getHeight()/2f) * gameController.screenYRatio
                 var tempImageResource = image
                 if (tempImageResource < 0){
                     tempImageResource *= -1
@@ -425,10 +380,10 @@ class Player(val gameController: GameController, characterName: String){
     fun updateImageView(){
         gameController.runOnUiThread{
             run{
-                imageView.layoutParams.width = width
-                imageView.layoutParams.height = height
-                imageView.x = getXPosition() - getWidth()/2f
-                imageView.y = getYPosition() - getHeight()/2f
+                imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
+                imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
+                imageView.x = (getXPosition() - getWidth()/2f) * gameController.screenXRatio
+                imageView.y = (getYPosition() - getHeight()/2f) * gameController.screenYRatio
                 var tempImageResource = image
                 if (tempImageResource < 0){
                     tempImageResource *= -1
