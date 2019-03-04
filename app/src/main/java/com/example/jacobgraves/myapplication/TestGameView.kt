@@ -6,20 +6,30 @@ import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.example.jacobgraves.myapplication.model.Engine
+import java.util.*
 
 
 class TestGameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
 
-    private val thread: TestGameThread
-    lateinit private var gameEngine:Engine
+    //private val thread: TestGameThread
+    private val gameEngine:Engine
+    private val timer:Timer
+    private val updateTask:TimerTask
 
     init{
         holder.addCallback(this)
+        gameEngine = Engine("Reggie",resources)
 
-        thread = TestGameThread(holder, this)
+        //thread = TestGameThread(holder, this)
+
+        timer = Timer()
+        updateTask = GameLoopTask(this)
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder?) {
+        timer.cancel()
+        Thread.sleep(100)
+        /*
         var retry = true
         while (retry) {
             try {
@@ -31,13 +41,13 @@ class TestGameView(context: Context, attributes: AttributeSet) : SurfaceView(con
 
             retry = false
         }
+        */
     }
 
     override fun surfaceCreated(p0: SurfaceHolder?) {
-        gameEngine = Engine("Reggie",resources)
-
-        thread.setRunning(true)
-        thread.start()
+        timer.scheduleAtFixedRate(updateTask,Date(),16)
+        //thread.setRunning(true)
+        //thread.start()
     }
 
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
