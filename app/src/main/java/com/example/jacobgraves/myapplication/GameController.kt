@@ -296,5 +296,6 @@ class GameController : AppCompatActivity() {
 
         //update Healthbar Images
         healthImage.setImageResource(gameEngine.player.playerHealthImage)
+        healthImage.bringToFront()
     }
 }
