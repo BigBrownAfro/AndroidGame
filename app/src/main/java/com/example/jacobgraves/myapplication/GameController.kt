@@ -19,7 +19,8 @@ import kotlin.math.*
 
 class GameController : AppCompatActivity() {
     lateinit var gameEngine: Engine
-    var timer = Timer()
+    val timer = Timer()
+    val gameTask = GameLoopTask(this)
     lateinit var joystickListener:View.OnTouchListener
     lateinit var joystick2Listener:View.OnTouchListener
     var tempImageResource = 0
@@ -89,7 +90,10 @@ class GameController : AppCompatActivity() {
         // use the code you have here as the lambda function, but make 
         // sure to put it all inside runOnUiThread { ... } 
         // If you have questions, we can talk about it in class!
-        timer.schedule(1,16) {//60 frames per second
+
+        timer.scheduleAtFixedRate(gameTask,Date(),16)
+
+        /*timer.schedule(1,16) {//60 frames per second
             start2 = System.currentTimeMillis()
             dur2 = start2 - start1;
             if(dur2 > longest2 && start1 != buffer){
@@ -102,29 +106,7 @@ class GameController : AppCompatActivity() {
             if(dur1 > longest1){
                 longest1 = dur1
             }
-        }
-
-        /*
-        timer.schedule(1,16) {//60 frames per second
-            runOnUiThread(Runnable() {
-                run() {
-                    start2 = System.currentTimeMillis()
-                    if (start2 - start > longest && start > buffer){
-                        longest = start2 - start
-                    }
-                    frameTimeText.text = "frame space: " + (start2 - start) + "\nLongest: " + longest
-                    start = System.currentTimeMillis()
-                    update()
-                    end = System.currentTimeMillis()
-                    if (end - start > longest2 && start > buffer){
-                        longest2 = end - start
-                    }
-                    frameTimeText2.text = "update time: " + (end - start) + "\nLongest: " + longest2
-                }
-            });
-        }
-         */
-
+        }*/
     }
 
     fun setupListeners(){
