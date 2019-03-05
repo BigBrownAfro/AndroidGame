@@ -6,6 +6,7 @@ import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
 import com.example.jacobgraves.myapplication.model.Engine
+import com.example.jacobgraves.myapplication.model.SoundManager
 import kotlinx.android.synthetic.main.game_view.*
 import java.util.*
 import kotlin.math.*
@@ -51,6 +52,9 @@ class GameController : AppCompatActivity() {
     var longest2:Long = 0
     var longest3:Long = 0
 
+    //Sounds
+    lateinit var soundManager:SoundManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +70,10 @@ class GameController : AppCompatActivity() {
         timer.cancel()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
     //Setup------------------------------------------------------------------------------------------
     fun runInitSetup() {
         var displayMetrics = DisplayMetrics()
@@ -77,10 +85,15 @@ class GameController : AppCompatActivity() {
         setupImages()
         setupButtons()
         setupListeners()
+        setupSounds()
 
         println("Init Game Setup Complete")
 
         timer.scheduleAtFixedRate(gameTask,Date(),16)
+    }
+
+    fun setupSounds(){
+        soundManager = SoundManager(this)
     }
 
     fun setupListeners(){
@@ -171,12 +184,12 @@ class GameController : AppCompatActivity() {
 
     fun setupImages(){
         //Joysticks images
-        joystickImage.alpha = .3f
-        joystickImage2.alpha = .3f
-        joystickImage.getLayoutParams().width = (125 * screenXRatio).toInt()
-        joystickImage.getLayoutParams().height = (125 * screenYRatio).toInt()
-        joystickImage2.getLayoutParams().width = (125 * screenXRatio).toInt()
-        joystickImage2.getLayoutParams().height = (125 * screenYRatio).toInt()
+        joystickImage.alpha = .4f
+        joystickImage2.alpha = .4f
+        joystickImage.getLayoutParams().width = (140 * screenXRatio).toInt()
+        joystickImage.getLayoutParams().height = (140 * screenYRatio).toInt()
+        joystickImage2.getLayoutParams().width = (140 * screenXRatio).toInt()
+        joystickImage2.getLayoutParams().height = (140 * screenYRatio).toInt()
 
         //Setup Healthbar Images
         healthImage.setImageResource(gameEngine.player.playerHealthImage)

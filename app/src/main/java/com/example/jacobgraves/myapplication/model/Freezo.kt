@@ -9,13 +9,13 @@ class Freezo(gameController: GameController): Enemy(gameController) {
 
     var maxReload = 30
     var reloadTime = 0;
-    var followRadius = 500
+    var followRadius = 300
 
     init {
         setHealthValue(5)
         setAttackValue(1)
         setMovementSpeed(.75f)
-        sensorRadius = 800
+        sensorRadius = 400
     }
 
     fun pursuePlayer(player:Player){

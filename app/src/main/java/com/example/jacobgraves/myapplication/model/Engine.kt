@@ -10,6 +10,8 @@ class Engine(val gameController: GameController, name:String) {
     Make an array for dead enemies so you don't remove enemy while iterating over enemies
      */
     var enemies = ArrayList<Enemy>()
+    var deadEnemies:Array<Enemy?>
+    var deadEnemyCounter:Int
     var orphanBullets = ArrayList<Bullet>()
     var deadOrphans:Array<Bullet?>
     var deadOrphanCounter:Int
@@ -22,8 +24,10 @@ class Engine(val gameController: GameController, name:String) {
         enemies[1].setXPosition(1720f)
         enemies[1].setYPosition(980f)
         enemies[1].followRadius += 100*/
-        deadOrphans = Array<Bullet?>(50){null}
+        deadOrphans = Array<Bullet?>(10){null}
         deadOrphanCounter = 0
+        deadEnemies = Array<Enemy?>(10){null}
+        deadEnemyCounter = 0
     }
 
 
@@ -98,6 +102,7 @@ class Engine(val gameController: GameController, name:String) {
                     if(enemy.hitBox.intersect(bullet.hitBox)){
                         bullet.xPosition = -222f
                         enemy.setHealthValue(enemy.getHealthValue() - bullet.attackValue)
+                        gameController.soundManager.soundPool.play(gameController.soundManager.arrow,1f,1f,5,0,1f)
                     }
                 }
             }
@@ -210,6 +215,11 @@ class Engine(val gameController: GameController, name:String) {
                     }
                 }
                 enemy.kill()
+                deadEnemies[deadEnemyCounter] = enemy
+            }
+        }
+        for(enemy in deadEnemies){
+            if(enemy != null){
                 enemies.remove(enemy)
             }
         }

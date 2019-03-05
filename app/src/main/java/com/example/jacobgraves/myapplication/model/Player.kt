@@ -2,6 +2,7 @@ package com.example.jacobgraves.myapplication.model
 
 import android.graphics.RectF
 import android.media.Image
+import android.media.MediaPlayer
 import android.provider.ContactsContract
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
@@ -36,6 +37,8 @@ class Player(val gameController: GameController, characterName: String){
     var reloadTime = 0;
 
     val imageView:ImageView
+
+    val mediaPlayer: MediaPlayer
 
     init{
         name = characterName
@@ -74,6 +77,8 @@ class Player(val gameController: GameController, characterName: String){
 
         imageView = ImageView(gameController)
         setupImageView()
+
+        mediaPlayer = MediaPlayer.create(gameController, R.raw.quack)
     }
 
 
@@ -248,11 +253,16 @@ class Player(val gameController: GameController, characterName: String){
 
     fun shoot(angle: Float){
         if(reloadTime <= 0){
+            //if(mediaPlayer.isPlaying){
+            //   mediaPlayer.pause()
+            //}
             if (bulletCounter >= bulletArray.size){
                 bulletCounter = 0
             }
             bulletArray[bulletCounter] = Bullet(gameController,this,angle)
             bulletCounter++
+            //mediaPlayer.start()
+            gameController.soundManager.soundPool.play(gameController.soundManager.pisto1,1f,1f,5,0,1f)
             reloadTime = maxReload
         }
         reloadTime--
