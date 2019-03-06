@@ -215,7 +215,7 @@ class Player(val gameController: GameController, characterName: String){
         accelerationX += movementSpeed * cos(angle)
         accelerationY -= movementSpeed * sin(angle)
 
-        if(hypot(xPosition,yPosition) > 4f * movementSpeed){
+        if(hypot(accelerationX,accelerationY) > 4f * movementSpeed){
             var newAngle = acos(accelerationX/ hypot(accelerationX,accelerationY))
             if(accelerationY > 0){
                 newAngle *= -1f

@@ -27,7 +27,7 @@ class Engine(val gameController: GameController, name:String) {
         /*enemies.add(Freezo(gameController))
         enemies[1].setXPosition(1720f)
         enemies[1].setYPosition(980f)
-        enemies[1].followRadius += 100*/
+        enemies[1].stopRadius += 100*/
         deadOrphans = Array<Bullet?>(10){null}
         deadOrphanCounter = 0
         deadEnemies = Array<Enemy?>(10){null}

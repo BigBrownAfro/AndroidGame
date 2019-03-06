@@ -5,10 +5,7 @@ import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
 import kotlinx.android.synthetic.main.game_view.*
-import kotlin.math.PI
-import kotlin.math.absoluteValue
-import kotlin.math.asin
-import kotlin.math.hypot
+import kotlin.math.*
 
 abstract class Enemy(val gameController: GameController) {
     var name = "Enemy"
@@ -32,6 +29,7 @@ abstract class Enemy(val gameController: GameController) {
     var bulletCounter = 0
     var hitBox: RectF
     var sensorRadius = 300
+    var moved = false
 
     val imageView:ImageView
 
@@ -187,6 +185,20 @@ abstract class Enemy(val gameController: GameController) {
         moveDownAnimationSet[3] = R.drawable.mario_run_down_2
     }
 
+    fun move(angle: Float){
+        accelerationX += movementSpeed * cos(angle)
+        accelerationY -= movementSpeed * sin(angle)
+
+        if(hypot(accelerationX,accelerationY) < 8f * movementSpeed){
+            xPosition += accelerationX
+            yPosition += accelerationY
+            moved = true
+        }else{
+            accelerationX -= movementSpeed * cos(angle)
+            accelerationY += movementSpeed * sin(angle)
+        }
+    }
+
     fun moveUp(){
         accelerationY -= 2f * movementSpeed;
         if (accelerationY < (-1f) * 7f * movementSpeed){
@@ -220,16 +232,19 @@ abstract class Enemy(val gameController: GameController) {
     }
 
     fun decelerate(){
-        if (accelerationX < 0) {
-            accelerationX += movementSpeed
-        }else {if (accelerationX > 0){
-            accelerationX -= movementSpeed
-        }}
-        if (accelerationY < 0){
-            accelerationY += movementSpeed
-        }else {if (accelerationY > 0){
-            accelerationY -= movementSpeed
-        }}
+        accelerationX *= .95f
+        accelerationY *= .95f
+        if(accelerationX < .1f && accelerationX > -.1f){
+            accelerationX = 0f
+        }
+        if(accelerationY < .1f && accelerationY > -.1f){
+            accelerationY = 0f
+        }
+        if (!moved){
+            xPosition += accelerationX
+            yPosition += accelerationY
+        }
+        moved = false
     }
 
     fun updateAnimations(){

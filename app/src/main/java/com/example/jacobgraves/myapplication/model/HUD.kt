@@ -86,7 +86,7 @@ class HUD(var gameController: GameController) {
                 otherImageView.setImageResource(otherImage)
                 otherImageView.layoutParams.width = (23 * gameController.screenXRatio).toInt()
                 otherImageView.layoutParams.height = (40 * gameController.screenYRatio).toInt()
-                otherImageView.x = coinsImageView.x
+                otherImageView.x = coinsImageView.x + (coinsImageView.layoutParams.width-otherImageView.layoutParams.width)/2 * gameController.screenXRatio
                 otherImageView.y = coinsImageView.y + coinsImageView.layoutParams.height + 10 * gameController.screenYRatio
 
                 otherTextView.textAlignment = TextView.TEXT_ALIGNMENT_TEXT_START
