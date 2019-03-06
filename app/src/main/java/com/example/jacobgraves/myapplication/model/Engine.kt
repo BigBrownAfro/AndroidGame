@@ -6,6 +6,7 @@ import com.example.jacobgraves.myapplication.GameController
 class Engine(val gameController: GameController, name:String) {
     var player: Player
     var frameCount: Int
+    val hud:HUD
     /*
     Make an array for dead enemies so you don't remove enemy while iterating over enemies
      */
@@ -15,12 +16,15 @@ class Engine(val gameController: GameController, name:String) {
     var orphanBullets = ArrayList<Bullet>()
     var deadOrphans:Array<Bullet?>
     var deadOrphanCounter:Int
+    var consumables:Array<Consumable?>
+    var consumableCounter:Int
 
     init{
         player = Player(gameController,name)
         frameCount = 0
+        hud = HUD(gameController)
         enemies.add(Freezo(gameController))
-        /*enemies.add(Freezo())
+        /*enemies.add(Freezo(gameController))
         enemies[1].setXPosition(1720f)
         enemies[1].setYPosition(980f)
         enemies[1].followRadius += 100*/
@@ -28,6 +32,8 @@ class Engine(val gameController: GameController, name:String) {
         deadOrphanCounter = 0
         deadEnemies = Array<Enemy?>(10){null}
         deadEnemyCounter = 0
+        consumables = Array<Consumable?>(50){null}
+        consumableCounter = 0
     }
 
 
@@ -50,11 +56,7 @@ class Engine(val gameController: GameController, name:String) {
         checkForCollision()
         attackPlayer()
         checkDeaths()
-        updateGUI()
-    }
-
-    fun updateGUI(){
-        player.updateGUI()
+        hud.updateViews()
     }
 
     fun moveEnemies(){
@@ -70,6 +72,14 @@ class Engine(val gameController: GameController, name:String) {
         for(freezo in enemies){
             freezo.decelerate()
         }
+
+        if(consumableCounter > 0){
+            for(consumable in consumables){
+                if (consumable != null){
+                    consumable.decelerate()
+                }
+            }
+        }
     }
 
     fun updateHitboxes() {
@@ -84,11 +94,18 @@ class Engine(val gameController: GameController, name:String) {
         for(bullet in orphanBullets){
             bullet.updateHitbox()
         }
+
+        if(consumableCounter > 0){
+            for(consumable in consumables){
+                if (consumable != null){
+                    consumable.updateHitbox()
+                }
+            }
+        }
     }
 
     fun checkForCollision(){
         //for each item check collision with player
-        //for each consumable check collision with player
 
         for(enemy in enemies){
             //check enemy player collision
@@ -122,6 +139,20 @@ class Engine(val gameController: GameController, name:String) {
             if(player.hitBox.intersect(bullet.hitBox)){
                 bullet.xPosition = -1000f
                 player.setHealthValue(player.getHealthValue()-bullet.attackValue)
+            }
+        }
+
+        //For each consumable check for player collision
+        if(consumableCounter > 0){
+            for (i in 0..consumables.size-1){
+                if(consumables[i] != null){
+                    if(consumables[i]!!.hitBox.intersect(player.hitBox)){
+                        consumables[i]!!.giveTo(player)
+                        consumables[i]!!.kill()
+                        consumables[i] = null
+                        consumableCounter -= 1
+                    }
+                }
             }
         }
     }
@@ -200,6 +231,14 @@ class Engine(val gameController: GameController, name:String) {
                 }
             }
         }
+
+        if(consumableCounter > 0){
+            for (consumable in consumables){
+                if (consumable != null){
+                    consumable.updateImageView()
+                }
+            }
+        }
     }
 
     fun checkDeaths(){
@@ -216,6 +255,8 @@ class Engine(val gameController: GameController, name:String) {
                 }
                 enemy.kill()
                 deadEnemies[deadEnemyCounter] = enemy
+                consumables[consumableCounter] = createConsumable(enemy)
+                consumableCounter += 1
             }
         }
         for(enemy in deadEnemies){
@@ -223,5 +264,15 @@ class Engine(val gameController: GameController, name:String) {
                 enemies.remove(enemy)
             }
         }
+    }
+
+    fun createConsumable(enemy: Enemy):Consumable{
+        var x:Int = Math.floor(Math.random()*3).toInt() + 1
+        when(x){
+            1 -> return HP(gameController,enemy.getXPosition(),enemy.getYPosition())
+            2 -> return Coin(gameController,enemy.getXPosition(),enemy.getYPosition())
+            3 -> return SpeedUp(gameController,enemy.getXPosition(),enemy.getYPosition())
+        }
+        return HP(gameController,enemy.getXPosition(),enemy.getYPosition())
     }
 }

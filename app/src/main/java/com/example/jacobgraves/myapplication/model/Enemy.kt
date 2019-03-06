@@ -313,7 +313,7 @@ abstract class Enemy(val gameController: GameController) {
     }
 
     fun updateHitbox(){
-        hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
+        hitBox.set(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
     }
 
     fun updateBulletHitboxes(){

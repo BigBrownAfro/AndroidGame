@@ -210,7 +210,7 @@ class Bullet{
     }
 
     fun updateHitbox(){
-        hitBox = RectF(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
+        hitBox.set(xPosition-getWidth()/2,yPosition-getHeight()/2,xPosition+getWidth()/2,yPosition+getHeight()/2)
     }
 
     fun setupImageView(){

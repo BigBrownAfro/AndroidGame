@@ -13,44 +13,34 @@ import kotlin.math.*
 
 class GameController : AppCompatActivity() {
     lateinit var gameEngine: Engine
+
     val timer = Timer()
     val gameTask = GameLoopTask(this)
+
     lateinit var joystickListener:View.OnTouchListener
     lateinit var joystick2Listener:View.OnTouchListener
+
     var joystickOriginX = 300f
     var joystickOriginY = 1080f-300f
     var joyStickX = joystickOriginX
     var joyStickY = joystickOriginY
     var joystickMoveRadius = 100f
     var joystickPlayerMoveRadius = 50f
+
     var joystick2OriginX = 1920f-300f
     var joystick2OriginY = 1080f-300f
     var joyStick2X = joystick2OriginX
     var joyStick2Y = joystick2OriginY
     var joystick2MoveRadius = 100f
     var joystick2PlayerMoveRadius = 50f
-    var lastLoopStart:Long = 0
+
     var xDifference:Float = 0f
     var yDifference:Float = 0f
     var hypotenuse:Float = 0f
     var angleC:Float = 0f
-    //val constraintLayout = findViewById(R.id.constraintLayout) as ConstraintLayout
+
     var screenXRatio:Float = 0f
     var screenYRatio:Float = 0f
-
-    //timing
-    var start1 :Long = 0
-    var start2 :Long = 0
-    var start3 :Long = 0
-    var dur1 :Long = 0
-    var dur2 :Long = 0
-    var dur3 :Long = 0
-    var buffer :Long = 0
-    var end1 :Long = 0
-    var end3 :Long = 0
-    var longest1:Long = 0
-    var longest2:Long = 0
-    var longest3:Long = 0
 
     //Sounds
     lateinit var soundManager:SoundManager
@@ -190,13 +180,6 @@ class GameController : AppCompatActivity() {
         joystickImage.getLayoutParams().height = (140 * screenYRatio).toInt()
         joystickImage2.getLayoutParams().width = (140 * screenXRatio).toInt()
         joystickImage2.getLayoutParams().height = (140 * screenYRatio).toInt()
-
-        //Setup Healthbar Images
-        healthImage.setImageResource(gameEngine.player.playerHealthImage)
-        healthImage.layoutParams.width = (250 * screenXRatio).toInt()
-        healthImage.layoutParams.height = (90 * screenYRatio).toInt()
-        healthImage.x = 50 * screenXRatio
-        healthImage.y = 50 * screenYRatio
     }
 
     fun setupButtons(){
@@ -204,18 +187,6 @@ class GameController : AppCompatActivity() {
     }
 
     //Updating------------------------------------------------------------------------------------------
-    fun gameLoop(){ //Doesn't Run
-        var run = true
-        while(run){
-            if(System.currentTimeMillis() - lastLoopStart >= 16){
-                lastLoopStart = System.currentTimeMillis()
-                update()
-            }else{
-                Thread.sleep(lastLoopStart + 16 - System.currentTimeMillis())
-            }
-        }
-    }
-
     fun update(){
         gameEngine.update()
         updateGUI()
@@ -223,16 +194,7 @@ class GameController : AppCompatActivity() {
         shootPlayer()
         runOnUiThread(Runnable() {
             run() {
-                start3 = System.currentTimeMillis()
                 updateImages()
-                frameTimeText.text = "Update time: " + (dur1) + "\nLongest: " + longest1
-                frameTimeText2.text = "frame space: " + (dur2) + "\nLongest: " + longest2
-                end3 = System.currentTimeMillis()
-                dur3 = end3 - start3
-                if(dur3 > longest3){
-                    longest3 = dur3
-                }
-                frameTimeText3.text = "Update Image Time: " + (dur3) + "\nLongest: " + longest3
             }
         });
     }
@@ -302,9 +264,5 @@ class GameController : AppCompatActivity() {
         joystickImage.y = (joyStickY - joystickImage.height/2)
         joystickImage2.x = (joyStick2X - joystickImage2.width/2)
         joystickImage2.y = (joyStick2Y - joystickImage2.height/2)
-
-        //update Healthbar Images
-        healthImage.setImageResource(gameEngine.player.playerHealthImage)
-        healthImage.bringToFront()
     }
 }

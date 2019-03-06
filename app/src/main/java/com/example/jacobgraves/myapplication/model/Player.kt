@@ -18,7 +18,6 @@ class Player(val gameController: GameController, characterName: String){
     private var movementSpeed :Float = 0.0f
     var accelerationX:Float = 0.0f
     var accelerationY:Float = 0.0f
-    var playerHealthImage = R.drawable.health6
     private var xPosition :Float = 0.0f
     private var yPosition :Float = 0.0f
     private var width:Int = 0
@@ -35,6 +34,7 @@ class Player(val gameController: GameController, characterName: String){
     var hitBox: RectF
     var maxReload = 20
     var reloadTime = 0;
+    var coins:Int
 
     val imageView:ImageView
 
@@ -68,6 +68,7 @@ class Player(val gameController: GameController, characterName: String){
             setHeight(400)
             setWidth(200)
         }
+        coins = 0
         setXPosition(300f)
         setYPosition(300f)
         bulletArray = Array(500){null}
@@ -86,7 +87,9 @@ class Player(val gameController: GameController, characterName: String){
     fun setHealthValue(x: Int){
         if (x < 0){
             healthValue = 0
-        }else {
+        }else if(x > 6){
+            healthValue = 6
+        } else {
             healthValue = x
         }
     }
@@ -262,7 +265,7 @@ class Player(val gameController: GameController, characterName: String){
             bulletArray[bulletCounter] = Bullet(gameController,this,angle)
             bulletCounter++
             //mediaPlayer.start()
-            gameController.soundManager.soundPool.play(gameController.soundManager.pisto1,1f,1f,5,0,1f)
+            gameController.soundManager.soundPool.play(gameController.soundManager.pisto1,.5f,.5f,5,0,1f)
             reloadTime = maxReload
         }
         reloadTime--
@@ -316,17 +319,6 @@ class Player(val gameController: GameController, characterName: String){
         }
     }
 
-    fun updateGUI(){
-        when(healthValue){
-            6 -> playerHealthImage = R.drawable.health6
-            5 -> playerHealthImage = R.drawable.health5
-            4 -> playerHealthImage = R.drawable.health4
-            3 -> playerHealthImage = R.drawable.health3
-            2 -> playerHealthImage = R.drawable.health2
-            1 -> playerHealthImage = R.drawable.health1
-            0 -> playerHealthImage = R.drawable.health0
-        }
-    }
     fun moveBullets(){
         for (bullet in bulletArray){
             if (bullet != null){
@@ -352,7 +344,7 @@ class Player(val gameController: GameController, characterName: String){
     }
 
     fun updateHitbox(){
-        hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
+        hitBox.set(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
     }
 
     fun updateBulletHitboxes(){
