@@ -29,8 +29,6 @@ class Freezo(gameController: GameController): Enemy(gameController) {
             move(angle)
         }
 
-        println(angle)
-
         /*
         if(player.getXPosition() < this.getXPosition() && this.getXPosition() - player.getXPosition() > stopRadius){
             moveLeft()

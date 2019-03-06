@@ -4,10 +4,15 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.example.jacobgraves.myapplication.model.Engine
 import com.example.jacobgraves.myapplication.model.Player
 import kotlinx.android.synthetic.main.main_menu_view.*
 
 class MainMenuController : AppCompatActivity() {
+
+    companion object {
+        var gameEngine:Engine? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

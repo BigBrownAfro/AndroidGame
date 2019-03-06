@@ -3,7 +3,7 @@ package com.example.jacobgraves.myapplication.model
 import com.example.jacobgraves.myapplication.GameController
 
 
-class Engine(val gameController: GameController, name:String) {
+class Engine(var gameController: GameController, name:String) {
     var player: Player
     var frameCount: Int
     val hud:HUD
@@ -36,6 +36,46 @@ class Engine(val gameController: GameController, name:String) {
         consumableCounter = 0
     }
 
+    fun refreshGameController(gc: GameController){
+        gameController = gc
+
+        player.gameController = gc
+
+        for (bullet in player.bulletArray){
+            if (bullet != null){
+                bullet.gameController = gc
+            }
+        }
+
+        for (enemy in enemies){
+            if(enemy != null){
+                enemy.gameController = gc
+                for(bullet in enemy.bulletArray){
+                    if (bullet != null){
+                        bullet.gameController = gc
+                    }
+                }
+            }
+        }
+
+        for (enemy in deadEnemies){
+            if(enemy != null){
+                enemy.gameController = gc
+            }
+        }
+
+        for (bullet in orphanBullets){
+            if(bullet != null){
+                bullet.gameController = gc
+            }
+        }
+
+        for(consumable in consumables){
+            if (consumable != null){
+                consumable.gameController = gc
+            }
+        }
+    }
 
     fun update(){
         if (frameCount == 60){

@@ -28,7 +28,7 @@ class Bullet{
     var hitBox :RectF
     var angle:Float
 
-    val gameController:GameController
+    var gameController:GameController
 
     val imageView:ImageView
 

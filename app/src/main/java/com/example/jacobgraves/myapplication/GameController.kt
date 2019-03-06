@@ -1,5 +1,6 @@
 package com.example.jacobgraves.myapplication
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
@@ -8,13 +9,14 @@ import android.view.View
 import com.example.jacobgraves.myapplication.model.Engine
 import com.example.jacobgraves.myapplication.model.SoundManager
 import kotlinx.android.synthetic.main.game_view.*
+import java.lang.Exception
 import java.util.*
 import kotlin.math.*
 
 class GameController : AppCompatActivity() {
     lateinit var gameEngine: Engine
 
-    val timer = Timer()
+    var timer = Timer()
     val gameTask = GameLoopTask(this)
 
     lateinit var joystickListener:View.OnTouchListener
@@ -50,7 +52,15 @@ class GameController : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game_view)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-
+        /*
+        if(MainMenuController.gameEngine != null){
+            println("Attempting to use Old Engine")
+            runReSetup()
+        }else{
+            println("No Engine in there")
+            runInitSetup()
+        }
+        */
         runInitSetup()
     }
 
@@ -60,9 +70,38 @@ class GameController : AppCompatActivity() {
         timer.cancel()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onPause() {
+        super.onPause()
+        timer.cancel()
+        println("Screen Paused")
     }
+
+    override fun onStop() {
+        super.onStop()
+        timer.cancel()
+        println("Screen Stopped")
+    }
+
+    override fun onDestroy() {
+        timer.cancel()
+        MainMenuController.gameEngine = gameEngine
+        super.onDestroy()
+        println("Screen Destroyed")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        try{
+            timer.cancel()
+        }catch (e:Exception){
+            println("tried to cancel timer" + e)
+        }
+        timer = Timer()
+        timer.scheduleAtFixedRate(gameTask,Date(),16)
+        println("Sreen Restarted")
+    }
+
+
 
     //Setup------------------------------------------------------------------------------------------
     fun runInitSetup() {
@@ -78,6 +117,24 @@ class GameController : AppCompatActivity() {
         setupSounds()
 
         println("Init Game Setup Complete")
+
+        timer.scheduleAtFixedRate(gameTask,Date(),16)
+    }
+
+    fun runReSetup(){
+        var displayMetrics = DisplayMetrics()
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics)
+        screenXRatio = displayMetrics.widthPixels.toFloat() / 1920f
+        screenYRatio = displayMetrics.heightPixels.toFloat() / 1080f
+
+        gameEngine = MainMenuController.gameEngine!!
+        gameEngine.refreshGameController(this)
+        setupImages()
+        setupButtons()
+        setupListeners()
+        setupSounds()
+
+        println("Game Re-Setup Complete")
 
         timer.scheduleAtFixedRate(gameTask,Date(),16)
     }

@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.game_view.*
 import kotlinx.android.synthetic.main.game_view.view.*
 import kotlin.math.*
 
-class Player(val gameController: GameController, characterName: String){
+class Player(var gameController: GameController, characterName: String){
     var name :String
     private var healthValue :Int = 0
     private var attackValue :Int = 0

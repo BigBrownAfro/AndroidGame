@@ -7,7 +7,7 @@ import com.example.jacobgraves.myapplication.R
 import kotlinx.android.synthetic.main.game_view.*
 import kotlin.math.*
 
-abstract class Enemy(val gameController: GameController) {
+abstract class Enemy(var gameController: GameController) {
     var name = "Enemy"
     private var healthValue :Int = 0
     private var attackValue :Int = 0
