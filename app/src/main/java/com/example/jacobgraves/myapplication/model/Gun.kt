@@ -1,132 +1,188 @@
 package com.example.jacobgraves.myapplication.model
 
+import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
+import com.example.jacobgraves.myapplication.R.id.imageView
+import kotlinx.android.synthetic.main.game_view.*
 
-abstract class Gun (val gameController: GameController){
+abstract class Gun (val gameController: GameController) {
     var name = "Gun"
-    private var damageValue:Int = 1
-    private var accuracy:Float = 1f
-    private var xPosition:Float = 1f
-    private var yPosition:Float = 1f
-    private var width:Int = 0
-    private var height:Int = 0
-    private var currentAmmo:Int = 0
-    private var maxAmmo:Int = 0
+    private var damageValue: Int = 1
+    private var accuracy: Float = 1f
+    private var xPosition: Float = 1f
+    private var yPosition: Float = 1f
+    private var width: Int = 0
+    private var height: Int = 0
+    private var currentAmmo: Int = 0
+    private var maxAmmo: Int = 0
+    var isPickedUp: Boolean = false
     var image = R.drawable.testgun
-    lateinit var shootAnimation:IntArray
-    var animationCounter:Int = 0
+    var bulletArray: Array<Bullet?>
+    lateinit var shootAnimationSet: IntArray
+    var animationCounter: Int = 0
+    val imageView: ImageView
 
-    init{
+    init {
         setMaxAmmo(50)
         setCurrentAmmo(50)
         setDamageValue(1)
         setAccuracy(1.0f)
-        setXPosition(1000f)
-        setYPosition(500f)
-        setWidth(80)
-        setHeight(160)
+        setXPosition(750f)
+        setYPosition(750f)
+        setWidth(40)
+        setHeight(35)
+        bulletArray = Array(500) { null }
+
+        assignImages()
+
+        imageView = ImageView(gameController)
+
+        setupImageView()
     }
 
     //Setters----------------------------
 
-    fun setDamageValue(x: Int){
-        if (x < 0){
+    fun setDamageValue(x: Int) {
+        if (x < 0) {
             damageValue = 0
-        }else{
+        } else {
             damageValue = x
         }
     }
 
-    fun setMaxAmmo(x:Int){
-        if(x < 1){
+    fun setMaxAmmo(x: Int) {
+        if (x < 1) {
             maxAmmo = 1
-        }else{
+        } else {
             maxAmmo = x
         }
     }
 
-    fun setCurrentAmmo(x:Int){
-        if(x < 0){
+    fun setCurrentAmmo(x: Int) {
+        if (x < 0) {
             currentAmmo = 0
-        }else{
+        } else {
             currentAmmo = x
         }
     }
 
-    fun setAccuracy(x: Float){
-        if(x<0){
+    fun setAccuracy(x: Float) {
+        if (x <= 0) {
             accuracy = 1f
-        }else{
+        } else {
             accuracy = x
         }
     }
 
-    fun setXPosition(x: Float){
-        if (x < 0){
+    fun setXPosition(x: Float) {
+        if (x < 0) {
             xPosition = 0.0f
-        }else{
+        } else {
             xPosition = x
         }
     }
 
-    fun setYPosition (x: Float){
-        if (x < 0){
+    fun setYPosition(x: Float) {
+        if (x < 0) {
             yPosition = 0.0f
-        }else{
+        } else {
             yPosition = x
         }
     }
 
-    fun setWidth (x: Int){
-        if (x < 0){
+    fun setWidth(x: Int) {
+        if (x < 0) {
             width = 100
-        }else{
+        } else {
             width = x
         }
     }
 
-    fun setHeight (x: Int){
-        if (x < 0){
+    fun setHeight(x: Int) {
+        if (x < 0) {
             height = 200
-        }else{
+        } else {
             height = x
         }
     }
 
     //Getters----------------------------
 
-    fun getDamageValue(): Int{
+    fun getDamageValue(): Int {
         return damageValue
     }
 
-    fun getMaxAmmo():Int{
+    fun getMaxAmmo(): Int {
         return maxAmmo
     }
 
-    fun getCurrentAmmo():Int{
+    fun getCurrentAmmo(): Int {
         return currentAmmo
     }
 
-    fun getAccuracy(): Float{
+    fun getAccuracy(): Float {
         return accuracy
     }
 
-    fun getXPosition(): Float{
+    fun getXPosition(): Float {
         return xPosition
     }
 
-    fun getYPosition (): Float{
+    fun getYPosition(): Float {
         return yPosition
     }
 
-    fun getWidth (): Int{
+    fun getWidth(): Int {
         return width
     }
 
-    fun getHeight (): Int{
+    fun getHeight(): Int {
         return height
     }
 
-    //reload, shoot, setup images, update images.
+    //reload, shoot, setup images, update images
+
+    fun assignImages(){
+        image = R.drawable.testgun
+        shootAnimationSet = IntArray(3)
+        shootAnimationSet[0] = R.drawable.testgun
+        shootAnimationSet[1] = R.drawable.testgunfire
+        shootAnimationSet[2] = R.drawable.testgun
+    }
+
+
+    fun setupImageView() {
+        gameController.runOnUiThread {
+            run {
+                gameController.constraintLayout.addView(imageView)
+
+                imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
+                imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
+                imageView.x = (getXPosition() - getWidth() / 2f) * gameController.screenXRatio
+                imageView.y = (getYPosition() - getHeight() / 2f) * gameController.screenYRatio
+
+                imageView.setImageResource(image)
+
+
+            }
+        }
+    }
+
+    fun updateImageView() {
+        gameController.runOnUiThread {
+            run {
+                gameController.constraintLayout.addView(imageView)
+
+                imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
+                imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
+                imageView.x = (getXPosition() - getWidth() / 2f) * gameController.screenXRatio
+                imageView.y = (getYPosition() - getHeight() / 2f) * gameController.screenYRatio
+
+                imageView.setImageResource(image)
+
+                //reload, shoot, setup images, update images.
+            }
+        }
+    }
 }
