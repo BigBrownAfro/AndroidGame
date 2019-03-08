@@ -12,16 +12,19 @@ abstract class Gun (val gameController: GameController) {
     private var accuracy: Float = 1f
     private var xPosition: Float = 1f
     private var yPosition: Float = 1f
-    private var width: Int = 0
-    private var height: Int = 0
-    private var currentAmmo: Int = 0
-    private var maxAmmo: Int = 0
+    private var width: Int = 35
+    private var height: Int = 40
+    private var currentAmmo: Int = 1
+    private var maxAmmo: Int = 1
     var isPickedUp: Boolean = false
     var image = R.drawable.testgun
     var bulletArray: Array<Bullet?>
     lateinit var shootAnimationSet: IntArray
     var animationCounter: Int = 0
     val imageView: ImageView
+    var maxReload = 20
+    var reloadTime = 0
+    var bulletCounter = 0
 
     init {
         setMaxAmmo(50)
@@ -184,5 +187,22 @@ abstract class Gun (val gameController: GameController) {
                 //reload, shoot, setup images, update images.
             }
         }
+    }
+
+    fun shoot(angle: Float){
+        if(reloadTime <= 0){
+            //if(mediaPlayer.isPlaying){
+            //   mediaPlayer.pause()
+            //}
+            if (bulletCounter >= bulletArray.size){
+                bulletCounter = 0
+            }
+            bulletArray[bulletCounter] = Bullet(gameController,gameController.gameEngine.player,angle)
+            bulletCounter++
+            //mediaPlayer.start()
+            gameController.soundManager.soundPool.play(gameController.soundManager.pisto1,1f,1f,5,0,1f)
+            reloadTime = maxReload
+        }
+        reloadTime--
     }
 }
