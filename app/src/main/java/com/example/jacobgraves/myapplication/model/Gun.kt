@@ -1,5 +1,6 @@
 package com.example.jacobgraves.myapplication.model
 
+import android.graphics.RectF
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
@@ -17,6 +18,7 @@ abstract class Gun (val gameController: GameController) {
     private var currentAmmo: Int = 1
     private var maxAmmo: Int = 1
     var isPickedUp: Boolean = false
+    var isEquipped: Boolean = false
     var image = R.drawable.testgun
     var bulletArray: Array<Bullet?>
     lateinit var shootAnimationSet: IntArray
@@ -25,6 +27,7 @@ abstract class Gun (val gameController: GameController) {
     var maxReload = 20
     var reloadTime = 0
     var bulletCounter = 0
+    var hitBox: RectF
 
     init {
         setMaxAmmo(50)
@@ -36,6 +39,7 @@ abstract class Gun (val gameController: GameController) {
         setWidth(40)
         setHeight(35)
         bulletArray = Array(500) { null }
+        hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
 
         assignImages()
 
@@ -72,7 +76,7 @@ abstract class Gun (val gameController: GameController) {
 
     fun setAccuracy(x: Float) {
         if (x <= 0) {
-            accuracy = 1f
+            accuracy = 0f
         } else {
             accuracy = x
         }
@@ -146,7 +150,7 @@ abstract class Gun (val gameController: GameController) {
 
     //reload, shoot, setup images, update images
 
-    fun assignImages(){
+    open fun assignImages(){
         image = R.drawable.testgun
         shootAnimationSet = IntArray(3)
         shootAnimationSet[0] = R.drawable.testgun
@@ -172,8 +176,16 @@ abstract class Gun (val gameController: GameController) {
         }
     }
 
+    fun updateBulletAnimations(){
+        for (bullet in bulletArray){
+            if (bullet != null){
+                bullet.updateAnimations()
+            }
+        }
+    }
+
     fun updateImageView() {
-        gameController.runOnUiThread {
+      /*  gameController.runOnUiThread {
             run {
                 gameController.constraintLayout.addView(imageView)
 
@@ -186,23 +198,24 @@ abstract class Gun (val gameController: GameController) {
 
                 //reload, shoot, setup images, update images.
             }
-        }
+        }*/
     }
 
-    fun shoot(angle: Float){
-        if(reloadTime <= 0){
-            //if(mediaPlayer.isPlaying){
-            //   mediaPlayer.pause()
-            //}
-            if (bulletCounter >= bulletArray.size){
-                bulletCounter = 0
+    abstract fun shoot(angle: Float)
+
+    fun moveBullets(){
+        for (bullet in bulletArray){
+            if (bullet != null){
+                if(!bullet.isAlive){
+                    bullet.kill()
+                    bulletArray[bulletArray.indexOf(bullet)] = null
+                }else{
+                    bullet.move()
+                    if(bullet.xPosition > 2200 || bullet.xPosition < -100 || bullet.yPosition > 1200 || bullet.yPosition < -100){
+                        bullet.isAlive = false
+                    }
+                }
             }
-            bulletArray[bulletCounter] = Bullet(gameController,gameController.gameEngine.player,angle)
-            bulletCounter++
-            //mediaPlayer.start()
-            gameController.soundManager.soundPool.play(gameController.soundManager.pisto1,1f,1f,5,0,1f)
-            reloadTime = maxReload
         }
-        reloadTime--
     }
 }

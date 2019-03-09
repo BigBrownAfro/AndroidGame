@@ -6,6 +6,7 @@ import com.example.jacobgraves.myapplication.GameController
 class Engine(val gameController: GameController, name:String) {
     var player: Player
     var frameCount: Int
+    var startGun: Gun
     /*
     Make an array for dead enemies so you don't remove enemy while iterating over enemies
      */
@@ -18,6 +19,7 @@ class Engine(val gameController: GameController, name:String) {
 
     init{
         player = Player(gameController,name)
+        startGun = StartingPistol(gameController)
         frameCount = 0
         enemies.add(Freezo(gameController))
         /*enemies.add(Freezo())
@@ -124,11 +126,13 @@ class Engine(val gameController: GameController, name:String) {
                 player.setHealthValue(player.getHealthValue()-bullet.attackValue)
             }
         }
+
     }
 
     fun updateAnimations(){
         player.updateAnimations()
         player.updateBulletAnimations()
+        startGun.updateBulletAnimations()
 
         for(enemy in enemies){
             enemy.updateAnimations()
@@ -142,6 +146,7 @@ class Engine(val gameController: GameController, name:String) {
 
     fun moveBullets(){
         player.moveBullets()
+        startGun.moveBullets()
 
         for(enemy in enemies){
             enemy.moveBullets()
@@ -181,6 +186,7 @@ class Engine(val gameController: GameController, name:String) {
 
     fun updateImageViews(){
         player.updateImageView()
+        startGun.updateImageView()
 
         for(bullet in player.bulletArray){
             if(bullet != null){
