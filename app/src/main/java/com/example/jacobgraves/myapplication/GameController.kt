@@ -22,19 +22,19 @@ class GameController : AppCompatActivity() {
     lateinit var joystickListener:View.OnTouchListener
     lateinit var joystick2Listener:View.OnTouchListener
 
-    var joystickOriginX = 300f
+    var joystickOriginX = 200f
     var joystickOriginY = 1080f-300f
     var joyStickX = joystickOriginX
     var joyStickY = joystickOriginY
     var joystickMoveRadius = 100f
-    var joystickPlayerMoveRadius = 50f
+    var joystickPlayerMoveRadius = 30f
 
-    var joystick2OriginX = 1920f-300f
+    var joystick2OriginX = 1920f-200f
     var joystick2OriginY = 1080f-300f
     var joyStick2X = joystick2OriginX
     var joyStick2Y = joystick2OriginY
     var joystick2MoveRadius = 100f
-    var joystick2PlayerMoveRadius = 50f
+    var joystick2PlayerMoveRadius = 30f
 
     var xDifference:Float = 0f
     var yDifference:Float = 0f
@@ -52,6 +52,7 @@ class GameController : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game_view)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
         /*
         if(MainMenuController.gameEngine != null){
             println("Attempting to use Old Engine")
@@ -59,8 +60,8 @@ class GameController : AppCompatActivity() {
         }else{
             println("No Engine in there")
             runInitSetup()
-        }
-        */
+        }*/
+
         runInitSetup()
     }
 
@@ -84,7 +85,8 @@ class GameController : AppCompatActivity() {
 
     override fun onDestroy() {
         timer.cancel()
-        MainMenuController.gameEngine = gameEngine
+        //gameEngine.destroyImages()
+        //MainMenuController.gameEngine = gameEngine
         super.onDestroy()
         println("Screen Destroyed")
     }
@@ -121,6 +123,7 @@ class GameController : AppCompatActivity() {
         timer.scheduleAtFixedRate(gameTask,Date(),16)
     }
 
+    /*
     fun runReSetup(){
         var displayMetrics = DisplayMetrics()
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics)
@@ -137,7 +140,7 @@ class GameController : AppCompatActivity() {
         println("Game Re-Setup Complete")
 
         timer.scheduleAtFixedRate(gameTask,Date(),16)
-    }
+    }*/
 
     fun setupSounds(){
         soundManager = SoundManager(this)

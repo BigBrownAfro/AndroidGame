@@ -12,6 +12,6 @@ class SpeedUp(gameController: GameController, x:Float, y:Float):Consumable(gameC
     }
 
     override fun giveTo(player: Player) {
-        player.setMovementSpeed(player.getMovementSpeed()*1.5f)
+        player.setMovementSpeed(player.getMovementSpeed()*1.2f)
     }
 }

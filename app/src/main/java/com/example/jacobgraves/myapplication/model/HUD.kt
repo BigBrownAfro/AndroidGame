@@ -61,19 +61,20 @@ class HUD(var gameController: GameController) {
                 healthImageView.setImageResource(healthImage)
                 healthImageView.layoutParams.width = (250 * gameController.screenXRatio).toInt()
                 healthImageView.layoutParams.height = (90 * gameController.screenYRatio).toInt()
-                healthImageView.x = 5f * gameController.screenXRatio
-                healthImageView.y = 5f * gameController.screenYRatio
+                healthImageView.x = 20f * gameController.screenXRatio
+                healthImageView.y = 10f * gameController.screenYRatio
 
                 timeTextView.text = String.format("%2d",time/60) + ":" + String.format("%2d",time%60)
-                timeTextView.layoutParams.width = (100 * gameController.screenXRatio).toInt()
-                timeTextView.layoutParams.height = (40 * gameController.screenYRatio).toInt()
-                timeTextView.x = 910f * gameController.screenXRatio
-                timeTextView.y = 5f * gameController.screenYRatio
+                timeTextView.layoutParams.width = (400 * gameController.screenXRatio).toInt()
+                timeTextView.layoutParams.height = (100 * gameController.screenYRatio).toInt()
+                timeTextView.x = 880f * gameController.screenXRatio
+                timeTextView.y = 38f * gameController.screenYRatio
+                timeTextView.textSize = 20f
 
                 coinsImageView.setImageResource(coinsImage)
                 coinsImageView.layoutParams.width = (31 * gameController.screenXRatio).toInt()
                 coinsImageView.layoutParams.height = (40 * gameController.screenYRatio).toInt()
-                coinsImageView.x = 1780f * gameController.screenXRatio
+                coinsImageView.x = 1700f * gameController.screenXRatio
                 coinsImageView.y = 300f * gameController.screenYRatio
 
                 coinsTextView.textAlignment = TextView.TEXT_ALIGNMENT_TEXT_START

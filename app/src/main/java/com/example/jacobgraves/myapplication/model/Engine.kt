@@ -1,15 +1,23 @@
 package com.example.jacobgraves.myapplication.model
 
+import android.graphics.Color
+import android.media.Image
+import android.provider.ContactsContract
+import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
+import kotlinx.android.synthetic.main.game_view.*
+import kotlinx.android.synthetic.main.game_view.view.*
 
 
 class Engine(var gameController: GameController, name:String) {
     var player: Player
     var frameCount: Int
-    val hud:HUD
-    /*
-    Make an array for dead enemies so you don't remove enemy while iterating over enemies
-     */
+    var hud:HUD
+
+    // Temporary
+    val tempMapArea:ImageView
+    val tempBackground:ImageView
+
     var enemies = ArrayList<Enemy>()
     var deadEnemies:Array<Enemy?>
     var deadEnemyCounter:Int
@@ -20,61 +28,37 @@ class Engine(var gameController: GameController, name:String) {
     var consumableCounter:Int
 
     init{
+        // Temporary
+        tempMapArea = ImageView(gameController)
+        tempBackground = ImageView(gameController)
+        gameController.runOnUiThread{
+            run{
+                gameController.constraintLayout.addView(tempBackground)
+                tempBackground.layoutParams.width = (1920f * gameController.screenXRatio).toInt()
+                tempBackground.layoutParams.height = (1080f * gameController.screenYRatio).toInt()
+                tempBackground.x = 0 * gameController.screenXRatio
+                tempBackground.y = 0 * gameController.screenYRatio
+                tempBackground.setBackgroundColor(Color.DKGRAY)
+
+                gameController.constraintLayout.addView(tempMapArea)
+                tempMapArea.layoutParams.width = (1320f * gameController.screenXRatio).toInt()
+                tempMapArea.layoutParams.height = (780f * gameController.screenYRatio).toInt()
+                tempMapArea.x = 300f * gameController.screenXRatio
+                tempMapArea.y = 150f * gameController.screenYRatio
+                tempMapArea.setBackgroundColor(Color.rgb(140,119,84))
+            }
+        }
+
         player = Player(gameController,name)
         frameCount = 0
         hud = HUD(gameController)
         enemies.add(Freezo(gameController))
-        /*enemies.add(Freezo(gameController))
-        enemies[1].setXPosition(1720f)
-        enemies[1].setYPosition(980f)
-        enemies[1].stopRadius += 100*/
         deadOrphans = Array<Bullet?>(10){null}
         deadOrphanCounter = 0
         deadEnemies = Array<Enemy?>(10){null}
         deadEnemyCounter = 0
         consumables = Array<Consumable?>(50){null}
         consumableCounter = 0
-    }
-
-    fun refreshGameController(gc: GameController){
-        gameController = gc
-
-        player.gameController = gc
-
-        for (bullet in player.bulletArray){
-            if (bullet != null){
-                bullet.gameController = gc
-            }
-        }
-
-        for (enemy in enemies){
-            if(enemy != null){
-                enemy.gameController = gc
-                for(bullet in enemy.bulletArray){
-                    if (bullet != null){
-                        bullet.gameController = gc
-                    }
-                }
-            }
-        }
-
-        for (enemy in deadEnemies){
-            if(enemy != null){
-                enemy.gameController = gc
-            }
-        }
-
-        for (bullet in orphanBullets){
-            if(bullet != null){
-                bullet.gameController = gc
-            }
-        }
-
-        for(consumable in consumables){
-            if (consumable != null){
-                consumable.gameController = gc
-            }
-        }
     }
 
     fun update(){
@@ -296,18 +280,21 @@ class Engine(var gameController: GameController, name:String) {
                 enemy.kill()
                 deadEnemies[deadEnemyCounter] = enemy
                 consumables[consumableCounter] = createConsumable(enemy)
+                deadEnemyCounter += 1
                 consumableCounter += 1
             }
         }
+
         for(enemy in deadEnemies){
             if(enemy != null){
                 enemies.remove(enemy)
             }
         }
+        deadEnemyCounter = 0
     }
 
     fun createConsumable(enemy: Enemy):Consumable{
-        var x:Int = Math.floor(Math.random()*3).toInt() + 1
+        val x:Int = Math.floor(Math.random()*3).toInt() + 1
         when(x){
             1 -> return HP(gameController,enemy.getXPosition(),enemy.getYPosition())
             2 -> return Coin(gameController,enemy.getXPosition(),enemy.getYPosition())
@@ -316,3 +303,115 @@ class Engine(var gameController: GameController, name:String) {
         return HP(gameController,enemy.getXPosition(),enemy.getYPosition())
     }
 }
+
+/*
+    fun destroyImages(){
+        var imagesToDestroy = ArrayList<ImageView>()
+
+        //Temporary
+        imagesToDestroy.add(tempBackground)
+        imagesToDestroy.add(tempMapArea)
+
+        imagesToDestroy.add(player.imageView)
+
+        for (bullet in player.bulletArray){
+            if (bullet != null){
+                imagesToDestroy.add(bullet.imageView)
+            }
+        }
+
+        for (enemy in enemies){
+            if(enemy != null){
+                imagesToDestroy.add(enemy.imageView)
+                for(bullet in enemy.bulletArray){
+                    if (bullet != null){
+                        imagesToDestroy.add(bullet.imageView)
+                    }
+                }
+            }
+        }
+
+        for (enemy in deadEnemies){
+            if(enemy != null){
+                imagesToDestroy.add(enemy.imageView)
+            }
+        }
+
+        for (bullet in orphanBullets){
+            if(bullet != null){
+                imagesToDestroy.add(bullet.imageView)
+            }
+        }
+
+        for(consumable in consumables){
+            if (consumable != null){
+                imagesToDestroy.add(consumable.imageView)
+            }
+        }
+
+        while(!imagesToDestroy.isEmpty()){
+            gameController.constraintLayout.removeView(imagesToDestroy.get(0))
+            imagesToDestroy.removeAt(0)
+        }
+    }
+
+    fun refreshGameController(gc: GameController){
+        var imagesToRefresh = ArrayList<ImageView>()
+
+        //Temporary
+        imagesToRefresh.add(tempBackground)
+        imagesToRefresh.add(tempMapArea)
+
+        gameController = gc
+
+        player.gameController = gc
+        imagesToRefresh.add(player.imageView)
+
+        for (bullet in player.bulletArray){
+            if (bullet != null){
+                bullet.gameController = gc
+                imagesToRefresh.add(bullet.imageView)
+            }
+        }
+
+        for (enemy in enemies){
+            if(enemy != null){
+                enemy.gameController = gc
+                imagesToRefresh.add(enemy.imageView)
+                for(bullet in enemy.bulletArray){
+                    if (bullet != null){
+                        bullet.gameController = gc
+                        imagesToRefresh.add(bullet.imageView)
+                    }
+                }
+            }
+        }
+
+        for (enemy in deadEnemies){
+            if(enemy != null){
+                enemy.gameController = gc
+                imagesToRefresh.add(enemy.imageView)
+            }
+        }
+
+        for (bullet in orphanBullets){
+            if(bullet != null){
+                bullet.gameController = gc
+                imagesToRefresh.add(bullet.imageView)
+            }
+        }
+
+        for(consumable in consumables){
+            if (consumable != null){
+                consumable.gameController = gc
+                imagesToRefresh.add(consumable.imageView)
+            }
+        }
+
+        while(!imagesToRefresh.isEmpty()){
+            gameController.constraintLayout.addView(imagesToRefresh.get(0))
+            imagesToRefresh.removeAt(0)
+        }
+
+        hud = HUD(gameController)
+    }*/

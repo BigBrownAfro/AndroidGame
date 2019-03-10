@@ -5,16 +5,13 @@ import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
 import kotlinx.android.synthetic.main.game_view.*
-import kotlin.math.acos
-import kotlin.math.cos
-import kotlin.math.hypot
-import kotlin.math.sin
+import kotlin.math.*
 
 class Bullet{
     var attackValue:Int
     var isAlive:Boolean
     var friendly:Boolean
-    var image = R.drawable.bullet
+    var image = R.drawable.line
     lateinit var animationSet:IntArray
     var size:Float
     var type:String
@@ -36,8 +33,8 @@ class Bullet{
         attackValue = player.getAttackValue()
         isAlive = true
         friendly = true
-        setHeight(7)
-        setWidth(20)
+        setHeight(2)
+        setWidth(7)
         size = 1f
         type = "regular"
         if(player.accelerationX < 0f){
@@ -65,8 +62,8 @@ class Bullet{
         attackValue = player.getAttackValue()
         isAlive = true
         friendly = true
-        setHeight(7)
-        setWidth(20)
+        setHeight(2)
+        setWidth(7)
         size = 1f
         type = bulletType
         xMovementSpeed = player.accelerationX+10f
@@ -86,8 +83,8 @@ class Bullet{
         attackValue = enemy.getAttackValue()
         isAlive = true
         friendly = true
-        setHeight(7)
-        setWidth(20)
+        setHeight(2)
+        setWidth(7)
         size = 1f
         type = "regular"
         if(enemy.accelerationX < 0f){
@@ -115,8 +112,8 @@ class Bullet{
         attackValue = enemy.getAttackValue()
         isAlive = true
         friendly = false
-        setHeight(7)
-        setWidth(20)
+        setHeight(2)
+        setWidth(7)
         size = 1f
         type = bulletType
         xMovementSpeed = enemy.accelerationX+10f
@@ -171,6 +168,9 @@ class Bullet{
     }
 
     fun assignPictures(){
+        animationSet = IntArray(1)
+        animationSet[0] = R.drawable.line
+        /*
         if (type.equals("regular")){
             animationSet = IntArray(3)
             animationSet[0] = R.drawable.bullet_animation_1
@@ -181,7 +181,7 @@ class Bullet{
             animationSet[0] = R.drawable.bullet_animation_1
             animationSet[1] = R.drawable.bullet_animation_2
             animationSet[2] = R.drawable.bullet_animation_3
-        }
+        }*/
     }
 
     /*fun move(){
@@ -221,15 +221,9 @@ class Bullet{
                 imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
                 imageView.x = (xPosition - getWidth()/2f) * gameController.screenXRatio
                 imageView.y = (yPosition - getHeight()/2f) * gameController.screenYRatio
-                var tempImageResource = image
-                if (tempImageResource < 0){
-                    tempImageResource *= -1
-                    imageView.setImageResource(tempImageResource)
-                    imageView.rotationY = 180f
-                }else{
-                    imageView.rotationY = 0f
-                    imageView.setImageResource(image)
-                }
+
+                imageView.rotation = angle * 180 / PI.toFloat()
+                imageView.setImageResource(image)
             }
         }
     }
@@ -241,15 +235,9 @@ class Bullet{
                 imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
                 imageView.x = (xPosition - getWidth()/2f) * gameController.screenXRatio
                 imageView.y = (yPosition - getHeight()/2f) * gameController.screenYRatio
-                var tempImageResource = image
-                if (tempImageResource < 0){
-                    tempImageResource *= -1
-                    imageView.setImageResource(tempImageResource)
-                    imageView.rotationY = 180f
-                }else{
-                    imageView.rotationY = 0f
-                    imageView.setImageResource(image)
-                }
+
+                imageView.rotation = angle * 180 / PI.toFloat()
+                imageView.setImageResource(image)
             }
         }
     }

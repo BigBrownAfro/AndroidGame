@@ -33,7 +33,7 @@ class Player(var gameController: GameController, characterName: String){
     var bulletCounter = 0
     var hitBox: RectF
     var maxReload = 20
-    var reloadTime = 0;
+    var reloadTime = 0
     var coins:Int
 
     val imageView:ImageView
@@ -51,8 +51,8 @@ class Player(var gameController: GameController, characterName: String){
         }else if(name == "Reggie"){
             setHealthValue(6)
             setAttackValue(1)
-            setMovementSpeed(1.2f)
-            setHeight(100)
+            setMovementSpeed(1f)
+            setHeight(80)
             setWidth(50)
         }else if(name == "Frank"){
             setHealthValue(2)
@@ -226,6 +226,19 @@ class Player(var gameController: GameController, characterName: String){
 
         xPosition += accelerationX
         yPosition += accelerationY
+
+        if(xPosition < 300f + width/2){
+            xPosition = 300f + width/2
+        }
+        if(xPosition > 1620f - width/2){
+            xPosition = 1620f - width/2
+        }
+        if (yPosition < 150f - height/2 +10){
+            yPosition = 150f - height/2 +10
+        }
+        if (yPosition > 930f - height/2){
+            yPosition = 930f - height/2
+        }
     }
 
     fun decelerate(){
@@ -239,6 +252,19 @@ class Player(var gameController: GameController, characterName: String){
         }
         xPosition += accelerationX
         yPosition += accelerationY
+
+        if(xPosition < 300f + width/2){
+            xPosition = 300f + width/2
+        }
+        if(xPosition > 1620f - width/2){
+            xPosition = 1620f - width/2
+        }
+        if (yPosition < 150f - height/2 +10){
+            yPosition = 150f - height/2 +10
+        }
+        if (yPosition > 930f - height/2){
+            yPosition = 930f - height/2
+        }
     }
 
     /*
