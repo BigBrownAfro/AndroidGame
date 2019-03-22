@@ -281,7 +281,8 @@ class Player(var gameController: GameController, characterName: String){
     }*/
 
     fun shoot(angle: Float){
-        if(reloadTime <= 0){
+        gameController.gameEngine.startGun.shoot(angle)
+       /* if(reloadTime <= 0){
             //if(mediaPlayer.isPlaying){
             //   mediaPlayer.pause()
             //}
@@ -294,7 +295,7 @@ class Player(var gameController: GameController, characterName: String){
             gameController.soundManager.soundPool.play(gameController.soundManager.pisto1,.5f,.5f,5,0,1f)
             reloadTime = maxReload
         }
-        reloadTime--
+        reloadTime--*/
     }
 
     fun updateAnimations(){
