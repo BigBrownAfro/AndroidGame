@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.game_view.view.*
 class Engine(var gameController: GameController, name:String) {
     var player: Player
     var frameCount: Int
+    var startGun: Gun
     var hud:HUD
 
     // Temporary
@@ -50,6 +51,7 @@ class Engine(var gameController: GameController, name:String) {
         }
 
         player = Player(gameController,name)
+        startGun = StartingPistol(gameController)
         frameCount = 0
         hud = HUD(gameController)
         enemies.add(Freezo(gameController))
@@ -184,6 +186,7 @@ class Engine(var gameController: GameController, name:String) {
     fun updateAnimations(){
         player.updateAnimations()
         player.updateBulletAnimations()
+        startGun.updateBulletAnimations()
 
         for(enemy in enemies){
             enemy.updateAnimations()
@@ -197,6 +200,7 @@ class Engine(var gameController: GameController, name:String) {
 
     fun moveBullets(){
         player.moveBullets()
+        startGun.moveBullets()
 
         for(enemy in enemies){
             enemy.moveBullets()
@@ -236,6 +240,7 @@ class Engine(var gameController: GameController, name:String) {
 
     fun updateImageViews(){
         player.updateImageView()
+        startGun.updateImageView()
 
         for(bullet in player.bulletArray){
             if(bullet != null){
