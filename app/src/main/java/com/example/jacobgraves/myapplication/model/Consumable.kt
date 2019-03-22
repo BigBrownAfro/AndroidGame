@@ -67,6 +67,23 @@ abstract class Consumable(var gameController: GameController, x: Float, y: Float
         }
         xPosition += accelerationX
         yPosition += accelerationY
+
+        if(xPosition < 300f + width/2){
+            xPosition = 300f + width/2
+            accelerationX *= -1f
+        }
+        if(xPosition > 1620f - width/2){
+            xPosition = 1620f - width/2
+            accelerationX *= -1f
+        }
+        if (yPosition < 150f - height/2 +10){
+            yPosition = 150f - height/2 +10
+            accelerationY *= -1f
+        }
+        if (yPosition > 930f - height/2){
+            yPosition = 930f - height/2
+            accelerationY *= -1f
+        }
     }
 
     fun updateHitbox(){

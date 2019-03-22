@@ -141,7 +141,7 @@ class Engine(var gameController: GameController, name:String) {
             for (bullet in player.bulletArray) {
                 if (bullet != null) {
                     if(enemy.hitBox.intersect(bullet.hitBox)){
-                        bullet.xPosition = -222f
+                        bullet.isAlive = false
                         enemy.setHealthValue(enemy.getHealthValue() - bullet.attackValue)
                         gameController.soundManager.soundPool.play(gameController.soundManager.arrow,1f,1f,5,0,1f)
                     }
@@ -152,7 +152,7 @@ class Engine(var gameController: GameController, name:String) {
             for (bullet in enemy.bulletArray) {
                 if (bullet != null) {
                     if(player.hitBox.intersect(bullet.hitBox)){
-                        bullet.xPosition = -1000f
+                        bullet.isAlive = false
                         player.setHealthValue(player.getHealthValue()-bullet.attackValue)
                     }
                 }
@@ -161,7 +161,7 @@ class Engine(var gameController: GameController, name:String) {
 
         for(bullet in orphanBullets){
             if(player.hitBox.intersect(bullet.hitBox)){
-                bullet.xPosition = -1000f
+                bullet.isAlive = false
                 player.setHealthValue(player.getHealthValue()-bullet.attackValue)
             }
         }
@@ -267,7 +267,7 @@ class Engine(var gameController: GameController, name:String) {
 
     fun checkDeaths(){
         if(player.getHealthValue() <= 0){
-            //Do Something
+            //Do Something when player dies
         }
 
         for(enemy in enemies){
@@ -281,6 +281,24 @@ class Engine(var gameController: GameController, name:String) {
                 deadEnemies[deadEnemyCounter] = enemy
                 consumables[consumableCounter] = createConsumable(enemy)
                 deadEnemyCounter += 1
+                consumableCounter += 1
+                consumables[consumableCounter] = createConsumable(enemy)
+                consumableCounter += 1
+                consumables[consumableCounter] = createConsumable(enemy)
+                consumableCounter += 1
+                consumables[consumableCounter] = createConsumable(enemy)
+                consumableCounter += 1
+                consumables[consumableCounter] = createConsumable(enemy)
+                consumableCounter += 1
+                consumables[consumableCounter] = createConsumable(enemy)
+                consumableCounter += 1
+                consumables[consumableCounter] = createConsumable(enemy)
+                consumableCounter += 1
+                consumables[consumableCounter] = createConsumable(enemy)
+                consumableCounter += 1
+                consumables[consumableCounter] = createConsumable(enemy)
+                consumableCounter += 1
+                consumables[consumableCounter] = createConsumable(enemy)
                 consumableCounter += 1
             }
         }

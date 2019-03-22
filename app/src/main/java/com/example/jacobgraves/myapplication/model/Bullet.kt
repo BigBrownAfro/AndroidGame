@@ -199,6 +199,42 @@ class Bullet{
     fun move(){
         xPosition += cos(angle)*xMovementSpeed
         yPosition -= sin(angle)*yMovementSpeed
+
+        if (false){
+            if(xPosition < 300f + width/2){
+                xPosition = 300f + width/2
+                angle = PI.toFloat() - angle
+            }
+            if(xPosition > 1620f - width/2){
+                xPosition = 1620f - width/2
+                angle = PI.toFloat() - angle
+            }
+            if (yPosition < 150f - height/2 +10){
+                yPosition = 150f - height/2 +10
+                angle = 2.0f * PI.toFloat() - angle
+            }
+            if (yPosition > 930f - height/2){
+                yPosition = 930f - height/2
+                angle = 2.0f * PI.toFloat() - angle
+            }
+        }else{
+            if(xPosition < 300f + width/2){
+                xPosition = 300f + width/2
+                isAlive = false
+            }
+            if(xPosition > 1620f - width/2){
+                xPosition = 1620f - width/2
+                isAlive = false
+            }
+            if (yPosition < 150f - height/2 +10){
+                yPosition = 150f - height/2 +10
+                isAlive = false
+            }
+            if (yPosition > 930f - height/2){
+                yPosition = 930f - height/2
+                isAlive = false
+            }
+        }
     }
 
     fun updateAnimations(){
