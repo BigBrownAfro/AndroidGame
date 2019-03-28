@@ -4,16 +4,17 @@ import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
 import kotlinx.android.synthetic.main.game_view.*
 
-class Ground(gameController: GameController):RoomTile(gameController) {
+class Wall(gameController: GameController, direction: String):RoomTile(gameController) {
 
 
     init{
-        isGround = true
+        isWall = true
         assignAnimationPictures()
     }
 
     override fun assignAnimationPictures() {
-        image = R.drawable.basic_floor
+        TODO("not implemented") //Assign the pictures for ground animations. Even if there's only one picture
+        image = R.drawable.temp_wall
     }
 
     override fun setupImageView(){

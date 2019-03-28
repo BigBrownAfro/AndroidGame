@@ -13,20 +13,22 @@ abstract class RoomTile(var gameController: GameController) {
     var tileY : Int
     var isWall : Boolean
     var isGround : Boolean
+    var isDoor: Boolean
     lateinit var animationSet: IntArray
     var animationCounter: Int
 
     init{
-        tileX = 0
-        tileY = 0
+        tileX = 32
+        tileY = 32
         isWall = false
         isGround = false
+        isDoor = false
         animationCounter = 0
         assignAnimationPictures()
 
-        image = R.drawable.isaac
+        image = R.drawable.basic_floor
         imageView = ImageView(gameController)
-        setupImageView()
+
     }
 
     abstract fun assignAnimationPictures()
@@ -39,20 +41,7 @@ abstract class RoomTile(var gameController: GameController) {
         }
     }
 
-    fun setupImageView(){
-        gameController.runOnUiThread{
-            run{
-                gameController.constraintLayout.addView(imageView)
-                imageView.setImageResource(image)
-            }
-        }
-    }
+    abstract fun setupImageView()
 
-    fun updateImageView(){
-        gameController.runOnUiThread{
-            run{
-                imageView.setImageResource(image)
-            }
-        }
-    }
+    abstract fun updateImageView()
 }

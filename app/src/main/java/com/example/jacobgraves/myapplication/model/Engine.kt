@@ -14,10 +14,11 @@ class Engine(var gameController: GameController, name:String) {
     var frameCount: Int
     var startGun: Gun
     var hud:HUD
+    var room: Room
 
     // Temporary
-    val tempMapArea:ImageView
-    val tempBackground:ImageView
+    //val tempMapArea:ImageView
+    //val tempBackground:ImageView
 
     var enemies = ArrayList<Enemy>()
     var deadEnemies:Array<Enemy?>
@@ -27,11 +28,15 @@ class Engine(var gameController: GameController, name:String) {
     var deadOrphanCounter:Int
     var consumables:Array<Consumable?>
     var consumableCounter:Int
+    var roomSchematic = arrayOf<Array<Int>>()
+
+
 
     init{
         // Temporary
-        tempMapArea = ImageView(gameController)
+       /* tempMapArea = ImageView(gameController)
         tempBackground = ImageView(gameController)
+
         gameController.runOnUiThread{
             run{
                 gameController.constraintLayout.addView(tempBackground)
@@ -48,9 +53,17 @@ class Engine(var gameController: GameController, name:String) {
                 tempMapArea.y = 150f * gameController.screenYRatio
                 tempMapArea.setBackgroundColor(Color.rgb(140,119,84))
             }
-        }
+        }*/
 
+        for (i in 0..4) {
+            var array = arrayOf<Int>()
+            for (j in 0..4) {
+                array += 0
+            }
+            roomSchematic += array
+        }
         player = Player(gameController,name)
+        room = Room(gameController,roomSchematic)
         startGun = StartingPistol(gameController)
         frameCount = 0
         hud = HUD(gameController)
