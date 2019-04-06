@@ -1,5 +1,6 @@
 package com.example.jacobgraves.myapplication
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -9,6 +10,7 @@ import android.view.View
 import com.example.jacobgraves.myapplication.model.Engine
 import com.example.jacobgraves.myapplication.model.SoundManager
 import kotlinx.android.synthetic.main.game_view.*
+import kotlinx.android.synthetic.main.main_menu_view.*
 import java.lang.Exception
 import java.util.*
 import kotlin.math.*
@@ -22,10 +24,18 @@ class GameController : AppCompatActivity() {
     lateinit var joystickListener:View.OnTouchListener
     lateinit var joystick2Listener:View.OnTouchListener
 
+    var isPaused = false
     var joystickOriginX = 200f
     var joystickOriginY = 1080f-300f
     var joyStickX = joystickOriginX
     var joyStickY = joystickOriginY
+    var pauseButtonX = 1920f-200f
+    var pauseButtonY = 1080f-1000f
+    var resumeButtonX = 1920f/2f
+    var resumeButtonY = 1080f - 450f
+    var quitButtonX = 1920f/2f
+    var quitButtonY = 1080f - 650f
+
     var joystickMoveRadius = 100f
     var joystickPlayerMoveRadius = 30f
 
@@ -240,27 +250,74 @@ class GameController : AppCompatActivity() {
         joystickImage.getLayoutParams().height = (140 * screenYRatio).toInt()
         joystickImage2.getLayoutParams().width = (140 * screenXRatio).toInt()
         joystickImage2.getLayoutParams().height = (140 * screenYRatio).toInt()
+        pauseButton.getLayoutParams().width = (140 * screenXRatio).toInt()
+        pauseButton.getLayoutParams().height = (140 * screenYRatio).toInt()
+        pauseButton.bringToFront()
     }
 
     fun setupButtons(){
 
+        pauseButton.setOnClickListener {
+            pauseButtonClicked()
+
+        }
+
+        resumeButton.setOnClickListener {
+            resumeButtonClicked()
+        }
+
+        quitButton.setOnClickListener {
+            quitButtonClicked()
+        }
+    }
+
+    private fun pauseButtonClicked() {
+        if(isPaused == false){
+            isPaused = true
+        }else{
+            isPaused = false
+        }
+
+
+    }
+    private fun resumeButtonClicked(){
+        isPaused = false
+    }
+
+    private fun quitButtonClicked(){
+        val intent = Intent(this, MainMenuController::class.java)
+        this.startActivity(intent)
     }
 
     //Updating------------------------------------------------------------------------------------------
     fun update(){
-        gameEngine.update()
-        updateGUI()
-        movePlayer()
-        shootPlayer()
-        runOnUiThread(Runnable() {
-            run() {
-                updateImages()
-            }
-        });
+        if(isPaused==false) {
+            gameEngine.update()
+            updateGUI()
+            movePlayer()
+            shootPlayer()
+            runOnUiThread(Runnable() {
+                run() {
+                    updateImages()
+                }
+            });
+        }else{
+            updatePauseMenu()
+        }
     }
 
     fun updateGUI(){
+        resumeButton.x = 5000f
+        resumeButton.y = 5000f
+        quitButton.x = 5000f
+        quitButton.y = 5000f
+    }
+    fun updatePauseMenu(){
 
+        resumeButton.x = 1920f-1150f
+        resumeButton.y = 1080f - 700f
+        quitButton.x = 1920f-1150f
+        quitButton.y = 1080f - 500f
     }
 
     fun movePlayer(){
@@ -324,5 +381,7 @@ class GameController : AppCompatActivity() {
         joystickImage.y = (joyStickY - joystickImage.height/2)
         joystickImage2.x = (joyStick2X - joystickImage2.width/2)
         joystickImage2.y = (joyStick2Y - joystickImage2.height/2)
+        pauseButton.x = (pauseButtonX - pauseButton.width/2)
+        pauseButton.y = (pauseButtonY - pauseButton.height/2)
     }
 }
