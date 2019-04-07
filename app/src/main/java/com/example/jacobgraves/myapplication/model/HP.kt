@@ -7,6 +7,7 @@ class HP(gameController: GameController,x:Float, y:Float):Consumable(gameControl
     override var image = R.drawable.heart
 
     init{
+        image = R.drawable.health_potion;
         width = 33
         height = 31
     }

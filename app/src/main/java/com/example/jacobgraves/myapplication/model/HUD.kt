@@ -1,5 +1,6 @@
 package com.example.jacobgraves.myapplication.model
 
+import android.media.Image
 import android.provider.ContactsContract
 import android.widget.ImageView
 import android.widget.TextView

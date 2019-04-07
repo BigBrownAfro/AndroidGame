@@ -17,8 +17,8 @@ class Engine(var gameController: GameController, name:String) {
     var room: Room
 
     // Temporary
-    //val tempMapArea:ImageView
-    //val tempBackground:ImageView
+    val tempMapArea:ImageView
+    val tempBackground:ImageView
 
     var enemies = ArrayList<Enemy>()
     var deadEnemies:Array<Enemy?>
@@ -34,7 +34,7 @@ class Engine(var gameController: GameController, name:String) {
 
     init{
         // Temporary
-       /* tempMapArea = ImageView(gameController)
+        tempMapArea = ImageView(gameController)
         tempBackground = ImageView(gameController)
 
         gameController.runOnUiThread{
@@ -53,7 +53,7 @@ class Engine(var gameController: GameController, name:String) {
                 tempMapArea.y = 150f * gameController.screenYRatio
                 tempMapArea.setBackgroundColor(Color.rgb(140,119,84))
             }
-        }*/
+        }
 
         for (i in 0..4) {
             var array = arrayOf<Int>()

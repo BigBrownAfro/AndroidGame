@@ -52,8 +52,8 @@ class Player(var gameController: GameController, characterName: String){
             setHealthValue(6)
             setAttackValue(1)
             setMovementSpeed(1f)
-            setHeight(80)
-            setWidth(50)
+            setHeight(124)
+            setWidth(124)
         }else if(name == "Frank"){
             setHealthValue(2)
             setAttackValue(2)
@@ -184,10 +184,11 @@ class Player(var gameController: GameController, characterName: String){
             moveLeftAnimationSet[0] = R.drawable.mario_stand
             moveLeftAnimationSet[1] = R.drawable.mario_run_1
             moveLeftAnimationSet[2] = R.drawable.mario_run_2
-            moveRightAnimationSet = IntArray(3)
-            moveRightAnimationSet[0] = (-1) * R.drawable.mario_stand
-            moveRightAnimationSet[1] = (-1) * R.drawable.mario_run_1
-            moveRightAnimationSet[2] = (-1) * R.drawable.mario_run_2
+            moveRightAnimationSet = IntArray(4)
+            moveRightAnimationSet[0] = (1) * R.drawable.player_1_walk_right_1
+            moveRightAnimationSet[1] = (1) * R.drawable.player_1_walk_right_2
+            moveRightAnimationSet[2] = (1) * R.drawable.player_1_walk_right_3
+            moveRightAnimationSet[3] = (1) * R.drawable.player_1_walk_right_4
             moveUpAnimationSet = IntArray(4)
             moveUpAnimationSet[0] = R.drawable.mario_run_up_1
             moveUpAnimationSet[1] = R.drawable.mario_run_up_2

@@ -8,30 +8,19 @@
 
     <Button
         android:id="@+id/characterSelectButton"
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:text="Choose This Character"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.838" />
+        tools:layout_editor_absoluteX="280dp"
+        tools:layout_editor_absoluteY="347dp" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="305dp"
-        android:layout_height="274dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/characterSelectButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/mario_peace" />
+        android:id="@+id/imageView0"
+        android:layout_width="160dp"
+        android:layout_height="158dp"
+        app:srcCompat="@drawable/player_1_dance_1"
+        tools:layout_editor_absoluteX="58dp"
+        tools:layout_editor_absoluteY="213dp" />
+
 </android.support.constraint.ConstraintLayout>

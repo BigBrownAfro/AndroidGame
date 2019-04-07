@@ -29,8 +29,8 @@ class GameController : AppCompatActivity() {
     var joystickOriginY = 1080f-300f
     var joyStickX = joystickOriginX
     var joyStickY = joystickOriginY
-    var pauseButtonX = 1920f-200f
-    var pauseButtonY = 1080f-1000f
+    var pauseButtonX = 1920f-100f
+    var pauseButtonY = 10f
     var resumeButtonX = 1920f/2f
     var resumeButtonY = 1080f - 450f
     var quitButtonX = 1920f/2f
@@ -250,48 +250,71 @@ class GameController : AppCompatActivity() {
         joystickImage.getLayoutParams().height = (140 * screenYRatio).toInt()
         joystickImage2.getLayoutParams().width = (140 * screenXRatio).toInt()
         joystickImage2.getLayoutParams().height = (140 * screenYRatio).toInt()
-        pauseButton.getLayoutParams().width = (140 * screenXRatio).toInt()
-        pauseButton.getLayoutParams().height = (140 * screenYRatio).toInt()
+        pauseButton.getLayoutParams().width = (70 * screenXRatio).toInt()
+        pauseButton.getLayoutParams().height = (70 * screenYRatio).toInt()
         pauseButton.bringToFront()
     }
 
     fun setupButtons(){
 
+        pauseButton.x = pauseButtonX * screenXRatio
+        pauseButton.y = pauseButtonY * screenYRatio
         pauseButton.setOnClickListener {
             pauseButtonClicked()
-
         }
 
+        resumeButton.x = (resumeButtonX) * screenXRatio
+        resumeButton.y = (resumeButtonY) * screenYRatio
+        resumeButton.isEnabled = false
+        resumeButton.visibility = View.INVISIBLE
         resumeButton.setOnClickListener {
             resumeButtonClicked()
         }
 
+        quitButton.x = (quitButtonX) * screenXRatio
+        quitButton.y = (quitButtonY) * screenYRatio
+        quitButton.isEnabled = false
+        quitButton.visibility = View.INVISIBLE
         quitButton.setOnClickListener {
             quitButtonClicked()
         }
     }
 
     private fun pauseButtonClicked() {
-        if(isPaused == false){
-            isPaused = true
+        resumeButton.x = (resumeButtonX) * screenXRatio
+        resumeButton.y = (resumeButtonY) * screenYRatio
+        quitButton.x = (quitButtonX) * screenXRatio
+        quitButton.y = (quitButtonY) * screenYRatio
+        isPaused = !isPaused
+        if (isPaused){
+            resumeButton.isEnabled = true
+            resumeButton.visibility = View.VISIBLE
+            quitButton.isEnabled = true
+            quitButton.visibility = View.VISIBLE
         }else{
-            isPaused = false
+            resumeButton.isEnabled = false
+            resumeButton.visibility = View.INVISIBLE
+            quitButton.isEnabled = false
+            quitButton.visibility = View.INVISIBLE
         }
-
-
     }
     private fun resumeButtonClicked(){
         isPaused = false
+        resumeButton.isEnabled = false
+        resumeButton.visibility = View.INVISIBLE
+        quitButton.isEnabled = false
+        quitButton.visibility = View.INVISIBLE
     }
 
     private fun quitButtonClicked(){
-        val intent = Intent(this, MainMenuController::class.java)
-        this.startActivity(intent)
+        onBackPressed()
+        //val intent = Intent(this, MainMenuController::class.java)
+        //this.startActivity(intent)
     }
 
     //Updating------------------------------------------------------------------------------------------
     fun update(){
-        if(isPaused==false) {
+        if(!isPaused) {
             gameEngine.update()
             updateGUI()
             movePlayer()
@@ -302,22 +325,17 @@ class GameController : AppCompatActivity() {
                 }
             });
         }else{
-            updatePauseMenu()
+            gameEngine.hud.updateViews()
+            //updatePauseMenu()
         }
     }
 
     fun updateGUI(){
-        resumeButton.x = 5000f
-        resumeButton.y = 5000f
-        quitButton.x = 5000f
-        quitButton.y = 5000f
+
     }
+
     fun updatePauseMenu(){
 
-        resumeButton.x = 1920f-1150f
-        resumeButton.y = 1080f - 700f
-        quitButton.x = 1920f-1150f
-        quitButton.y = 1080f - 500f
     }
 
     fun movePlayer(){
@@ -381,7 +399,7 @@ class GameController : AppCompatActivity() {
         joystickImage.y = (joyStickY - joystickImage.height/2)
         joystickImage2.x = (joyStick2X - joystickImage2.width/2)
         joystickImage2.y = (joyStick2Y - joystickImage2.height/2)
-        pauseButton.x = (pauseButtonX - pauseButton.width/2)
-        pauseButton.y = (pauseButtonY - pauseButton.height/2)
+        pauseButton.x = (pauseButtonX) * screenXRatio
+        pauseButton.y = (pauseButtonY) * screenYRatio
     }
 }
