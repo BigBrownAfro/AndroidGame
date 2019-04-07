@@ -1,21 +1,17 @@
 package com.example.jacobgraves.myapplication
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.ImageView
-import com.example.jacobgraves.myapplication.model.PlayerSelectTask
 import kotlinx.android.synthetic.main.character_select_view.*
-import kotlinx.android.synthetic.main.game_view.*
-import kotlinx.android.synthetic.main.game_view.view.*
 import java.util.*
 
 class CharacterSelectController : AppCompatActivity() {
     var timer = Timer()
-    val task = PlayerSelectTask(this)
+    val task = CharacterSelectTask(this)
 
     var name = ""
     lateinit var player1Image: ImageView

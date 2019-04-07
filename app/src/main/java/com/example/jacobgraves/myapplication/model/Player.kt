@@ -228,17 +228,17 @@ class Player(var gameController: GameController, characterName: String){
         xPosition += accelerationX
         yPosition += accelerationY
 
-        if(xPosition < 300f + width/2){
-            xPosition = 300f + width/2
+        if(xPosition < 320f + width/2){
+            xPosition = 320f + width/2
         }
-        if(xPosition > 1620f - width/2){
-            xPosition = 1620f - width/2
+        if(xPosition > 1600f - width/2){
+            xPosition = 1600f - width/2
         }
-        if (yPosition < 150f - height/2 +10){
-            yPosition = 150f - height/2 +10
+        if (yPosition < 156f - height/2 +10){
+            yPosition = 156f - height/2 +10
         }
-        if (yPosition > 930f - height/2){
-            yPosition = 930f - height/2
+        if (yPosition > 924f - height/2){
+            yPosition = 924f - height/2
         }
     }
 
@@ -254,17 +254,17 @@ class Player(var gameController: GameController, characterName: String){
         xPosition += accelerationX
         yPosition += accelerationY
 
-        if(xPosition < 300f + width/2){
-            xPosition = 300f + width/2
+        if(xPosition < 320f + width/2){
+            xPosition = 320f + width/2
         }
-        if(xPosition > 1620f - width/2){
-            xPosition = 1620f - width/2
+        if(xPosition > 1600f - width/2){
+            xPosition = 1600f - width/2
         }
-        if (yPosition < 150f - height/2 +10){
-            yPosition = 150f - height/2 +10
+        if (yPosition < 156f - height/2 +10){
+            yPosition = 156f - height/2 +10
         }
-        if (yPosition > 930f - height/2){
-            yPosition = 930f - height/2
+        if (yPosition > 924f - height/2){
+            yPosition = 924f - height/2
         }
     }
 
@@ -284,15 +284,11 @@ class Player(var gameController: GameController, characterName: String){
     fun shoot(angle: Float){
         gameController.gameEngine.startGun.shoot(angle)
        /* if(reloadTime <= 0){
-            //if(mediaPlayer.isPlaying){
-            //   mediaPlayer.pause()
-            //}
             if (bulletCounter >= bulletArray.size){
                 bulletCounter = 0
             }
             bulletArray[bulletCounter] = Bullet(gameController,this,angle)
             bulletCounter++
-            //mediaPlayer.start()
             gameController.soundManager.soundPool.play(gameController.soundManager.pisto1,.5f,.5f,5,0,1f)
             reloadTime = maxReload
         }

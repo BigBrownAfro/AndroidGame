@@ -1,12 +1,16 @@
 package com.example.jacobgraves.myapplication.model
 
 import android.graphics.Color
-import android.media.Image
-import android.provider.ContactsContract
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
+import com.example.jacobgraves.myapplication.model.map.Room
+import com.example.jacobgraves.myapplication.model.consumables.Coin
+import com.example.jacobgraves.myapplication.model.consumables.Consumable
+import com.example.jacobgraves.myapplication.model.consumables.HP
+import com.example.jacobgraves.myapplication.model.consumables.SpeedUp
+import com.example.jacobgraves.myapplication.model.guns.Gun
+import com.example.jacobgraves.myapplication.model.guns.StartingPistol
 import kotlinx.android.synthetic.main.game_view.*
-import kotlinx.android.synthetic.main.game_view.view.*
 
 
 class Engine(var gameController: GameController, name:String) {
@@ -28,17 +32,15 @@ class Engine(var gameController: GameController, name:String) {
     var deadOrphanCounter:Int
     var consumables:Array<Consumable?>
     var consumableCounter:Int
-    var roomSchematic = arrayOf<Array<Int>>()
-
-
+    var roomSchematic:Array<Array<Int>>
 
     init{
         // Temporary
         tempMapArea = ImageView(gameController)
         tempBackground = ImageView(gameController)
 
-        gameController.runOnUiThread{
-            run{
+        gameController.runOnUiThread {
+            run {
                 gameController.constraintLayout.addView(tempBackground)
                 tempBackground.layoutParams.width = (1920f * gameController.screenXRatio).toInt()
                 tempBackground.layoutParams.height = (1080f * gameController.screenYRatio).toInt()
@@ -47,23 +49,18 @@ class Engine(var gameController: GameController, name:String) {
                 tempBackground.setBackgroundColor(Color.DKGRAY)
 
                 gameController.constraintLayout.addView(tempMapArea)
-                tempMapArea.layoutParams.width = (1320f * gameController.screenXRatio).toInt()
-                tempMapArea.layoutParams.height = (780f * gameController.screenYRatio).toInt()
-                tempMapArea.x = 300f * gameController.screenXRatio
-                tempMapArea.y = 150f * gameController.screenYRatio
-                tempMapArea.setBackgroundColor(Color.rgb(140,119,84))
+                tempMapArea.layoutParams.width = (1280f * gameController.screenXRatio).toInt()
+                tempMapArea.layoutParams.height = (768f * gameController.screenYRatio).toInt()
+                tempMapArea.x = 320f * gameController.screenXRatio
+                tempMapArea.y = 156f * gameController.screenYRatio
+                tempMapArea.setBackgroundColor(Color.rgb(140, 119, 84))
             }
         }
 
-        for (i in 0..4) {
-            var array = arrayOf<Int>()
-            for (j in 0..4) {
-                array += 0
-            }
-            roomSchematic += array
-        }
+        roomSchematic = Array(12){Array(20){0}}
+        room = Room(gameController, roomSchematic)
+
         player = Player(gameController,name)
-        room = Room(gameController,roomSchematic)
         startGun = StartingPistol(gameController)
         frameCount = 0
         hud = HUD(gameController)
@@ -252,6 +249,10 @@ class Engine(var gameController: GameController, name:String) {
     }
 
     fun updateImageViews(){
+        //var start = System.currentTimeMillis()
+        //room.updateImages()
+        //var end = System.currentTimeMillis()
+        //println(end - start)
         player.updateImageView()
         startGun.updateImageView()
 
@@ -297,27 +298,8 @@ class Engine(var gameController: GameController, name:String) {
                 }
                 enemy.kill()
                 deadEnemies[deadEnemyCounter] = enemy
-                consumables[consumableCounter] = createConsumable(enemy)
                 deadEnemyCounter += 1
-                consumableCounter += 1
-                consumables[consumableCounter] = createConsumable(enemy)
-                consumableCounter += 1
-                consumables[consumableCounter] = createConsumable(enemy)
-                consumableCounter += 1
-                consumables[consumableCounter] = createConsumable(enemy)
-                consumableCounter += 1
-                consumables[consumableCounter] = createConsumable(enemy)
-                consumableCounter += 1
-                consumables[consumableCounter] = createConsumable(enemy)
-                consumableCounter += 1
-                consumables[consumableCounter] = createConsumable(enemy)
-                consumableCounter += 1
-                consumables[consumableCounter] = createConsumable(enemy)
-                consumableCounter += 1
-                consumables[consumableCounter] = createConsumable(enemy)
-                consumableCounter += 1
-                consumables[consumableCounter] = createConsumable(enemy)
-                consumableCounter += 1
+                createConsumables(10,enemy)
             }
         }
 
@@ -329,14 +311,26 @@ class Engine(var gameController: GameController, name:String) {
         deadEnemyCounter = 0
     }
 
-    fun createConsumable(enemy: Enemy):Consumable{
+    fun createConsumable(enemy: Enemy): Consumable {
+        var c: Consumable
         val x:Int = Math.floor(Math.random()*3).toInt() + 1
         when(x){
-            1 -> return HP(gameController,enemy.getXPosition(),enemy.getYPosition())
-            2 -> return Coin(gameController,enemy.getXPosition(),enemy.getYPosition())
-            3 -> return SpeedUp(gameController,enemy.getXPosition(),enemy.getYPosition())
+            1 -> c = HP(gameController, enemy.getXPosition(), enemy.getYPosition())
+            2 -> c = Coin(gameController, enemy.getXPosition(), enemy.getYPosition())
+            3 -> c = SpeedUp(gameController, enemy.getXPosition(), enemy.getYPosition())
+            else -> {
+                c = HP(gameController, enemy.getXPosition(), enemy.getYPosition())
+            }
         }
-        return HP(gameController,enemy.getXPosition(),enemy.getYPosition())
+        consumables[consumableCounter] = c
+        consumableCounter++
+        return c
+    }
+
+    fun createConsumables(amount:Int, enemy:Enemy){
+        for (i in 0..amount-1){
+            createConsumable(enemy)
+        }
     }
 }
 

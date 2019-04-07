@@ -1,8 +1,9 @@
-package com.example.jacobgraves.myapplication.model
+package com.example.jacobgraves.myapplication.model.consumables
 
 import android.graphics.RectF
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
+import com.example.jacobgraves.myapplication.model.Player
 import kotlinx.android.synthetic.main.game_view.*
 
 abstract class Consumable(var gameController: GameController, x: Float, y: Float){

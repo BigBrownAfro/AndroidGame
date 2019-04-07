@@ -1,7 +1,8 @@
-package com.example.jacobgraves.myapplication.model
+package com.example.jacobgraves.myapplication.model.guns
 
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
+import com.example.jacobgraves.myapplication.model.Bullet
 
 class StartingPistol(gameController: GameController): Gun(gameController) {
     init {
@@ -23,15 +24,11 @@ class StartingPistol(gameController: GameController): Gun(gameController) {
 
     override fun shoot(angle: Float){
         if(reloadTime <= 0){
-            //if(mediaPlayer.isPlaying){
-            //   mediaPlayer.pause()
-            //}
             if (gameController.gameEngine.player.bulletCounter >= gameController.gameEngine.player.bulletArray.size){
                 bulletCounter = 0
             }
-            gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter] = Bullet(gameController,gameController.gameEngine.player,(angle+((-getAccuracy()*Math.random())*-.5*Math.random())).toFloat())
+            gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter] = Bullet(gameController, gameController.gameEngine.player, (angle + ((-getAccuracy() * Math.random()) * -.5 * Math.random())).toFloat())
             gameController.gameEngine.player.bulletCounter++
-            //mediaPlayer.start()
             gameController.soundManager.soundPool.play(gameController.soundManager.pisto1,1f,1f,5,0,1f)
             reloadTime = maxReload
         }
