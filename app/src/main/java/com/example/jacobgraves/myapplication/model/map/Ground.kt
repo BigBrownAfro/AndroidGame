@@ -13,7 +13,7 @@ class Ground(gameController: GameController, row: Int, col: Int): RoomTile(gameC
     }
 
     override fun assignAnimationPictures() {
-        image = R.drawable.basic_floor
+        image = R.drawable.floor
         animationSet = IntArray(1)
         animationSet[0] = R.drawable.floor
     }

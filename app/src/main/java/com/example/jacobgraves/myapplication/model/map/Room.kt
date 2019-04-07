@@ -7,6 +7,13 @@ import kotlinx.android.synthetic.main.game_view.*
 class Room(var gameController: GameController, var schematic: Array<Array<Int>>) {
     var tiles : Array<Array<RoomTile?>>
 
+    companion object {
+        val mapX = 320f
+        val mapY = 156f
+        val mapWidth = 1280f
+        val mapHeight = 768f
+    }
+
     init{
         //              rows                       cols
         tiles = Array(12){Array<RoomTile?>(20){null}}
@@ -24,34 +31,29 @@ class Room(var gameController: GameController, var schematic: Array<Array<Int>>)
             }
         }
 
+        /*
         for(j in 0..tiles[0].size-1){
             tiles[0][j] = Wall(gameController, "top", 0, j)
         }
         for(j in 0..tiles[11].size-1){
             tiles[11][j] = Wall(gameController, "bottom", 11, j)
-        }
-
-        /*
-        var i = 0
-        var j = 0
-        for(intArray in schematic){
-            for(int in intArray){
-                /*when(int){
-                    0 -> tiles[i][j] = Ground(gameController)
-                    1 -> tiles[i][j] = Wall(gameController,"top")
-                    2 -> tiles[i][j] = Wall(gameController,"bottom")
-                    3 -> tiles[i][j] = Wall(gameController,"left")
-                    4 -> tiles[i][j] = Wall(gameController,"right")
-                    5 -> tiles[i][j] = Door(gameController, "top")
-                    6 -> tiles[i][j] = Door(gameController, "bottom")
-                    7 -> tiles[i][j] = Door(gameController, "left")
-                    8 -> tiles[i][j] = Door(gameController, "right")
-                }*/
-                tiles[i][j] = Wall(gameController,"top",i,j)
-                j++
-            }
-            i++
         }*/
+
+        for(i in 0..schematic.size-1) {
+            for (j in 0..schematic[0].size - 1) {
+                when(schematic[i][j]){
+                    0 -> tiles[i][j] = Ground(gameController, i, j)
+                    1 -> tiles[i][j] = Wall(gameController,"top", i, j)
+                    2 -> tiles[i][j] = Wall(gameController,"bottom", i, j)
+                    3 -> tiles[i][j] = Wall(gameController,"left", i, j)
+                    4 -> tiles[i][j] = Wall(gameController,"right", i, j)
+                    5 -> tiles[i][j] = Door(gameController, "top", i, j)
+                    6 -> tiles[i][j] = Door(gameController, "bottom", i, j)
+                    7 -> tiles[i][j] = Door(gameController, "left", i, j)
+                    8 -> tiles[i][j] = Door(gameController, "right", i, j)
+                }
+            }
+        }
     }
 
     fun setupImageView(){

@@ -1,14 +1,12 @@
 package com.example.jacobgraves.myapplication.model
 
 import android.graphics.RectF
-import android.media.Image
 import android.media.MediaPlayer
-import android.provider.ContactsContract
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
+import com.example.jacobgraves.myapplication.model.map.Room
 import kotlinx.android.synthetic.main.game_view.*
-import kotlinx.android.synthetic.main.game_view.view.*
 import kotlin.math.*
 
 class Player(var gameController: GameController, characterName: String){
@@ -22,6 +20,8 @@ class Player(var gameController: GameController, characterName: String){
     private var yPosition :Float = 0.0f
     private var width:Int = 0
     private var height:Int = 0
+    var actualWidth = 0f
+    var actualHeight = 0f
     var image = R.drawable.isaac
     lateinit var moveLeftAnimationSet:IntArray
     lateinit var moveRightAnimationSet:IntArray
@@ -52,8 +52,8 @@ class Player(var gameController: GameController, characterName: String){
             setHealthValue(6)
             setAttackValue(1)
             setMovementSpeed(1f)
-            setHeight(124)
-            setWidth(124)
+            setHeight(93)
+            setWidth(93)
         }else if(name == "Frank"){
             setHealthValue(2)
             setAttackValue(2)
@@ -68,6 +68,8 @@ class Player(var gameController: GameController, characterName: String){
             setHeight(400)
             setWidth(200)
         }
+        actualWidth = width * 2f/3f
+        actualHeight = height * 1f
         coins = 0
         setXPosition(300f)
         setYPosition(300f)
@@ -228,18 +230,7 @@ class Player(var gameController: GameController, characterName: String){
         xPosition += accelerationX
         yPosition += accelerationY
 
-        if(xPosition < 320f + width/2){
-            xPosition = 320f + width/2
-        }
-        if(xPosition > 1600f - width/2){
-            xPosition = 1600f - width/2
-        }
-        if (yPosition < 156f - height/2 +10){
-            yPosition = 156f - height/2 +10
-        }
-        if (yPosition > 924f - height/2){
-            yPosition = 924f - height/2
-        }
+        checkRoomBounds()
     }
 
     fun decelerate(){
@@ -254,17 +245,21 @@ class Player(var gameController: GameController, characterName: String){
         xPosition += accelerationX
         yPosition += accelerationY
 
-        if(xPosition < 320f + width/2){
-            xPosition = 320f + width/2
+        checkRoomBounds()
+    }
+
+    fun checkRoomBounds(){
+        if(xPosition < Room.mapX + 64 + actualWidth/2){
+            xPosition = Room.mapX + 64 + actualWidth/2
         }
-        if(xPosition > 1600f - width/2){
-            xPosition = 1600f - width/2
+        if(xPosition > (Room.mapX + Room.mapWidth - 64) - actualWidth/2){
+            xPosition = (Room.mapX + Room.mapWidth - 64) - actualWidth/2
         }
-        if (yPosition < 156f - height/2 +10){
-            yPosition = 156f - height/2 +10
+        if (yPosition < Room.mapY + 64 - height/2){
+            yPosition = Room.mapY + 64 - height/2
         }
-        if (yPosition > 924f - height/2){
-            yPosition = 924f - height/2
+        if (yPosition > (Room.mapY + Room.mapHeight) - 64 - height/2){
+            yPosition = (Room.mapY + Room.mapHeight) - 64 - height/2
         }
     }
 

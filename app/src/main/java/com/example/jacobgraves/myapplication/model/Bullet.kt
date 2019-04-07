@@ -4,6 +4,7 @@ import android.graphics.RectF
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
+import com.example.jacobgraves.myapplication.model.map.Room
 import kotlinx.android.synthetic.main.game_view.*
 import kotlin.math.*
 
@@ -201,7 +202,7 @@ class Bullet{
         yPosition -= sin(angle)*yMovementSpeed
 
         if (false){
-            if(xPosition < 300f + width/2){
+            /*if(xPosition < 300f + width/2){
                 xPosition = 300f + width/2
                 angle = PI.toFloat() - angle
             }
@@ -216,24 +217,28 @@ class Bullet{
             if (yPosition > 930f - height/2){
                 yPosition = 930f - height/2
                 angle = 2.0f * PI.toFloat() - angle
-            }
+            }*/
         }else{
-            if(xPosition < 300f + width/2){
-                xPosition = 300f + width/2
-                isAlive = false
-            }
-            if(xPosition > 1620f - width/2){
-                xPosition = 1620f - width/2
-                isAlive = false
-            }
-            if (yPosition < 150f - height/2 +10){
-                yPosition = 150f - height/2 +10
-                isAlive = false
-            }
-            if (yPosition > 930f - height/2){
-                yPosition = 930f - height/2
-                isAlive = false
-            }
+            checkRoomBounds()
+        }
+    }
+
+    fun checkRoomBounds(){
+        if(xPosition < Room.mapX + 64 + width/2){
+            xPosition = Room.mapX + 64 + width/2
+            isAlive = false
+        }
+        if(xPosition > (Room.mapX + Room.mapWidth - 64) - width/2){
+            xPosition = (Room.mapX + Room.mapWidth - 64) - width/2
+            isAlive = false
+        }
+        if (yPosition < Room.mapY + 64 - height/2){
+            yPosition = Room.mapY + 64 - height/2
+            isAlive = false
+        }
+        if (yPosition > (Room.mapY + Room.mapHeight) - 64 - height/2){
+            yPosition = (Room.mapY + Room.mapHeight) - 64 - height/2
+            isAlive = false
         }
     }
 

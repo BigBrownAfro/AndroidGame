@@ -10,6 +10,7 @@ import com.example.jacobgraves.myapplication.model.consumables.HP
 import com.example.jacobgraves.myapplication.model.consumables.SpeedUp
 import com.example.jacobgraves.myapplication.model.guns.Gun
 import com.example.jacobgraves.myapplication.model.guns.StartingPistol
+import com.example.jacobgraves.myapplication.model.map.Wall
 import kotlinx.android.synthetic.main.game_view.*
 
 
@@ -49,15 +50,16 @@ class Engine(var gameController: GameController, name:String) {
                 tempBackground.setBackgroundColor(Color.DKGRAY)
 
                 gameController.constraintLayout.addView(tempMapArea)
-                tempMapArea.layoutParams.width = (1280f * gameController.screenXRatio).toInt()
-                tempMapArea.layoutParams.height = (768f * gameController.screenYRatio).toInt()
-                tempMapArea.x = 320f * gameController.screenXRatio
-                tempMapArea.y = 156f * gameController.screenYRatio
+                tempMapArea.layoutParams.width = (Room.mapWidth * gameController.screenXRatio).toInt()
+                tempMapArea.layoutParams.height = (Room.mapHeight * gameController.screenYRatio).toInt()
+                tempMapArea.x = Room.mapX * gameController.screenXRatio
+                tempMapArea.y = Room.mapY * gameController.screenYRatio
                 tempMapArea.setBackgroundColor(Color.rgb(140, 119, 84))
             }
         }
-
         roomSchematic = Array(12){Array(20){0}}
+        buildSchematic()
+
         room = Room(gameController, roomSchematic)
 
         player = Player(gameController,name)
@@ -71,6 +73,23 @@ class Engine(var gameController: GameController, name:String) {
         deadEnemyCounter = 0
         consumables = Array<Consumable?>(50){null}
         consumableCounter = 0
+    }
+
+    fun buildSchematic(){
+        for(j in 0..roomSchematic[0].size-1){
+            roomSchematic[0][j] = 1
+        }
+        for(j in 0..roomSchematic[11].size-1){
+            roomSchematic[11][j] = 2
+        }
+        for (i in 0..roomSchematic.size-1){
+            roomSchematic[i][0] = 3
+            roomSchematic[i][19] = 4
+        }
+        roomSchematic[0][10] = 5
+        roomSchematic[11][10] = 6
+        roomSchematic[6][0] = 7
+        roomSchematic[6][19] = 8
     }
 
     fun update(){
@@ -299,7 +318,7 @@ class Engine(var gameController: GameController, name:String) {
                 enemy.kill()
                 deadEnemies[deadEnemyCounter] = enemy
                 deadEnemyCounter += 1
-                createConsumables(10,enemy)
+                createConsumables(2,enemy)
             }
         }
 
@@ -312,17 +331,22 @@ class Engine(var gameController: GameController, name:String) {
     }
 
     fun createConsumable(enemy: Enemy): Consumable {
-        var c: Consumable
-        val x:Int = Math.floor(Math.random()*3).toInt() + 1
-        when(x){
-            1 -> c = HP(gameController, enemy.getXPosition(), enemy.getYPosition())
-            2 -> c = Coin(gameController, enemy.getXPosition(), enemy.getYPosition())
-            3 -> c = SpeedUp(gameController, enemy.getXPosition(), enemy.getYPosition())
-            else -> {
-                c = HP(gameController, enemy.getXPosition(), enemy.getYPosition())
-            }
+        var c: Consumable? = null
+        val x:Int = Math.floor(Math.random()*10).toInt() + 1
+
+        //c = HP(gameController, enemy.getXPosition(), enemy.getYPosition())
+
+        if (x <= 4){
+            c = HP(gameController, enemy.getXPosition(), enemy.getYPosition())
         }
-        consumables[consumableCounter] = c
+        if(x >= 5 && x <= 8){
+            c = Coin(gameController, enemy.getXPosition(), enemy.getYPosition())
+        }
+        if(x >= 9 && x <= 10){
+            c = SpeedUp(gameController, enemy.getXPosition(), enemy.getYPosition())
+        }
+
+        consumables[consumableCounter] = c!!
         consumableCounter++
         return c
     }

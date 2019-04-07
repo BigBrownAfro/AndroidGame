@@ -15,10 +15,10 @@ class Wall(gameController: GameController, var direction: String, row: Int, col:
     override fun assignAnimationPictures() {
         image = R.drawable.wall
         when(direction){
-            "top" -> image = R.drawable.wall
-            "bottom" -> image = R.drawable.wall_down
-            "left" -> image = R.drawable.wall_left
-            "right" -> image = R.drawable.wall_right
+            "top" -> image = R.drawable.wall_bottom_cobble
+            "bottom" -> image = R.drawable.wall_bottom_cobble
+            "left" -> image = R.drawable.wall_left_cobble
+            "right" -> image = R.drawable.wall_left_cobble
         }
         animationSet = IntArray(1)
         animationSet[0] = image

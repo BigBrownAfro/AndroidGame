@@ -45,8 +45,8 @@ abstract class RoomTile(var gameController: GameController, row:Int, col:Int) {
             run{
                 gameController.constraintLayout.addView(imageView)
                 imageView.setImageResource(image)
-                imageView.x = (tileCol * 64f + 320f) * gameController.screenXRatio
-                imageView.y = (tileRow * 64f + 156f) * gameController.screenYRatio
+                imageView.x = (tileCol * 64f + Room.mapX) * gameController.screenXRatio
+                imageView.y = (tileRow * 64f + Room.mapY) * gameController.screenYRatio
                 imageView.layoutParams.width = 64
                 imageView.layoutParams.height = 64
             }

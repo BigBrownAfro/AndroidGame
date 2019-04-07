@@ -4,6 +4,7 @@ import android.graphics.RectF
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.model.Player
+import com.example.jacobgraves.myapplication.model.map.Room
 import kotlinx.android.synthetic.main.game_view.*
 
 abstract class Consumable(var gameController: GameController, x: Float, y: Float){
@@ -69,20 +70,24 @@ abstract class Consumable(var gameController: GameController, x: Float, y: Float
         xPosition += accelerationX
         yPosition += accelerationY
 
-        if(xPosition < 300f + width/2){
-            xPosition = 300f + width/2
+        checkRoomBounds()
+    }
+
+    fun checkRoomBounds(){
+        if(xPosition < Room.mapX + 64 + width/2){
+            xPosition = Room.mapX + 64 + width/2
             accelerationX *= -1f
         }
-        if(xPosition > 1620f - width/2){
-            xPosition = 1620f - width/2
+        if(xPosition > (Room.mapX + Room.mapWidth - 64) - width/2){
+            xPosition = (Room.mapX + Room.mapWidth - 64) - width/2
             accelerationX *= -1f
         }
-        if (yPosition < 150f - height/2 +10){
-            yPosition = 150f - height/2 +10
+        if (yPosition < Room.mapY + 64 - height/2){
+            yPosition = Room.mapY + 64 - height/2
             accelerationY *= -1f
         }
-        if (yPosition > 930f - height/2){
-            yPosition = 930f - height/2
+        if (yPosition > (Room.mapY + Room.mapHeight) - 64 - height/2){
+            yPosition = (Room.mapY + Room.mapHeight) - 64 - height/2
             accelerationY *= -1f
         }
     }
