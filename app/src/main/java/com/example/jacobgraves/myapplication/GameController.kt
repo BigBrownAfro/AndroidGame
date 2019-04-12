@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
@@ -56,6 +57,17 @@ class GameController : AppCompatActivity() {
     var screenYRatio:Float = 0f
     //Sounds
     lateinit var soundManager:SoundManager
+
+    var useTouchControls:Boolean = true
+    var keyUp:Boolean = false
+    var keyDown:Boolean = false
+    var keyLeft:Boolean = false
+    var keyRight:Boolean = false
+
+    var lastKeyUp:Float = 0f
+    var lastKeyDown:Float = 0f
+    var lastKeyLeft:Float = 0f
+    var lastKeyRight:Float = 0f
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,6 +125,68 @@ class GameController : AppCompatActivity() {
         println("Sreen Restarted")
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_W){
+            keyUp = true
+            lastKeyUp = System.currentTimeMillis().toFloat()
+        }
+        if (keyCode == KeyEvent.KEYCODE_S){
+            keyDown = true
+            lastKeyDown = System.currentTimeMillis().toFloat()
+        }
+        if (keyCode == KeyEvent.KEYCODE_A){
+            keyLeft = true
+            lastKeyLeft = System.currentTimeMillis().toFloat()
+        }
+        if (keyCode == KeyEvent.KEYCODE_D){
+            keyRight= true
+            lastKeyRight = System.currentTimeMillis().toFloat()
+        }
+        if(keyUp || keyDown || keyLeft || keyRight){
+            useTouchControls = false
+            joystickImage.alpha = 0f
+            joystickImage2.alpha = 0f
+        }else{
+            useTouchControls = true
+            joystickImage.alpha = .4f
+            joystickImage2.alpha = .4f
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_W){
+            if (System.currentTimeMillis() - lastKeyUp > 200){
+                keyUp = false
+            }
+        }
+        if (keyCode == KeyEvent.KEYCODE_S){
+            if (System.currentTimeMillis() - lastKeyDown > 200){
+                keyDown = false
+            }
+        }
+        if (keyCode == KeyEvent.KEYCODE_A){
+            if (System.currentTimeMillis() - lastKeyLeft > 200){
+                keyLeft = false
+                println("D false")
+            }
+        }
+        if (keyCode == KeyEvent.KEYCODE_D){
+            if (System.currentTimeMillis() - lastKeyRight > 200){
+                keyRight = false
+            }
+        }
+        if(keyUp || keyDown || keyLeft || keyRight){
+            useTouchControls = false
+            joystickImage.alpha = 0f
+            joystickImage2.alpha = 0f
+        }else{
+            useTouchControls = true
+            joystickImage.alpha = .4f
+            joystickImage2.alpha = .4f
+        }
+        return super.onKeyUp(keyCode, event)
+    }
 
 
     //Setup------------------------------------------------------------------------------------------
@@ -339,18 +413,45 @@ class GameController : AppCompatActivity() {
     }
 
     fun movePlayer(){
-        xDifference = joyStickX - joystickOriginX
-        yDifference = joystickOriginY - joyStickY
-        hypotenuse = hypot(xDifference, yDifference)
+        if (useTouchControls){
+            xDifference = joyStickX - joystickOriginX
+            yDifference = joystickOriginY - joyStickY
+            hypotenuse = hypot(xDifference, yDifference)
 
-        if(hypotenuse > joystickPlayerMoveRadius){
-            angleC = acos(xDifference/hypotenuse)
+            if(hypotenuse > joystickPlayerMoveRadius){
+                angleC = acos(xDifference/hypotenuse)
 
-            if(joyStickY > joystickOriginY){
-                angleC *= (-1f)
+                if(joyStickY > joystickOriginY){
+                    angleC *= (-1f)
+                }
+
+                gameEngine.player.move(angleC)
             }
-
-            gameEngine.player.move(angleC)
+        }else{
+            if(keyRight && !keyUp && !keyLeft && !keyDown){
+                gameEngine.player.move(0f)
+            }
+            if(keyRight && keyUp && !keyLeft && !keyDown){
+                gameEngine.player.move((PI/4).toFloat())
+            }
+            if(!keyRight && keyUp && !keyLeft && !keyDown){
+                gameEngine.player.move((PI/2).toFloat())
+            }
+            if(!keyRight && keyUp && keyLeft && !keyDown){
+                gameEngine.player.move((3*PI/4).toFloat())
+            }
+            if(!keyRight && !keyUp && keyLeft && !keyDown){
+                gameEngine.player.move((PI).toFloat())
+            }
+            if(!keyRight && !keyUp && keyLeft && keyDown){
+                gameEngine.player.move((-3*PI/4).toFloat())
+            }
+            if(!keyRight && !keyUp && !keyLeft && keyDown){
+                gameEngine.player.move((-PI/2).toFloat())
+            }
+            if(keyRight && !keyUp && !keyLeft && keyDown){
+                gameEngine.player.move((-PI/4).toFloat())
+            }
         }
     }
 

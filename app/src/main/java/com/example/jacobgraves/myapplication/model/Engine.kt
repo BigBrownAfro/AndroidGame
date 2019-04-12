@@ -59,7 +59,7 @@ class Engine(var gameController: GameController, name:String) {
                 tempBackground.y = 0f
                 tempBackground.setImageResource(R.drawable.background)
                 tempBackground.scaleType = ImageView.ScaleType.FIT_XY
-                tempBackground.imageAlpha = 80
+                tempBackground.imageAlpha = 150
             }
         }
 
