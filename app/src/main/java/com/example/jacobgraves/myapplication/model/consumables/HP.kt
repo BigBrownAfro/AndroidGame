@@ -14,6 +14,7 @@ class HP(gameController: GameController,x:Float, y:Float): Consumable(gameContro
     }
 
     override fun giveTo(player: Player) {
+        gameController.soundManager.soundPool.play(gameController.soundManager.health,.5f,.5f,5,0,1f)
         player.setHealthValue(player.getHealthValue() + 1)
     }
 }

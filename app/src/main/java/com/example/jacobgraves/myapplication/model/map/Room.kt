@@ -51,6 +51,10 @@ class Room(var gameController: GameController, var schematic: Array<Array<Int>>)
                     6 -> tiles[i][j] = Door(gameController, "bottom", i, j)
                     7 -> tiles[i][j] = Door(gameController, "left", i, j)
                     8 -> tiles[i][j] = Door(gameController, "right", i, j)
+                    9 -> tiles[i][j] = Wall(gameController, "topleft", i, j)
+                    10 -> tiles[i][j] = Wall(gameController, "topright", i, j)
+                    11 -> tiles[i][j] = Wall(gameController, "bottomleft", i, j)
+                    12 -> tiles[i][j] = Wall(gameController, "bottomright", i, j)
                 }
             }
         }

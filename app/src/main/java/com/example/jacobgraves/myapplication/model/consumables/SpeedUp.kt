@@ -13,6 +13,7 @@ class SpeedUp(gameController: GameController, x:Float, y:Float): Consumable(game
     }
 
     override fun giveTo(player: Player) {
-        player.setMovementSpeed(player.getMovementSpeed()*1.1f)
+        gameController.soundManager.soundPool.play(gameController.soundManager.speed,.5f,.5f,5,0,1f)
+        player.setMovementSpeed(player.getMovementSpeed()*1.03f)
     }
 }

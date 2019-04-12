@@ -35,6 +35,7 @@ class Player(var gameController: GameController, characterName: String){
     var maxReload = 20
     var reloadTime = 0
     var coins:Int
+    var lastAngle:Float = 0f;
 
     val imageView:ImageView
 
@@ -182,25 +183,26 @@ class Player(var gameController: GameController, characterName: String){
     fun assignPictures(name:String){
         if(name.equals("Reggie")){
             image = R.drawable.mario_peace
-            moveLeftAnimationSet = IntArray(3)
-            moveLeftAnimationSet[0] = R.drawable.mario_stand
-            moveLeftAnimationSet[1] = R.drawable.mario_run_1
-            moveLeftAnimationSet[2] = R.drawable.mario_run_2
+            moveLeftAnimationSet = IntArray(4)
+            moveLeftAnimationSet[0] = (-1) * R.drawable.player_1_walk_right_1
+            moveLeftAnimationSet[1] = (-1) * R.drawable.player_1_walk_right_2
+            moveLeftAnimationSet[2] = (-1) * R.drawable.player_1_walk_right_3
+            moveLeftAnimationSet[3] = (-1) * R.drawable.player_1_walk_right_4
             moveRightAnimationSet = IntArray(4)
             moveRightAnimationSet[0] = (1) * R.drawable.player_1_walk_right_1
             moveRightAnimationSet[1] = (1) * R.drawable.player_1_walk_right_2
             moveRightAnimationSet[2] = (1) * R.drawable.player_1_walk_right_3
             moveRightAnimationSet[3] = (1) * R.drawable.player_1_walk_right_4
             moveUpAnimationSet = IntArray(4)
-            moveUpAnimationSet[0] = R.drawable.mario_run_up_1
-            moveUpAnimationSet[1] = R.drawable.mario_run_up_2
-            moveUpAnimationSet[2] = R.drawable.mario_run_up_1
-            moveUpAnimationSet[3] = R.drawable.mario_run_up_3
+            moveUpAnimationSet[0] = R.drawable.player_1_walk_up_1
+            moveUpAnimationSet[1] = R.drawable.player_1_walk_up_2
+            moveUpAnimationSet[2] = R.drawable.player_1_walk_up_3
+            moveUpAnimationSet[3] = R.drawable.player_1_walk_up_4
             moveDownAnimationSet = IntArray(4)
-            moveDownAnimationSet[0] = R.drawable.mario_face_forward
-            moveDownAnimationSet[1] = R.drawable.mario_run_down_1
-            moveDownAnimationSet[2] = R.drawable.mario_face_forward
-            moveDownAnimationSet[3] = R.drawable.mario_run_down_2
+            moveDownAnimationSet[0] = R.drawable.player_1_walk_down_1
+            moveDownAnimationSet[1] = R.drawable.player_1_walk_down_2
+            moveDownAnimationSet[2] = R.drawable.player_1_walk_down_3
+            moveDownAnimationSet[3] = R.drawable.player_1_walk_down_4
         }else{
             image = R.drawable.isaac
             moveLeftAnimationSet = IntArray(1)
@@ -215,6 +217,7 @@ class Player(var gameController: GameController, characterName: String){
     }
 
     fun move(angle:Float){
+        lastAngle = angle
         accelerationX += movementSpeed * cos(angle)
         accelerationY -= movementSpeed * sin(angle)
 
@@ -288,52 +291,65 @@ class Player(var gameController: GameController, characterName: String){
             reloadTime = maxReload
         }
         reloadTime--*/
+        if(angle < PI/4f && angle >= -PI/4f){//Facing right
+            lastDirection ="right"
+        }
+        if(angle < 3*PI/4f && angle >= PI/4f){//Facing up
+            lastDirection ="up"
+        }
+        if(angle < -3*PI/4f || angle >= 3*PI/4f){//Facing left
+            lastDirection ="left"
+        }
+        if(angle < -PI/4f && angle >= -3*PI/4f) {//Facing down
+            lastDirection ="down"
+        }
     }
 
     fun updateAnimations(){
-        if(accelerationX > 0){
-            if (animationCounter >= moveRightAnimationSet.size){
-                animationCounter = 0
+        if (accelerationX != 0f && accelerationY != 0f){
+            if(lastAngle < PI/4f && lastAngle >= -PI/4f){//Facing right
+                if (animationCounter >= moveRightAnimationSet.size){
+                    animationCounter = 0
+                }
+                image = moveRightAnimationSet[animationCounter]
+                lastDirection ="right"
+                animationCounter += 1
             }
-            image = moveRightAnimationSet[animationCounter]
-            lastDirection ="right"
-            animationCounter += 1
-        }else
-        if(accelerationX < 0){
-            if (animationCounter >= moveLeftAnimationSet.size){
-                animationCounter = 0
+            if(lastAngle < 3*PI/4f && lastAngle >= PI/4f){//Facing up
+                if (animationCounter >= moveUpAnimationSet.size){
+                    animationCounter = 0
+                }
+                image = moveUpAnimationSet[animationCounter]
+                lastDirection ="up"
+                animationCounter += 1
             }
-            image = moveLeftAnimationSet[animationCounter]
-            lastDirection ="left"
-            animationCounter += 1
-        }else
-        if(accelerationY < 0){
-            if (animationCounter >= moveUpAnimationSet.size){
-                animationCounter = 0
+            if(lastAngle < -3*PI/4f || lastAngle >= 3*PI/4f){//Facing left
+                if (animationCounter >= moveLeftAnimationSet.size){
+                    animationCounter = 0
+                }
+                image = moveLeftAnimationSet[animationCounter]
+                lastDirection ="left"
+                animationCounter += 1
             }
-            image = moveUpAnimationSet[animationCounter]
-            lastDirection ="up"
-            animationCounter += 1
-        }else
-        if(accelerationY > 0){
-            if (animationCounter >= moveDownAnimationSet.size){
-                animationCounter = 0
+            if(lastAngle < -PI/4f && lastAngle >= -3*PI/4f) {//Facing down
+                if (animationCounter >= moveDownAnimationSet.size){
+                    animationCounter = 0
+                }
+                image = moveDownAnimationSet[animationCounter]
+                lastDirection ="down"
+                animationCounter += 1
             }
-            image = moveDownAnimationSet[animationCounter]
-            lastDirection ="down"
-            animationCounter += 1
-        }else
-        if(accelerationX == 0f){
+        }else{
             if(lastDirection.equals("up")){
-                image = R.drawable.mario_run_up_1
+                image = R.drawable.player_1_standing_up
             }else if(lastDirection.equals("down")){
-                image = R.drawable.mario_face_forward
+                image = R.drawable.player_1_standing_down
             }else if(lastDirection.equals("left")){
-                image = R.drawable.mario_stand
+                image = (-1) * R.drawable.player_1_standing_right
             }else if(lastDirection.equals("right")){
-                image = R.drawable.mario_stand * (-1)
+                image = R.drawable.player_1_standing_right
             }else{
-                image = R.drawable.mario_peace
+                image = R.drawable.player_1_standing_down
             }
         }
     }
