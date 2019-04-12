@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.game_view.*
 class Engine(var gameController: GameController, name:String) {
     var player: Player
     var frameCount: Int
-    var startGun: Gun
+    var startGun: StartingPistol
     var hud:HUD
     var room: Room
 
@@ -33,6 +33,7 @@ class Engine(var gameController: GameController, name:String) {
     var deadOrphanCounter:Int
     var consumables:Array<Consumable?>
     var consumableCounter:Int
+    var guns:Array<Gun?>
     var roomSchematic:Array<Array<Int>>
 
     init{
@@ -73,6 +74,7 @@ class Engine(var gameController: GameController, name:String) {
         deadEnemyCounter = 0
         consumables = Array<Consumable?>(50){null}
         consumableCounter = 0
+        guns = Array<Gun?>(50){null}
     }
 
     fun buildSchematic(){
@@ -274,6 +276,7 @@ class Engine(var gameController: GameController, name:String) {
         //println(end - start)
         player.updateImageView()
         startGun.updateImageView()
+        startGun.updateImages()
 
         for(bullet in player.bulletArray){
             if(bullet != null){

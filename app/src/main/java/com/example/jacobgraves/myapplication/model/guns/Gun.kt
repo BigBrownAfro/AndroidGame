@@ -34,8 +34,8 @@ abstract class Gun (val gameController: GameController) {
         setCurrentAmmo(50)
         setDamageValue(1)
         setAccuracy(1.0f)
-        setXPosition(750f)
-        setYPosition(750f)
+        setXPosition(250f)
+        setYPosition(250f)
         setWidth(40)
         setHeight(35)
         bulletArray = Array(500) { null }
@@ -151,7 +151,7 @@ abstract class Gun (val gameController: GameController) {
     //reload, shoot, setup images, update images
 
     open fun assignImages(){
-        image = R.drawable.testgun
+        image = R.drawable.starting_pistol_right
         shootAnimationSet = IntArray(3)
         shootAnimationSet[0] = R.drawable.testgun
         shootAnimationSet[1] = R.drawable.testgunfire
@@ -185,20 +185,26 @@ abstract class Gun (val gameController: GameController) {
     }
 
     fun updateImageView() {
-      /*  gameController.runOnUiThread {
+        gameController.runOnUiThread {
             run {
-                gameController.constraintLayout.addView(imageView)
-
+                if(isEquipped == true){
                 imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
                 imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
-                imageView.x = (getXPosition() - getWidth() / 2f) * gameController.screenXRatio
-                imageView.y = (getYPosition() - getHeight() / 2f) * gameController.screenYRatio
+                    if(gameController.gameEngine.player.accelerationX > 0) {
+                        imageView.x = gameController.gameEngine.player.getXPosition() * gameController.screenXRatio
+                        imageView.y = gameController.gameEngine.player.getYPosition() * gameController.screenYRatio
+                    }else
+                        if(gameController.gameEngine.player.accelerationX < 0){
+                            imageView.x = (gameController.gameEngine.player.getXPosition() - getWidth()) * gameController.screenXRatio
+                            imageView.y = (gameController.gameEngine.player.getYPosition() - getHeight()/2) * gameController.screenYRatio
+                        }
 
                 imageView.setImageResource(image)
 
                 //reload, shoot, setup images, update images.
             }
-        }*/
+            }
+        }
     }
 
     abstract fun shoot(angle: Float)
