@@ -1,14 +1,17 @@
 package com.example.jacobgraves.myapplication
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.jacobgraves.myapplication.model.Engine
 import com.example.jacobgraves.myapplication.model.Player
+import com.example.jacobgraves.myapplication.model.upgrades.Music
 import kotlinx.android.synthetic.main.main_menu_view.*
 
 class MainMenuController : AppCompatActivity() {
+    lateinit var mediaPlayer: MediaPlayer
 
     companion object {
         var gameEngine:Engine? = null
@@ -24,6 +27,8 @@ class MainMenuController : AppCompatActivity() {
 
     fun runSetup(){
         configureButtons()
+        mediaPlayer = MediaPlayer.create(this, R.raw.sick_music)
+        mediaPlayer.start()
         println("Setup Complete in menu")
     }
 

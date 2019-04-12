@@ -1,5 +1,6 @@
 package com.example.jacobgraves.myapplication.model
 
+import android.graphics.Color
 import android.media.Image
 import android.provider.ContactsContract
 import android.widget.ImageView
@@ -71,6 +72,7 @@ class HUD(var gameController: GameController) {
                 timeTextView.x = 880f * gameController.screenXRatio
                 timeTextView.y = 38f * gameController.screenYRatio
                 timeTextView.textSize = 20f
+                timeTextView.setTextColor(Color.LTGRAY)
 
                 coinsImageView.setImageResource(coinsImage)
                 coinsImageView.layoutParams.width = (31 * gameController.screenXRatio).toInt()
@@ -84,6 +86,7 @@ class HUD(var gameController: GameController) {
                 coinsTextView.layoutParams.height = coinsImageView.layoutParams.height
                 coinsTextView.x = coinsImageView.x + coinsImageView.layoutParams.width + 10 * gameController.screenXRatio
                 coinsTextView.y = coinsImageView.y + -5 * gameController.screenYRatio
+                coinsTextView.setTextColor(Color.LTGRAY)
 
                 otherImageView.setImageResource(otherImage)
                 otherImageView.layoutParams.width = (23 * gameController.screenXRatio).toInt()
@@ -97,6 +100,7 @@ class HUD(var gameController: GameController) {
                 otherTextView.layoutParams.height = otherImageView.layoutParams.height
                 otherTextView.x = coinsTextView.x
                 otherTextView.y = otherImageView.y + -5 * gameController.screenYRatio
+                otherTextView.setTextColor(Color.LTGRAY)
             }
         }
     }

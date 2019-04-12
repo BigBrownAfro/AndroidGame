@@ -6,6 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/backgroundImageView"
+        android:layout_width="735dp"
+        android:layout_height="429dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/main_menu"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
     <TextView
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
@@ -14,9 +23,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Title Placeholder"
+        android:fontFamily="@font/bungee_inline"
+        android:text="Pocket Roguelike"
         android:textAlignment="center"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@color/colorPrimary"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/playButton"
@@ -27,26 +37,32 @@
 
     <Button
         android:id="@+id/playButton"
-        android:layout_width="500dp"
+        android:layout_width="400dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/colorAccent"
+        android:fontFamily="@font/advent_pro_semibold"
         android:text="Play"
         android:textAllCaps="false"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/shopButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/shopButton"
-        android:layout_width="500dp"
+        android:layout_width="400dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/colorAccent"
+        android:fontFamily="@font/advent_pro_semibold"
         android:text="Shop"
         android:textAllCaps="false"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,13 +70,16 @@
 
     <Button
         android:id="@+id/settingsButton"
-        android:layout_width="500dp"
+        android:layout_width="400dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/colorAccent"
+        android:fontFamily="@font/advent_pro_semibold"
         android:text="Settings"
         android:textAllCaps="false"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shopButton" />
