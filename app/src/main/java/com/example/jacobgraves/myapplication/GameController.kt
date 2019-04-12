@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageView
 import com.example.jacobgraves.myapplication.model.Engine
 import com.example.jacobgraves.myapplication.model.SoundManager
 import kotlinx.android.synthetic.main.game_view.*
@@ -53,7 +54,6 @@ class GameController : AppCompatActivity() {
 
     var screenXRatio:Float = 0f
     var screenYRatio:Float = 0f
-
     //Sounds
     lateinit var soundManager:SoundManager
 

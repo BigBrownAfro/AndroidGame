@@ -13,6 +13,7 @@ class Coin(gameController: GameController,x:Float,y:Float): Consumable(gameContr
     }
 
     override fun giveTo(player: Player) {
+        gameController.soundManager.soundPool.play(gameController.soundManager.coin,.5f,.5f,5,0,1f)
         player.coins += 1
     }
 }

@@ -3,6 +3,7 @@ package com.example.jacobgraves.myapplication.model
 import android.graphics.Color
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
+import com.example.jacobgraves.myapplication.R
 import com.example.jacobgraves.myapplication.model.map.Room
 import com.example.jacobgraves.myapplication.model.consumables.Coin
 import com.example.jacobgraves.myapplication.model.consumables.Consumable
@@ -11,6 +12,7 @@ import com.example.jacobgraves.myapplication.model.consumables.SpeedUp
 import com.example.jacobgraves.myapplication.model.guns.Gun
 import com.example.jacobgraves.myapplication.model.guns.StartingPistol
 import com.example.jacobgraves.myapplication.model.map.Wall
+import kotlinx.android.synthetic.main.character_select_view.view.*
 import kotlinx.android.synthetic.main.game_view.*
 
 
@@ -22,7 +24,7 @@ class Engine(var gameController: GameController, name:String) {
     var room: Room
 
     // Temporary
-    val tempMapArea:ImageView
+    val backgroundTint:ImageView
     val tempBackground:ImageView
 
     var enemies = ArrayList<Enemy>()
@@ -38,24 +40,25 @@ class Engine(var gameController: GameController, name:String) {
 
     init{
         // Temporary
-        tempMapArea = ImageView(gameController)
+        backgroundTint = ImageView(gameController)
         tempBackground = ImageView(gameController)
 
         gameController.runOnUiThread {
             run {
-                gameController.constraintLayout.addView(tempBackground)
-                tempBackground.layoutParams.width = (1920f * gameController.screenXRatio).toInt()
-                tempBackground.layoutParams.height = (1080f * gameController.screenYRatio).toInt()
-                tempBackground.x = 0 * gameController.screenXRatio
-                tempBackground.y = 0 * gameController.screenYRatio
-                tempBackground.setBackgroundColor(Color.DKGRAY)
+                gameController.constraintLayout.addView(backgroundTint)
+                backgroundTint.layoutParams.width = (1920f * gameController.screenXRatio).toInt()
+                backgroundTint.layoutParams.height = (1080f * gameController.screenYRatio).toInt()
+                backgroundTint.x = 0 * gameController.screenXRatio
+                backgroundTint.y = 0 * gameController.screenYRatio
+                backgroundTint.setBackgroundColor(Color.BLACK)
 
-                gameController.constraintLayout.addView(tempMapArea)
-                tempMapArea.layoutParams.width = (Room.mapWidth * gameController.screenXRatio).toInt()
-                tempMapArea.layoutParams.height = (Room.mapHeight * gameController.screenYRatio).toInt()
-                tempMapArea.x = Room.mapX * gameController.screenXRatio
-                tempMapArea.y = Room.mapY * gameController.screenYRatio
-                tempMapArea.setBackgroundColor(Color.rgb(140, 119, 84))
+                gameController.constraintLayout.addView(tempBackground)
+                tempBackground.layoutParams.width = (4000f * gameController.screenXRatio).toInt()
+                tempBackground.layoutParams.height = (1800f * gameController.screenYRatio).toInt()
+                tempBackground.x = -100f
+                tempBackground.y = -100f
+                tempBackground.setImageResource(R.drawable.background)
+                tempBackground.imageAlpha = 80
             }
         }
         roomSchematic = Array(12){Array(20){0}}
@@ -72,12 +75,13 @@ class Engine(var gameController: GameController, name:String) {
         deadOrphanCounter = 0
         deadEnemies = Array<Enemy?>(10){null}
         deadEnemyCounter = 0
-        consumables = Array<Consumable?>(50){null}
+        consumables = Array<Consumable?>(250){null}
         consumableCounter = 0
         guns = Array<Gun?>(50){null}
     }
 
     fun buildSchematic(){
+        //walls
         for(j in 0..roomSchematic[0].size-1){
             roomSchematic[0][j] = 1
         }
@@ -88,10 +92,18 @@ class Engine(var gameController: GameController, name:String) {
             roomSchematic[i][0] = 3
             roomSchematic[i][19] = 4
         }
+
+        //Doors
         roomSchematic[0][10] = 5
         roomSchematic[11][10] = 6
         roomSchematic[6][0] = 7
         roomSchematic[6][19] = 8
+
+        //corners
+        roomSchematic[0][0] = 9
+        roomSchematic[11][19] = 12
+        roomSchematic[0][19] = 10
+        roomSchematic[11][0] = 11
     }
 
     fun update(){
@@ -321,7 +333,7 @@ class Engine(var gameController: GameController, name:String) {
                 enemy.kill()
                 deadEnemies[deadEnemyCounter] = enemy
                 deadEnemyCounter += 1
-                createConsumables(2,enemy)
+                createConsumables(3,enemy)
             }
         }
 
