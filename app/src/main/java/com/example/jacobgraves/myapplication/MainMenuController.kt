@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.jacobgraves.myapplication.model.Engine
-import com.example.jacobgraves.myapplication.model.Player
-import com.example.jacobgraves.myapplication.model.upgrades.Music
 import kotlinx.android.synthetic.main.main_menu_view.*
 
 class MainMenuController : AppCompatActivity() {

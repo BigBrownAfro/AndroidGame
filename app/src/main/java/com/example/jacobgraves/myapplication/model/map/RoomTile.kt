@@ -44,14 +44,14 @@ abstract class RoomTile(var gameController: GameController, row:Int, col:Int) {
         gameController.runOnUiThread{
             run{
                 gameController.constraintLayout.addView(imageView)
-                imageView.layoutParams.width = 64
-                imageView.layoutParams.height = 64
+                imageView.layoutParams.width = (64 * gameController.screenXRatio * 1.1).toInt()
+                imageView.layoutParams.height = (64* gameController.screenYRatio * 1.1).toInt()
                 imageView.setImageResource(image)
                 imageView.x = (tileCol * 64f + Room.mapX) * gameController.screenXRatio
                 imageView.y = (tileRow * 64f + Room.mapY) * gameController.screenYRatio
-                if (tileCol == 0){
+                /*if (tileCol == 0){
                     imageView.x -= 4
-                }
+                }*/
             }
         }
     }

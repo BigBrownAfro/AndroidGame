@@ -8,12 +8,14 @@
 
     <ImageView
         android:id="@+id/backgroundImageView"
-        android:layout_width="735dp"
-        android:layout_height="429dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/main_menu"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/main_menu" />
 
     <TextView
         android:id="@+id/titleText"

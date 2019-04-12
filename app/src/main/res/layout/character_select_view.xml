@@ -8,12 +8,14 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="765dp"
-        android:layout_height="436dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/character_select_background"
-        tools:layout_editor_absoluteX="-31dp"
-        tools:layout_editor_absoluteY="-20dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/character_select_background" />
 
     <Button
         android:id="@+id/characterSelectButton"

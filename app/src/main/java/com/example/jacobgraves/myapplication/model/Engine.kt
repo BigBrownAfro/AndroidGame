@@ -53,14 +53,16 @@ class Engine(var gameController: GameController, name:String) {
                 backgroundTint.setBackgroundColor(Color.BLACK)
 
                 gameController.constraintLayout.addView(tempBackground)
-                tempBackground.layoutParams.width = (4000f * gameController.screenXRatio).toInt()
-                tempBackground.layoutParams.height = (1800f * gameController.screenYRatio).toInt()
-                tempBackground.x = -100f
-                tempBackground.y = -100f
+                tempBackground.layoutParams.width = (1920f * gameController.screenXRatio).toInt()
+                tempBackground.layoutParams.height = (1080f * gameController.screenYRatio).toInt()
+                tempBackground.x = 0f
+                tempBackground.y = 0f
                 tempBackground.setImageResource(R.drawable.background)
+                tempBackground.scaleType = ImageView.ScaleType.FIT_XY
                 tempBackground.imageAlpha = 80
             }
         }
+
         roomSchematic = Array(12){Array(20){0}}
         buildSchematic()
 
