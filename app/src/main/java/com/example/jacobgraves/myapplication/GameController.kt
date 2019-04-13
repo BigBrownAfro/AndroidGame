@@ -2,6 +2,7 @@ package com.example.jacobgraves.myapplication
 
 import android.content.Intent
 import android.content.res.Configuration
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
@@ -26,6 +27,8 @@ class GameController : AppCompatActivity() {
     lateinit var joystick2Listener:View.OnTouchListener
 
     var isPaused = false
+    var volume = 1f
+    var isMuted = false
     var joystickOriginX = 200f
     var joystickOriginY = 1080f-300f
     var joyStickX = joystickOriginX
@@ -36,6 +39,10 @@ class GameController : AppCompatActivity() {
     var resumeButtonY = 1080f - 450f
     var quitButtonX = 1920f/2f
     var quitButtonY = 1080f - 650f
+    var muteButtonX = 1920f-500f
+    var muteButtonY = 10f
+    var unMuteButtonX = 1920f-500f
+    var unMuteButtonY = 10f
 
     var joystickMoveRadius = 100f
     var joystickPlayerMoveRadius = 30f
@@ -91,6 +98,7 @@ class GameController : AppCompatActivity() {
         super.onStop()
         timer.cancel()
         println("Screen Stopped")
+
     }
 
     override fun onDestroy() {
@@ -154,6 +162,7 @@ class GameController : AppCompatActivity() {
 
     fun setupSounds(){
         soundManager = SoundManager(this)
+
     }
 
     fun setupListeners(){
@@ -278,6 +287,20 @@ class GameController : AppCompatActivity() {
         quitButton.setOnClickListener {
             quitButtonClicked()
         }
+
+        muteButton.x = muteButtonX * screenXRatio
+        muteButton.y = muteButtonY * screenYRatio
+        muteButton.setOnClickListener {
+            muteButtonClicked()
+        }
+
+        unMuteButton.x = unMuteButtonX * screenXRatio
+        unMuteButton.y = unMuteButtonY * screenYRatio
+        unMuteButton.isEnabled = false
+        unMuteButton.visibility = View.INVISIBLE
+        unMuteButton.setOnClickListener {
+            unMuteButtonClicked()
+        }
     }
 
     private fun pauseButtonClicked() {
@@ -310,6 +333,26 @@ class GameController : AppCompatActivity() {
         onBackPressed()
         //val intent = Intent(this, MainMenuController::class.java)
         //this.startActivity(intent)
+    }
+
+    private fun muteButtonClicked(){
+        isMuted = true
+        volume = 0f
+        muteButton.isEnabled = false
+        muteButton.visibility = View.INVISIBLE
+        unMuteButton.isEnabled = true
+        unMuteButton.visibility = View.VISIBLE
+    }
+
+    private fun unMuteButtonClicked(){
+        isMuted = false
+        volume = 1f
+        unMuteButton.isEnabled = false
+        unMuteButton.visibility = View.INVISIBLE
+        muteButton.isEnabled = true
+        muteButton.visibility = View.VISIBLE
+
+
     }
 
     //Updating------------------------------------------------------------------------------------------

@@ -68,4 +68,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resumeButton" />
 
+    <Button
+        android:id="@+id/muteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/ic_lock_silent_mode_off"
+        android:backgroundTint="@color/colorPrimaryDark"
+        tools:layout_editor_absoluteX="491dp"
+        tools:layout_editor_absoluteY="23dp" />
+
+    <Button
+        android:id="@+id/unMuteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/ic_lock_silent_mode"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="494dp"
+        tools:layout_editor_absoluteY="23dp" />
+
 </android.support.constraint.ConstraintLayout>
