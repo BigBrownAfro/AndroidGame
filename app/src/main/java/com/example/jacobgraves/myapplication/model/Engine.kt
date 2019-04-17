@@ -9,10 +9,11 @@ import com.example.jacobgraves.myapplication.model.consumables.Coin
 import com.example.jacobgraves.myapplication.model.consumables.Consumable
 import com.example.jacobgraves.myapplication.model.consumables.HP
 import com.example.jacobgraves.myapplication.model.consumables.SpeedUp
+import com.example.jacobgraves.myapplication.model.enemies.Enemy
+import com.example.jacobgraves.myapplication.model.enemies.Freezo
+import com.example.jacobgraves.myapplication.model.enemies.SwarmMario
 import com.example.jacobgraves.myapplication.model.guns.Gun
 import com.example.jacobgraves.myapplication.model.guns.StartingPistol
-import com.example.jacobgraves.myapplication.model.map.Wall
-import kotlinx.android.synthetic.main.character_select_view.view.*
 import kotlinx.android.synthetic.main.game_view.*
 
 
@@ -72,10 +73,10 @@ class Engine(var gameController: GameController, name:String) {
         startGun = StartingPistol(gameController)
         frameCount = 0
         hud = HUD(gameController)
-        enemies.add(Freezo(gameController))
-        deadOrphans = Array<Bullet?>(10){null}
+        makeEnemies()
+        deadOrphans = Array<Bullet?>(50){null}
         deadOrphanCounter = 0
-        deadEnemies = Array<Enemy?>(10){null}
+        deadEnemies = Array<Enemy?>(50){null}
         deadEnemyCounter = 0
         consumables = Array<Consumable?>(250){null}
         consumableCounter = 0
@@ -108,6 +109,19 @@ class Engine(var gameController: GameController, name:String) {
         roomSchematic[11][0] = 11
     }
 
+    fun makeEnemies(){
+        enemies.add(Freezo(gameController))
+        for(i in 0..19){
+            var e = SwarmMario(gameController)
+            e.setXPosition(e.getXPosition() + 70 * i)
+            if (e.getXPosition() > Room.mapX + Room.mapWidth - 80){
+                e.setYPosition(e.getYPosition() - 100)
+                e.setXPosition(Room.mapX + 380)
+            }
+            enemies.add(e)
+        }
+    }
+
     fun update(){
         if (frameCount == 60){
             //println("It's been 60 frames")
@@ -133,6 +147,9 @@ class Engine(var gameController: GameController, name:String) {
     fun moveEnemies(){
         for(enemy in enemies){
             if(enemy is Freezo){
+                enemy.pursuePlayer(player)
+            }
+            if (enemy is SwarmMario){
                 enemy.pursuePlayer(player)
             }
         }
@@ -280,6 +297,9 @@ class Engine(var gameController: GameController, name:String) {
             if(enemy is Freezo){
                 enemy.attack(player)
             }
+            if(enemy is SwarmMario){
+                enemy.attack(player)
+            }
         }
     }
 
@@ -368,7 +388,7 @@ class Engine(var gameController: GameController, name:String) {
         return c
     }
 
-    fun createConsumables(amount:Int, enemy:Enemy){
+    fun createConsumables(amount:Int, enemy: Enemy){
         for (i in 0..amount-1){
             createConsumable(enemy)
         }

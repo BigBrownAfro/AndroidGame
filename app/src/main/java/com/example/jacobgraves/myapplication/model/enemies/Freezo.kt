@@ -1,6 +1,7 @@
-package com.example.jacobgraves.myapplication.model
+package com.example.jacobgraves.myapplication.model.enemies
 
 import com.example.jacobgraves.myapplication.GameController
+import com.example.jacobgraves.myapplication.model.Player
 import kotlin.math.acos
 import kotlin.math.hypot
 
@@ -17,7 +18,7 @@ class Freezo(gameController: GameController): Enemy(gameController) {
         sensorRadius = 400
     }
 
-    fun pursuePlayer(player:Player){
+    fun pursuePlayer(player: Player){
         var xDifference = player.getXPosition() - getXPosition()
         var yDifference = getYPosition() - player.getYPosition()
         var hypotenuse = hypot(xDifference, yDifference)

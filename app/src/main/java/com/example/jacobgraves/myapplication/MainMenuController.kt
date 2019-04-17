@@ -9,10 +9,10 @@ import com.example.jacobgraves.myapplication.model.Engine
 import kotlinx.android.synthetic.main.main_menu_view.*
 
 class MainMenuController : AppCompatActivity() {
-    lateinit var mediaPlayer: MediaPlayer
 
     companion object {
         var gameEngine:Engine? = null
+        lateinit var mediaPlayer: MediaPlayer
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

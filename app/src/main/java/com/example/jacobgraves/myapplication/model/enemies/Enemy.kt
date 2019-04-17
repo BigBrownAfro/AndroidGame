@@ -1,9 +1,11 @@
-package com.example.jacobgraves.myapplication.model
+package com.example.jacobgraves.myapplication.model.enemies
 
 import android.graphics.RectF
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
+import com.example.jacobgraves.myapplication.model.Bullet
+import com.example.jacobgraves.myapplication.model.Player
 import kotlinx.android.synthetic.main.game_view.*
 import kotlin.math.*
 
@@ -150,7 +152,7 @@ abstract class Enemy(var gameController: GameController) {
         }
     }
 
-    fun inRadius(player:Player): Boolean{
+    fun inRadius(player: Player): Boolean{
         var inRadius = false
         var xDifference = player.getXPosition() - xPosition
         xDifference = xDifference.absoluteValue
@@ -299,7 +301,7 @@ abstract class Enemy(var gameController: GameController) {
         if (bulletCounter > 99){
             bulletCounter = 0
         }
-        bulletArray[bulletCounter] = Bullet(gameController, this,angle)
+        bulletArray[bulletCounter] = Bullet(gameController, this, angle)
         bulletCounter++
     }
 

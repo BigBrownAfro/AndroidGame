@@ -1,21 +1,19 @@
 package com.example.jacobgraves.myapplication
 
-import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
-import android.widget.ImageView
 import com.example.jacobgraves.myapplication.model.Engine
 import com.example.jacobgraves.myapplication.model.SoundManager
 import kotlinx.android.synthetic.main.game_view.*
-import kotlinx.android.synthetic.main.main_menu_view.*
 import java.lang.Exception
 import java.util.*
 import kotlin.math.*
+
+
 
 class GameController : AppCompatActivity() {
     lateinit var gameEngine: Engine
@@ -64,10 +62,20 @@ class GameController : AppCompatActivity() {
     var keyLeft:Boolean = false
     var keyRight:Boolean = false
 
-    var lastKeyUp:Float = 0f
-    var lastKeyDown:Float = 0f
-    var lastKeyLeft:Float = 0f
-    var lastKeyRight:Float = 0f
+    var lastKeyUp:Long = 0
+    var lastKeyDown:Long = 0
+    var lastKeyLeft:Long = 0
+    var lastKeyRight:Long = 0
+
+    var shootUp:Boolean = false
+    var shootDown:Boolean = false
+    var shootLeft:Boolean = false
+    var shootRight:Boolean = false
+
+    var lastshootUp:Long = 0
+    var lastshootDown:Long = 0
+    var lastshootLeft:Long = 0
+    var lastshootRight:Long = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -125,22 +133,23 @@ class GameController : AppCompatActivity() {
         println("Sreen Restarted")
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+    /*override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_W){
             keyUp = true
-            lastKeyUp = System.currentTimeMillis().toFloat()
+            lastKeyUp = System.currentTimeMillis()
+            println("up pressed")
         }
         if (keyCode == KeyEvent.KEYCODE_S){
             keyDown = true
-            lastKeyDown = System.currentTimeMillis().toFloat()
+            lastKeyDown = System.currentTimeMillis()
         }
         if (keyCode == KeyEvent.KEYCODE_A){
             keyLeft = true
-            lastKeyLeft = System.currentTimeMillis().toFloat()
+            lastKeyLeft = System.currentTimeMillis()
         }
         if (keyCode == KeyEvent.KEYCODE_D){
             keyRight= true
-            lastKeyRight = System.currentTimeMillis().toFloat()
+            lastKeyRight = System.currentTimeMillis()
         }
         if(keyUp || keyDown || keyLeft || keyRight){
             useTouchControls = false
@@ -152,38 +161,51 @@ class GameController : AppCompatActivity() {
             joystickImage2.alpha = .4f
         }
         return super.onKeyDown(keyCode, event)
-    }
+    }*/
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_W){
-            if (System.currentTimeMillis() - lastKeyUp > 200){
-                keyUp = false
-            }
+            keyUp = true
+            lastKeyUp = System.currentTimeMillis()
         }
         if (keyCode == KeyEvent.KEYCODE_S){
-            if (System.currentTimeMillis() - lastKeyDown > 200){
-                keyDown = false
-            }
+            keyDown = true
+            lastKeyDown = System.currentTimeMillis()
         }
         if (keyCode == KeyEvent.KEYCODE_A){
-            if (System.currentTimeMillis() - lastKeyLeft > 200){
-                keyLeft = false
-                println("D false")
-            }
+            keyLeft = true
+            lastKeyLeft = System.currentTimeMillis()
         }
         if (keyCode == KeyEvent.KEYCODE_D){
-            if (System.currentTimeMillis() - lastKeyRight > 200){
-                keyRight = false
-            }
+            keyRight= true
+            lastKeyRight = System.currentTimeMillis()
         }
+
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP){
+            shootUp = true
+            lastshootUp = System.currentTimeMillis()
+        }
+        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
+            shootDown = true
+            lastshootDown = System.currentTimeMillis()
+        }
+        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT){
+            shootLeft = true
+            lastshootLeft = System.currentTimeMillis()
+        }
+        if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
+            shootRight = true
+            lastshootRight = System.currentTimeMillis()
+        }
+
         if(keyUp || keyDown || keyLeft || keyRight){
             useTouchControls = false
-            joystickImage.alpha = 0f
-            joystickImage2.alpha = 0f
+            //joystickImage.alpha = 0f
+            //joystickImage2.alpha = 0f
         }else{
             useTouchControls = true
-            joystickImage.alpha = .4f
-            joystickImage2.alpha = .4f
+            //joystickImage.alpha = .4f
+            //joystickImage2.alpha = .4f
         }
         return super.onKeyUp(keyCode, event)
     }
@@ -273,6 +295,9 @@ class GameController : AppCompatActivity() {
                 joystickImage.x = joyStickX - joystickImage.width/2
                 joystickImage.y = joyStickY - joystickImage.height/2
             }
+            useTouchControls = true
+            joystickImage.alpha = .4f
+            joystickImage2.alpha = .4f
             true
         })
 
@@ -365,11 +390,13 @@ class GameController : AppCompatActivity() {
             resumeButton.visibility = View.VISIBLE
             quitButton.isEnabled = true
             quitButton.visibility = View.VISIBLE
+            MainMenuController.mediaPlayer.pause()
         }else{
             resumeButton.isEnabled = false
             resumeButton.visibility = View.INVISIBLE
             quitButton.isEnabled = false
             quitButton.visibility = View.INVISIBLE
+            MainMenuController.mediaPlayer.start()
         }
     }
     private fun resumeButtonClicked(){
@@ -378,9 +405,11 @@ class GameController : AppCompatActivity() {
         resumeButton.visibility = View.INVISIBLE
         quitButton.isEnabled = false
         quitButton.visibility = View.INVISIBLE
+        MainMenuController.mediaPlayer.start()
     }
 
     private fun quitButtonClicked(){
+        MainMenuController.mediaPlayer.start()
         onBackPressed()
         //val intent = Intent(this, MainMenuController::class.java)
         //this.startActivity(intent)
@@ -413,6 +442,97 @@ class GameController : AppCompatActivity() {
     }
 
     fun movePlayer(){
+        xDifference = joyStickX - joystickOriginX
+        yDifference = joystickOriginY - joyStickY
+        hypotenuse = hypot(xDifference, yDifference)
+
+        if(hypotenuse > joystickPlayerMoveRadius){
+            angleC = acos(xDifference/hypotenuse)
+
+            if(joyStickY > joystickOriginY){
+                angleC *= (-1f)
+            }
+
+            gameEngine.player.move(angleC)
+        }
+
+        if(keyRight && !keyUp && !keyLeft && !keyDown){
+            gameEngine.player.move(0f)
+        }
+        if(keyRight && keyUp && !keyLeft && !keyDown){
+            gameEngine.player.move((PI/4).toFloat())
+        }
+        if(!keyRight && keyUp && !keyLeft && !keyDown){
+            gameEngine.player.move((PI/2).toFloat())
+        }
+        if(!keyRight && keyUp && keyLeft && !keyDown){
+            gameEngine.player.move((3*PI/4).toFloat())
+        }
+        if(!keyRight && !keyUp && keyLeft && !keyDown){
+            gameEngine.player.move((PI).toFloat())
+        }
+        if(!keyRight && !keyUp && keyLeft && keyDown){
+            gameEngine.player.move((-3*PI/4).toFloat())
+        }
+        if(!keyRight && !keyUp && !keyLeft && keyDown){
+            gameEngine.player.move((-PI/2).toFloat())
+        }
+        if(keyRight && !keyUp && !keyLeft && keyDown){
+            gameEngine.player.move((-PI/4).toFloat())
+        }
+
+        if(shootRight && !shootUp && !shootLeft && !shootDown){
+            gameEngine.player.shoot(0f)
+        }
+        if(shootRight && shootUp && !shootLeft && !shootDown){
+            gameEngine.player.shoot((PI/4).toFloat())
+        }
+        if(!shootRight && shootUp && !shootLeft && !shootDown){
+            gameEngine.player.shoot((PI/2).toFloat())
+        }
+        if(!shootRight && shootUp && shootLeft && !shootDown){
+            gameEngine.player.shoot((3*PI/4).toFloat())
+        }
+        if(!shootRight && !shootUp && shootLeft && !shootDown){
+            gameEngine.player.shoot((PI).toFloat())
+        }
+        if(!shootRight && !shootUp && shootLeft && shootDown){
+            gameEngine.player.shoot((-3*PI/4).toFloat())
+        }
+        if(!shootRight && !shootUp && !shootLeft && shootDown){
+            gameEngine.player.shoot((-PI/2).toFloat())
+        }
+        if(shootRight && !shootUp && !shootLeft && shootDown){
+            gameEngine.player.shoot((-PI/4).toFloat())
+        }
+
+        var time = System.currentTimeMillis()
+        if(time - lastKeyUp > 400){
+            keyUp = false
+        }
+        if(time - lastKeyDown > 400){
+            keyDown = false
+        }
+        if(time - lastKeyLeft > 400){
+            keyLeft = false
+        }
+        if(time - lastKeyRight > 400){
+            keyRight = false
+        }
+
+        if(time - lastshootUp > 200){
+            shootUp = false
+        }
+        if(time - lastshootDown > 200){
+            shootDown = false
+        }
+        if(time - lastshootLeft > 200){
+            shootLeft = false
+        }
+        if(time - lastshootRight > 200){
+            shootRight = false
+        }
+        /*
         if (useTouchControls){
             xDifference = joyStickX - joystickOriginX
             yDifference = joystickOriginY - joyStickY
@@ -452,7 +572,21 @@ class GameController : AppCompatActivity() {
             if(keyRight && !keyUp && !keyLeft && keyDown){
                 gameEngine.player.move((-PI/4).toFloat())
             }
-        }
+
+            var time = System.currentTimeMillis()
+            if(time - lastKeyUp > 400){
+                keyUp = false
+            }
+            if(time - lastKeyDown > 400){
+                keyDown = false
+            }
+            if(time - lastKeyLeft > 400){
+                keyLeft = false
+            }
+            if(time - lastKeyRight > 400){
+                keyRight = false
+            }
+        }*/
     }
 
     fun shootPlayer(){
