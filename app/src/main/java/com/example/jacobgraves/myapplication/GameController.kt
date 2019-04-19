@@ -1,11 +1,8 @@
 package com.example.jacobgraves.myapplication
 
-<<<<<<< HEAD
-=======
 import android.content.Intent
 import android.content.res.Configuration
 import android.media.MediaPlayer
->>>>>>> Develop
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.DisplayMetrics
