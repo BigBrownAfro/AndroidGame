@@ -63,7 +63,7 @@ class StartingPistol(gameController: GameController): Gun(gameController) {
             }
             gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter] = Bullet(gameController, gameController.gameEngine.player, (angle + ((-getAccuracy() * Math.random()) * -.5 * Math.random())).toFloat())
             gameController.gameEngine.player.bulletCounter++
-            gameController.soundManager.soundPool.play(gameController.soundManager.pisto1,1f,1f,5,0,1f)
+            gameController.soundManager.soundPool.play(gameController.soundManager.pisto1,gameController.volume,gameController.volume,5,0,1f)
             reloadTime = maxReload
         }
         reloadTime--

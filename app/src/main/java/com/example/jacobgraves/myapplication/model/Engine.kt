@@ -207,7 +207,7 @@ class Engine(var gameController: GameController, name:String) {
                     if(enemy.hitBox.intersect(bullet.hitBox)){
                         bullet.isAlive = false
                         enemy.setHealthValue(enemy.getHealthValue() - bullet.attackValue)
-                        gameController.soundManager.soundPool.play(gameController.soundManager.arrow,1f,1f,5,0,1f)
+                        gameController.soundManager.soundPool.play(gameController.soundManager.arrow,gameController.volume,gameController.volume,5,0,1f)
                     }
                 }
             }
