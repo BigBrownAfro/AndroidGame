@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.game_view.*
 abstract class Gun (val gameController: GameController) {
     var name = "Gun"
     private var damageValue: Int = 1
-    private var accuracy: Float = 1f
+    private var accuracy: Int = 1
     private var xPosition: Float = 1f
     private var yPosition: Float = 1f
     private var width: Int = 35
@@ -33,7 +33,7 @@ abstract class Gun (val gameController: GameController) {
         setMaxAmmo(50)
         setCurrentAmmo(50)
         setDamageValue(1)
-        setAccuracy(1.0f)
+        setAccuracy(1)
         setXPosition(250f)
         setYPosition(250f)
         setWidth(40)
@@ -74,9 +74,9 @@ abstract class Gun (val gameController: GameController) {
         }
     }
 
-    fun setAccuracy(x: Float) {
+    fun setAccuracy(x: Int) {
         if (x <= 0) {
-            accuracy = 0f
+            accuracy = 0
         } else {
             accuracy = x
         }
@@ -128,7 +128,7 @@ abstract class Gun (val gameController: GameController) {
         return currentAmmo
     }
 
-    fun getAccuracy(): Float {
+    fun getAccuracy(): Int {
         return accuracy
     }
 
@@ -188,7 +188,7 @@ abstract class Gun (val gameController: GameController) {
         gameController.runOnUiThread {
             run {
                 if(isEquipped == true){
-                imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
+              /*  imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
                 imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
                     if(gameController.gameEngine.player.accelerationX > 0) {
                         imageView.x = gameController.gameEngine.player.getXPosition() * gameController.screenXRatio
@@ -196,8 +196,8 @@ abstract class Gun (val gameController: GameController) {
                     }else
                         if(gameController.gameEngine.player.accelerationX < 0){
                             imageView.x = (gameController.gameEngine.player.getXPosition() - getWidth()) * gameController.screenXRatio
-                            imageView.y = (gameController.gameEngine.player.getYPosition() - getHeight()/2) * gameController.screenYRatio
-                        }
+                            imageView.y = (gameController.gameEngine.player.getYPosition()) * gameController.screenYRatio
+                        }*/
 
                 imageView.setImageResource(image)
 

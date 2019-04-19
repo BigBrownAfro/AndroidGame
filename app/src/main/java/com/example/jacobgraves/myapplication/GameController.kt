@@ -36,10 +36,10 @@ class GameController : AppCompatActivity() {
     var joyStickY = joystickOriginY
     var pauseButtonX = 1920f-100f
     var pauseButtonY = 10f
-    var resumeButtonX = 1920f/2f
-    var resumeButtonY = 1080f - 450f
-    var quitButtonX = 1920f/2f
-    var quitButtonY = 1080f - 650f
+    var resumeButtonX = (1920f/2f) - 100f
+    var resumeButtonY = 1080f - 650f
+    var quitButtonX = (1920f/2f) - 100f
+    var quitButtonY = 1080f - 450f
     var muteButtonX = 1920f-500f
     var muteButtonY = 10f
     var unMuteButtonX = 1920f-500f

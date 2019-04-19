@@ -13,6 +13,7 @@ import com.example.jacobgraves.myapplication.model.enemies.Enemy
 import com.example.jacobgraves.myapplication.model.enemies.Freezo
 import com.example.jacobgraves.myapplication.model.enemies.SwarmMario
 import com.example.jacobgraves.myapplication.model.guns.Gun
+import com.example.jacobgraves.myapplication.model.guns.Shotgun
 import com.example.jacobgraves.myapplication.model.guns.StartingPistol
 import kotlinx.android.synthetic.main.game_view.*
 
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.game_view.*
 class Engine(var gameController: GameController, name:String) {
     var player: Player
     var frameCount: Int
-    var startGun: StartingPistol
+    var startGun: Shotgun
     var hud:HUD
     var room: Room
 
@@ -70,7 +71,7 @@ class Engine(var gameController: GameController, name:String) {
         room = Room(gameController, roomSchematic)
 
         player = Player(gameController,name)
-        startGun = StartingPistol(gameController)
+        startGun = Shotgun(gameController)
         frameCount = 0
         hud = HUD(gameController)
         makeEnemies()

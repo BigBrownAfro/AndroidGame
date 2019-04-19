@@ -32,7 +32,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="28dp"
         android:layout_marginBottom="212dp"
-        android:background="@drawable/pausebutton"
+        android:background="@drawable/new_pause_button"
         app:layout_constraintBottom_toTopOf="@+id/joystickImage2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
