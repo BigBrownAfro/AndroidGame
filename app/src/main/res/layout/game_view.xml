@@ -87,4 +87,13 @@
         tools:layout_editor_absoluteX="494dp"
         tools:layout_editor_absoluteY="23dp" />
 
+    <Button
+        android:id="@+id/swapGunButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@android:color/darker_gray"
+        android:text="Swap Guns"
+        tools:layout_editor_absoluteX="654dp"
+        tools:layout_editor_absoluteY="193dp" />
+
 </android.support.constraint.ConstraintLayout>

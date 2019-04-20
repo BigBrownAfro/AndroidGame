@@ -11,6 +11,8 @@ import android.view.MotionEvent
 import android.view.View
 import com.example.jacobgraves.myapplication.model.Engine
 import com.example.jacobgraves.myapplication.model.SoundManager
+import com.example.jacobgraves.myapplication.model.guns.Shotgun
+import com.example.jacobgraves.myapplication.model.guns.StartingPistol
 import kotlinx.android.synthetic.main.game_view.*
 import java.lang.Exception
 import java.util.*
@@ -44,6 +46,8 @@ class GameController : AppCompatActivity() {
     var muteButtonY = 10f
     var unMuteButtonX = 1920f-500f
     var unMuteButtonY = 10f
+    var swapGunButtonX = 1920f - 250f
+    var swapGunButtonY = 1080f-600f
 
     var joystickMoveRadius = 100f
     var joystickPlayerMoveRadius = 30f
@@ -365,7 +369,7 @@ class GameController : AppCompatActivity() {
         pauseButton.bringToFront()
     }
 
-    fun setupButtons(){
+    fun setupButtons() {
 
         pauseButton.x = pauseButtonX * screenXRatio
         pauseButton.y = pauseButtonY * screenYRatio
@@ -393,6 +397,8 @@ class GameController : AppCompatActivity() {
         muteButton.y = muteButtonY * screenYRatio
         muteButton.setOnClickListener {
             muteButtonClicked()
+            swapGunButtonClicked()
+
         }
 
         unMuteButton.x = unMuteButtonX * screenXRatio
@@ -402,6 +408,27 @@ class GameController : AppCompatActivity() {
         unMuteButton.setOnClickListener {
             unMuteButtonClicked()
         }
+
+        swapGunButton.x = swapGunButtonX * screenXRatio
+        swapGunButton.y = swapGunButtonY * screenYRatio
+        swapGunButton.setOnClickListener {
+            swapGunButtonClicked()
+        }
+    }
+
+    private fun swapGunButtonClicked(){
+        println("switch")
+        if(gameEngine.player.StartingGun.isEquipped == true && gameEngine.player.SecondaryGun.isPickedUp == true){
+
+            gameEngine.player.StartingGun.imageView.x = 5000f
+            gameEngine.player.SecondaryGun.isEquipped = true
+            gameEngine.player.StartingGun.isEquipped = false
+        }else{
+            gameEngine.player.SecondaryGun.imageView.x = 5000f
+            gameEngine.player.StartingGun.isEquipped = true
+            gameEngine.player.SecondaryGun.isEquipped = false
+        }
+
     }
 
     private fun pauseButtonClicked() {

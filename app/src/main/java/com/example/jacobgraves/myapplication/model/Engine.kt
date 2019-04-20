@@ -4,11 +4,8 @@ import android.graphics.Color
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
+import com.example.jacobgraves.myapplication.model.consumables.*
 import com.example.jacobgraves.myapplication.model.map.Room
-import com.example.jacobgraves.myapplication.model.consumables.Coin
-import com.example.jacobgraves.myapplication.model.consumables.Consumable
-import com.example.jacobgraves.myapplication.model.consumables.HP
-import com.example.jacobgraves.myapplication.model.consumables.SpeedUp
 import com.example.jacobgraves.myapplication.model.enemies.Enemy
 import com.example.jacobgraves.myapplication.model.enemies.Freezo
 import com.example.jacobgraves.myapplication.model.enemies.SwarmMario
@@ -21,7 +18,7 @@ import kotlinx.android.synthetic.main.game_view.*
 class Engine(var gameController: GameController, name:String) {
     var player: Player
     var frameCount: Int
-    var startGun: Shotgun
+    //var startGun: StartingPistol
     var hud:HUD
     var room: Room
 
@@ -71,7 +68,7 @@ class Engine(var gameController: GameController, name:String) {
         room = Room(gameController, roomSchematic)
 
         player = Player(gameController,name)
-        startGun = Shotgun(gameController)
+        //startGun = StartingPistol(gameController)
         frameCount = 0
         hud = HUD(gameController)
         makeEnemies()
@@ -112,7 +109,7 @@ class Engine(var gameController: GameController, name:String) {
 
     fun makeEnemies(){
         enemies.add(Freezo(gameController))
-        for(i in 0..19){
+       /* for(i in 0..9){
             var e = SwarmMario(gameController)
             e.setXPosition(e.getXPosition() + 70 * i)
             if (e.getXPosition() > Room.mapX + Room.mapWidth - 80){
@@ -120,7 +117,7 @@ class Engine(var gameController: GameController, name:String) {
                 e.setXPosition(Room.mapX + 380)
             }
             enemies.add(e)
-        }
+        }*/
     }
 
     fun update(){
@@ -249,7 +246,9 @@ class Engine(var gameController: GameController, name:String) {
     fun updateAnimations(){
         player.updateAnimations()
         player.updateBulletAnimations()
-        startGun.updateBulletAnimations()
+        player.StartingGun.updateBulletAnimations()
+        player.SecondaryGun.updateBulletAnimations()
+
 
         for(enemy in enemies){
             enemy.updateAnimations()
@@ -263,7 +262,9 @@ class Engine(var gameController: GameController, name:String) {
 
     fun moveBullets(){
         player.moveBullets()
-        startGun.moveBullets()
+            player.StartingGun.moveBullets()
+            player.SecondaryGun.moveBullets()
+
 
         for(enemy in enemies){
             enemy.moveBullets()
@@ -310,8 +311,11 @@ class Engine(var gameController: GameController, name:String) {
         //var end = System.currentTimeMillis()
         //println(end - start)
         player.updateImageView()
-        startGun.updateImageView()
-        startGun.updateImages()
+        player.StartingGun.updateImageView()
+        player.StartingGun.updateImages()
+        player.SecondaryGun.updateImageView()
+        player.SecondaryGun.updateImages()
+
 
         for(bullet in player.bulletArray){
             if(bullet != null){
@@ -378,7 +382,7 @@ class Engine(var gameController: GameController, name:String) {
             c = HP(gameController, enemy.getXPosition(), enemy.getYPosition())
         }
         if(x >= 5 && x <= 8){
-            c = Coin(gameController, enemy.getXPosition(), enemy.getYPosition())
+            c = ShotgunDrop(gameController, enemy.getXPosition(), enemy.getYPosition())
         }
         if(x >= 9 && x <= 10){
             c = SpeedUp(gameController, enemy.getXPosition(), enemy.getYPosition())

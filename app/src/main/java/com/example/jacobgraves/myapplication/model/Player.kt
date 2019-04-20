@@ -5,6 +5,9 @@ import android.media.MediaPlayer
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
+import com.example.jacobgraves.myapplication.model.guns.Gun
+import com.example.jacobgraves.myapplication.model.guns.Shotgun
+import com.example.jacobgraves.myapplication.model.guns.StartingPistol
 import com.example.jacobgraves.myapplication.model.map.Room
 import kotlinx.android.synthetic.main.game_view.*
 import kotlin.math.*
@@ -36,7 +39,8 @@ class Player(var gameController: GameController, characterName: String){
     var reloadTime = 0
     var coins:Int
     var lastAngle:Float = 0f;
-
+    var StartingGun: StartingPistol = StartingPistol(gameController)
+    var SecondaryGun: Shotgun = Shotgun(gameController)
     val imageView:ImageView
 
     val mediaPlayer: MediaPlayer
@@ -280,7 +284,9 @@ class Player(var gameController: GameController, characterName: String){
     }*/
 
     fun shoot(angle: Float){
-        gameController.gameEngine.startGun.shoot(angle)
+            StartingGun.shoot(angle)
+            SecondaryGun.shoot(angle)
+
        /* if(reloadTime <= 0){
             if (bulletCounter >= bulletArray.size){
                 bulletCounter = 0

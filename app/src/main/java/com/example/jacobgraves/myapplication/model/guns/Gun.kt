@@ -13,8 +13,8 @@ abstract class Gun (val gameController: GameController) {
     private var accuracy: Int = 1
     private var xPosition: Float = 1f
     private var yPosition: Float = 1f
-    private var width: Int = 35
-    private var height: Int = 40
+    var width: Int = 35
+    var height: Int = 40
     private var currentAmmo: Int = 1
     private var maxAmmo: Int = 1
     var isPickedUp: Boolean = false
@@ -34,12 +34,10 @@ abstract class Gun (val gameController: GameController) {
         setCurrentAmmo(50)
         setDamageValue(1)
         setAccuracy(1)
-        setXPosition(250f)
-        setYPosition(250f)
-        setWidth(40)
-        setHeight(35)
+        setXPosition(5000f)
+        setYPosition(5000f)
         bulletArray = Array(500) { null }
-        hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
+        hitBox = RectF(getXPosition()-width/2,getYPosition()-height/2,getXPosition()+width/2,getYPosition()+height/2)
 
         assignImages()
 
@@ -98,21 +96,7 @@ abstract class Gun (val gameController: GameController) {
         }
     }
 
-    fun setWidth(x: Int) {
-        if (x < 0) {
-            width = 100
-        } else {
-            width = x
-        }
-    }
 
-    fun setHeight(x: Int) {
-        if (x < 0) {
-            height = 200
-        } else {
-            height = x
-        }
-    }
 
     //Getters----------------------------
 
@@ -140,13 +124,7 @@ abstract class Gun (val gameController: GameController) {
         return yPosition
     }
 
-    fun getWidth(): Int {
-        return width
-    }
 
-    fun getHeight(): Int {
-        return height
-    }
 
     //reload, shoot, setup images, update images
 
@@ -166,10 +144,11 @@ abstract class Gun (val gameController: GameController) {
 
                 imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
                 imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
-                imageView.x = (getXPosition() - getWidth() / 2f) * gameController.screenXRatio
-                imageView.y = (getYPosition() - getHeight() / 2f) * gameController.screenYRatio
+                imageView.x = (getXPosition() - width / 2f) * gameController.screenXRatio
+                imageView.y = (getYPosition() - height / 2f) * gameController.screenYRatio
 
                 imageView.setImageResource(image)
+                imageView.bringToFront()
 
 
             }
@@ -200,7 +179,7 @@ abstract class Gun (val gameController: GameController) {
                         }*/
 
                 imageView.setImageResource(image)
-
+                imageView.bringToFront()
                 //reload, shoot, setup images, update images.
             }
             }
