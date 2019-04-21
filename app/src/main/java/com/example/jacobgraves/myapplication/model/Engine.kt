@@ -12,6 +12,7 @@ import com.example.jacobgraves.myapplication.model.enemies.SwarmMario
 import com.example.jacobgraves.myapplication.model.guns.Bullet
 import com.example.jacobgraves.myapplication.model.guns.Gun
 import kotlinx.android.synthetic.main.game_view.*
+import java.math.RoundingMode
 
 
 class Engine(var gameController: GameController, name:String) {
@@ -35,6 +36,8 @@ class Engine(var gameController: GameController, name:String) {
     var consumableCounter:Int
     var guns:Array<Gun?>
     var roomSchematic:Array<Array<Int>>
+
+    var roomCounter = 0
 
     init{
         // Temporary
@@ -107,16 +110,54 @@ class Engine(var gameController: GameController, name:String) {
     }
 
     fun makeEnemies(){
-        enemies.add(Freezo(gameController))
-       /* for(i in 0..9){
-            var e = SwarmMario(gameController)
-            e.setXPosition(e.getXPosition() + 70 * i)
-            if (e.getXPosition() > Room.mapX + Room.mapWidth - 80){
-                e.setYPosition(e.getYPosition() - 100)
-                e.setXPosition(Room.mapX + 380)
+        if (roomCounter > 3){
+            roomCounter = 0
+        }
+        if (roomCounter == 0){
+            enemies.add(Freezo(gameController))
+        }else if(roomCounter == 1){
+            consumables[consumableCounter] = ShotgunDrop(gameController, Room.mapX + Room.mapWidth/2, Room.mapY + Room.mapHeight/2)
+            consumableCounter++
+        }else if(roomCounter == 2){
+            for(i in 0..9){
+                var e = SwarmMario(gameController)
+                e.setXPosition(e.getXPosition() + 70 * i)
+                if (e.getXPosition() > Room.mapX + Room.mapWidth - 80){
+                    e.setYPosition(e.getYPosition() - 100)
+                    e.setXPosition(Room.mapX + 380)
+                }
+                enemies.add(e)
             }
-            enemies.add(e)
-        }*/
+        }else if(roomCounter == 3){
+
+        }
+    }
+
+    fun checkDoorCollision(){
+        if(enemies.isEmpty()){
+            if (player.getXPosition() > 950 && player.getXPosition() < 1120){
+                if (player.getYPosition() < Room.mapY + 30){
+                    player.setYPosition(Room.mapY + Room.mapHeight - 160)
+                    changeRooms()
+                }
+                if (player.getYPosition() > Room.mapY+Room.mapHeight - 150){
+                    player.setYPosition(Room.mapY + 50)
+                    changeRooms()
+                }
+            }
+        }
+    }
+
+    fun changeRooms(){
+        roomCounter++
+        for (i in 0..consumables.size-1){
+            if (consumables[i] != null){
+                consumables[i]!!.kill()
+                consumables[i] = null
+            }
+        }
+        consumableCounter = 0
+        makeEnemies()
     }
 
     fun update(){
@@ -139,6 +180,7 @@ class Engine(var gameController: GameController, name:String) {
         attackPlayer()
         checkDeaths()
         hud.updateViews()
+        checkDoorCollision()
     }
 
     fun moveEnemies(){
@@ -335,11 +377,9 @@ class Engine(var gameController: GameController, name:String) {
             }
         }
 
-        if(consumableCounter > 0){
-            for (consumable in consumables){
-                if (consumable != null){
-                    consumable.updateImageView()
-                }
+        for (consumable in consumables) {
+            if (consumable != null) {
+                consumable.updateImageView()
             }
         }
     }
@@ -359,7 +399,7 @@ class Engine(var gameController: GameController, name:String) {
                 enemy.kill()
                 deadEnemies[deadEnemyCounter] = enemy
                 deadEnemyCounter += 1
-                createConsumables(3,enemy)
+                createConsumables(1,enemy)
             }
         }
 
@@ -381,9 +421,9 @@ class Engine(var gameController: GameController, name:String) {
             c = HP(gameController, enemy.getXPosition(), enemy.getYPosition())
         }
         if(x >= 5 && x <= 8){
-            c = ShotgunDrop(gameController, enemy.getXPosition(), enemy.getYPosition())
+            c = Coin(gameController, enemy.getXPosition(), enemy.getYPosition())
         }
-        if(x >= 9 && x <= 10){
+        if(x >= 9 && x <= 10) {
             c = SpeedUp(gameController, enemy.getXPosition(), enemy.getYPosition())
         }
 

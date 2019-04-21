@@ -113,13 +113,10 @@ abstract class Consumable(var gameController: GameController, x: Float, y: Float
     }
 
     fun updateImageView(){
+        imageView.x = (xPosition - width/2f) * gameController.screenXRatio
+        imageView.y = (yPosition - height/2f) * gameController.screenYRatio
         gameController.runOnUiThread{
             run{
-                imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
-                imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
-                imageView.x = (xPosition - width/2f) * gameController.screenXRatio
-                imageView.y = (yPosition - height/2f) * gameController.screenYRatio
-
                 imageView.setImageResource(image)
                 imageView.rotationY += 5
             }

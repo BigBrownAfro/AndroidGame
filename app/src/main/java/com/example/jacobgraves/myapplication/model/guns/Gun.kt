@@ -166,21 +166,9 @@ abstract class Gun (val gameController: GameController) {
         gameController.runOnUiThread {
             run {
                 if(isEquipped == true){
-              /*  imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
-                imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
-                    if(gameController.gameEngine.player.accelerationX > 0) {
-                        imageView.x = gameController.gameEngine.player.getXPosition() * gameController.screenXRatio
-                        imageView.y = gameController.gameEngine.player.getYPosition() * gameController.screenYRatio
-                    }else
-                        if(gameController.gameEngine.player.accelerationX < 0){
-                            imageView.x = (gameController.gameEngine.player.getXPosition() - getWidth()) * gameController.screenXRatio
-                            imageView.y = (gameController.gameEngine.player.getYPosition()) * gameController.screenYRatio
-                        }*/
-
-                imageView.setImageResource(image)
-                imageView.bringToFront()
-                //reload, shoot, setup images, update images.
-            }
+                    imageView.setImageResource(image)
+                    imageView.bringToFront()
+                }
             }
         }
     }

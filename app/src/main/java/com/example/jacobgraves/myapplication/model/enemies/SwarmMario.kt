@@ -17,7 +17,7 @@ class SwarmMario(gameController: GameController): Enemy(gameController) {
         sensorRadius = 400
 
         setXPosition(Room.mapX + 100)
-        setYPosition(Room.mapY + Room.mapHeight - 200)
+        setYPosition(Room.mapY + Room.mapHeight/2)
 
         setWidth(40)
         setHeight(80)

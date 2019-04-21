@@ -366,12 +366,10 @@ abstract class Enemy(var gameController: GameController) {
     }
 
     fun updateImageView(){
+        imageView.x = (getXPosition() - getWidth()/2f) * gameController.screenXRatio
+        imageView.y = (getYPosition() - getHeight()/2f) * gameController.screenYRatio
         gameController.runOnUiThread{
             run{
-                imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
-                imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
-                imageView.x = (getXPosition() - getWidth()/2f) * gameController.screenXRatio
-                imageView.y = (getYPosition() - getHeight()/2f) * gameController.screenYRatio
                 var tempImageResource = image
                 if (tempImageResource < 0){
                     tempImageResource *= -1
