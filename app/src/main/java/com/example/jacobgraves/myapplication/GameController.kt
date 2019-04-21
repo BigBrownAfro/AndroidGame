@@ -147,36 +147,6 @@ class GameController : AppCompatActivity() {
         println("Sreen Restarted")
     }
 
-    /*override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_W){
-            keyUp = true
-            lastKeyUp = System.currentTimeMillis()
-            println("up pressed")
-        }
-        if (keyCode == KeyEvent.KEYCODE_S){
-            keyDown = true
-            lastKeyDown = System.currentTimeMillis()
-        }
-        if (keyCode == KeyEvent.KEYCODE_A){
-            keyLeft = true
-            lastKeyLeft = System.currentTimeMillis()
-        }
-        if (keyCode == KeyEvent.KEYCODE_D){
-            keyRight= true
-            lastKeyRight = System.currentTimeMillis()
-        }
-        if(keyUp || keyDown || keyLeft || keyRight){
-            useTouchControls = false
-            joystickImage.alpha = 0f
-            joystickImage2.alpha = 0f
-        }else{
-            useTouchControls = true
-            joystickImage.alpha = .4f
-            joystickImage2.alpha = .4f
-        }
-        return super.onKeyDown(keyCode, event)
-    }*/
-
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_W){
             keyUp = true
@@ -397,7 +367,6 @@ class GameController : AppCompatActivity() {
         muteButton.y = muteButtonY * screenYRatio
         muteButton.setOnClickListener {
             muteButtonClicked()
-            swapGunButtonClicked()
 
         }
 
@@ -448,7 +417,9 @@ class GameController : AppCompatActivity() {
             resumeButton.visibility = View.INVISIBLE
             quitButton.isEnabled = false
             quitButton.visibility = View.INVISIBLE
-            MainMenuController.mediaPlayer.start()
+            if (!isMuted){
+                MainMenuController.mediaPlayer.start()
+            }
         }
     }
     private fun resumeButtonClicked(){
@@ -457,7 +428,9 @@ class GameController : AppCompatActivity() {
         resumeButton.visibility = View.INVISIBLE
         quitButton.isEnabled = false
         quitButton.visibility = View.INVISIBLE
-        MainMenuController.mediaPlayer.start()
+        if (!isMuted){
+            MainMenuController.mediaPlayer.start()
+        }
     }
 
     private fun quitButtonClicked(){
@@ -474,6 +447,7 @@ class GameController : AppCompatActivity() {
         muteButton.visibility = View.INVISIBLE
         unMuteButton.isEnabled = true
         unMuteButton.visibility = View.VISIBLE
+        MainMenuController.mediaPlayer.pause()
     }
 
     private fun unMuteButtonClicked(){
@@ -483,6 +457,7 @@ class GameController : AppCompatActivity() {
         unMuteButton.visibility = View.INVISIBLE
         muteButton.isEnabled = true
         muteButton.visibility = View.VISIBLE
+        MainMenuController.mediaPlayer.start()
 
 
     }

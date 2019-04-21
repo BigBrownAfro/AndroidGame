@@ -2,7 +2,6 @@ package com.example.jacobgraves.myapplication.model.guns
 
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
-import com.example.jacobgraves.myapplication.model.Bullet
 import java.util.*
 
 class Shotgun(gameController: GameController): Gun(gameController) {
@@ -62,8 +61,8 @@ class Shotgun(gameController: GameController): Gun(gameController) {
                 d = d - (getAccuracy() / 2)
                 val result = d / 100.0
                 gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter] = Bullet(gameController, gameController.gameEngine.player, (angle + result).toFloat())
-                gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter + 1] = Bullet(gameController, gameController.gameEngine.player, (angle + (result * (result * 13))).toFloat())
-                gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter + 2] = Bullet(gameController, gameController.gameEngine.player, (angle + (result * (result * 28))).toFloat())
+                gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter + 1] = Bullet(gameController, gameController.gameEngine.player, (angle + (.1 * (result * 13))).toFloat())
+                gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter + 2] = Bullet(gameController, gameController.gameEngine.player, (angle + (.1 * (result * 28))).toFloat())
                 gameController.gameEngine.player.bulletCounter++
                 gameController.gameEngine.player.bulletCounter++
                 gameController.gameEngine.player.bulletCounter++

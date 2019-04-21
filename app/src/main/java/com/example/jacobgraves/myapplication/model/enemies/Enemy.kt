@@ -4,7 +4,7 @@ import android.graphics.RectF
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
-import com.example.jacobgraves.myapplication.model.Bullet
+import com.example.jacobgraves.myapplication.model.guns.Bullet
 import com.example.jacobgraves.myapplication.model.Player
 import kotlinx.android.synthetic.main.game_view.*
 import kotlin.math.*

@@ -9,9 +9,8 @@ import com.example.jacobgraves.myapplication.model.map.Room
 import com.example.jacobgraves.myapplication.model.enemies.Enemy
 import com.example.jacobgraves.myapplication.model.enemies.Freezo
 import com.example.jacobgraves.myapplication.model.enemies.SwarmMario
+import com.example.jacobgraves.myapplication.model.guns.Bullet
 import com.example.jacobgraves.myapplication.model.guns.Gun
-import com.example.jacobgraves.myapplication.model.guns.Shotgun
-import com.example.jacobgraves.myapplication.model.guns.StartingPistol
 import kotlinx.android.synthetic.main.game_view.*
 
 

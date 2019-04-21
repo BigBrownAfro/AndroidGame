@@ -5,7 +5,7 @@ import android.media.MediaPlayer
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
-import com.example.jacobgraves.myapplication.model.guns.Gun
+import com.example.jacobgraves.myapplication.model.guns.Bullet
 import com.example.jacobgraves.myapplication.model.guns.Shotgun
 import com.example.jacobgraves.myapplication.model.guns.StartingPistol
 import com.example.jacobgraves.myapplication.model.map.Room
@@ -78,7 +78,7 @@ class Player(var gameController: GameController, characterName: String){
         coins = 0
         setXPosition(300f)
         setYPosition(300f)
-        bulletArray = Array(500){null}
+        bulletArray = Array(50){null}
         hitBox = RectF(getXPosition()-getWidth()/2,getYPosition()-getHeight()/2,getXPosition()+getWidth()/2,getYPosition()+getHeight()/2)
 
         assignPictures(characterName)
@@ -373,6 +373,9 @@ class Player(var gameController: GameController, characterName: String){
                     }
                 }
             }
+        }
+        if (bulletCounter > 43){
+            bulletCounter = 0
         }
     }
 

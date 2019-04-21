@@ -1,9 +1,10 @@
-package com.example.jacobgraves.myapplication.model
+package com.example.jacobgraves.myapplication.model.guns
 
 import android.graphics.RectF
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
+import com.example.jacobgraves.myapplication.model.Player
 import com.example.jacobgraves.myapplication.model.enemies.Enemy
 import com.example.jacobgraves.myapplication.model.map.Room
 import kotlinx.android.synthetic.main.game_view.*
@@ -31,7 +32,7 @@ class Bullet{
 
     val imageView:ImageView
 
-    constructor(gameController: GameController, player:Player, angle:Float){
+    constructor(gameController: GameController, player: Player, angle:Float){
         attackValue = player.getAttackValue()
         isAlive = true
         friendly = true
@@ -60,7 +61,7 @@ class Bullet{
         setupImageView()
     }
 
-    constructor(gameController: GameController, bulletType:String, player:Player, angle:Float){
+    constructor(gameController: GameController, bulletType:String, player: Player, angle:Float){
         attackValue = player.getAttackValue()
         isAlive = true
         friendly = true

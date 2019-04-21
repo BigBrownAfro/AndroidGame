@@ -4,7 +4,6 @@ import android.graphics.RectF
 import android.widget.ImageView
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
-import com.example.jacobgraves.myapplication.model.Bullet
 import kotlinx.android.synthetic.main.game_view.*
 
 abstract class Gun (val gameController: GameController) {

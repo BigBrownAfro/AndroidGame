@@ -2,7 +2,6 @@ package com.example.jacobgraves.myapplication.model.guns
 
 import com.example.jacobgraves.myapplication.GameController
 import com.example.jacobgraves.myapplication.R
-import com.example.jacobgraves.myapplication.model.Bullet
 import java.util.*
 
 class StartingPistol(gameController: GameController): Gun(gameController) {
@@ -29,23 +28,6 @@ class StartingPistol(gameController: GameController): Gun(gameController) {
 
     fun updateImages(){
         if(isEquipped == true) {
-            /*  if(gameController.gameEngine.player.accelerationX > 0){
-            image = R.drawable.starting_pistol_right
-           // gameController.gameEngine.player.lastDirection ="right"
-        }else
-            if(gameController.gameEngine.player.accelerationX < 0){
-                image = R.drawable.starting_pistol_left
-               // gameController.gameEngine.player.lastDirection ="left"
-            }else
-                if(gameController.gameEngine.player.accelerationY < 0){
-                    image = R.drawable.starting_pistol_right
-                   // gameController.gameEngine.player.lastDirection ="up"
-                }else
-                    if(gameController.gameEngine.player.accelerationY > 0){
-                        image = R.drawable.starting_pistol_down
-                       // gameController.gameEngine.player.lastDirection ="down"
-                    }else
-*/
             if (gameController.gameEngine.player.lastDirection.equals("up")) {
                 image = R.drawable.starting_pistol_right
                 imageView.x = 5000f
@@ -65,7 +47,6 @@ class StartingPistol(gameController: GameController): Gun(gameController) {
                 image = R.drawable.starting_pistol_right
             }
         }
-
     }
 
     override fun shoot(angle: Float){
