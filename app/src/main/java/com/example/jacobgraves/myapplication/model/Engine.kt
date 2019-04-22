@@ -137,10 +137,10 @@ class Engine(var gameController: GameController, name:String) {
         if(enemies.isEmpty()){
             if (player.getXPosition() > 950 && player.getXPosition() < 1120){
                 if (player.getYPosition() < Room.mapY + 30){
-                    player.setYPosition(Room.mapY + Room.mapHeight - 160)
+                    player.setYPosition(Room.mapY + Room.mapHeight - 140)
                     changeRooms()
                 }
-                if (player.getYPosition() > Room.mapY+Room.mapHeight - 150){
+                if (player.getYPosition() > Room.mapY+Room.mapHeight - 130){
                     player.setYPosition(Room.mapY + 50)
                     changeRooms()
                 }

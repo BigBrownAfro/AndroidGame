@@ -424,19 +424,6 @@ class Player(var gameController: GameController, characterName: String){
     }
 
     fun updateImageView(){
-        imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
-        imageView.layoutParams.height = (height * gameController.screenYRatio).toInt()
-        imageView.x = (getXPosition() - getWidth()/2f) * gameController.screenXRatio
-        imageView.y = (getYPosition() - getHeight()/2f) * gameController.screenYRatio
-        var tempImageResource = image
-        if (tempImageResource < 0){
-            tempImageResource *= -1
-            imageView.setImageResource(tempImageResource)
-            imageView.rotationY = 180f
-        }else{
-            imageView.rotationY = 0f
-            imageView.setImageResource(image)
-        }/*
         gameController.runOnUiThread{
             run{
                 imageView.layoutParams.width = (width * gameController.screenXRatio).toInt()
@@ -453,6 +440,6 @@ class Player(var gameController: GameController, characterName: String){
                     imageView.setImageResource(image)
                 }
             }
-        }*/
+        }
     }
 }

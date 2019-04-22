@@ -275,16 +275,14 @@ class Bullet{
     }
 
     fun updateImageView(){
-        imageView.x = (xPosition - getWidth()/2f) * gameController.screenXRatio
-        imageView.y = (yPosition - getHeight()/2f) * gameController.screenYRatio
-        /*gameController.runOnUiThread{
+        gameController.runOnUiThread{
             run{
                 imageView.x = (xPosition - getWidth()/2f) * gameController.screenXRatio
                 imageView.y = (yPosition - getHeight()/2f) * gameController.screenYRatio
 
-                //imageView.rotation = angle * 180 / PI.toFloat()
+                imageView.rotation = angle * 180 / PI.toFloat()
                 imageView.setImageResource(image)
             }
-        }*/
+        }
     }
 }
