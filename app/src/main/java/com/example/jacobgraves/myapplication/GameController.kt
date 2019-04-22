@@ -388,7 +388,7 @@ class GameController : AppCompatActivity() {
     private fun swapGunButtonClicked(){
         println("switch")
         if(gameEngine.player.StartingGun.isEquipped == true && gameEngine.player.SecondaryGun.isPickedUp == true){
-
+            soundManager.soundPool.play(soundManager.swapGun, volume, volume, 5, 0, 1f)
             gameEngine.player.StartingGun.imageView.x = 5000f
             gameEngine.player.SecondaryGun.isEquipped = true
             gameEngine.player.StartingGun.isEquipped = false

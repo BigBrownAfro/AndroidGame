@@ -14,6 +14,7 @@ class SoundManager(gameController: GameController) {
     val speed:Int
     val health:Int
     val coin:Int
+    val swapGun:Int
 
     init {
         soundPoolBuilder = SoundPool.Builder().setMaxStreams(10)
@@ -25,6 +26,6 @@ class SoundManager(gameController: GameController) {
         speed = soundPool.load(gameController, R.raw.speed_pickup, 1)
         health = soundPool.load(gameController, R.raw.health_pickup, 1)
         coin = soundPool.load(gameController, R.raw.coin_pickup, 1)
-
+        swapGun = soundPool.load(gameController, R.raw.reload, 1)
     }
 }

@@ -66,7 +66,7 @@ class Shotgun(gameController: GameController): Gun(gameController) {
                 gameController.gameEngine.player.bulletCounter++
                 gameController.gameEngine.player.bulletCounter++
                 gameController.gameEngine.player.bulletCounter++
-                gameController.soundManager.soundPool.play(gameController.soundManager.pisto1, gameController.volume, gameController.volume, 5, 0, 1f)
+                gameController.soundManager.soundPool.play(gameController.soundManager.shotgun, gameController.volume, gameController.volume, 5, 0, 1f)
                 reloadTime = maxReload
             }
             reloadTime--

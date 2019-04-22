@@ -15,7 +15,7 @@ class ShotgunDrop(gameController: GameController, x:Float, y:Float): Consumable(
 
     override fun giveTo(player: Player) {
         if(player.SecondaryGun.isEquipped == false) {
-            gameController.soundManager.soundPool.play(gameController.soundManager.speed, gameController.volume, gameController.volume, 5, 0, 1f)
+            gameController.soundManager.soundPool.play(gameController.soundManager.swapGun, gameController.volume, gameController.volume, 5, 0, 1f)
             player.SecondaryGun = Shotgun(gameController)
             player.StartingGun.imageView.x = 5000f
             player.StartingGun.isEquipped = false
