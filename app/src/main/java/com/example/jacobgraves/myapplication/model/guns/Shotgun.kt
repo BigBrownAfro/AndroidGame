@@ -60,9 +60,9 @@ class Shotgun(gameController: GameController): Gun(gameController) {
                 var d = x.nextInt(getAccuracy()) + 1
                 d = d - (getAccuracy() / 2)
                 val result = d / 100.0
-                gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter] = Bullet(gameController, gameController.gameEngine.player, (angle + result).toFloat())
-                gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter + 1] = Bullet(gameController, gameController.gameEngine.player, (angle + (.1 * (result * 13))).toFloat())
-                gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter + 2] = Bullet(gameController, gameController.gameEngine.player, (angle + (.1 * (result * 28))).toFloat())
+                gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter] = Bullet(gameController, gameController.gameEngine.player, (angle).toFloat())
+                gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter + 1] = Bullet(gameController, gameController.gameEngine.player, (angle + (.1 * (result * -20))).toFloat())
+                gameController.gameEngine.player.bulletArray[gameController.gameEngine.player.bulletCounter + 2] = Bullet(gameController, gameController.gameEngine.player, (angle + (.1 * (result * 20))).toFloat())
                 gameController.gameEngine.player.bulletCounter++
                 gameController.gameEngine.player.bulletCounter++
                 gameController.gameEngine.player.bulletCounter++

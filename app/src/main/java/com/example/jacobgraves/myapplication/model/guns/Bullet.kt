@@ -14,7 +14,7 @@ class Bullet{
     var attackValue:Int
     var isAlive:Boolean
     var friendly:Boolean
-    var image = R.drawable.line
+    var image = R.drawable.orange_bullet1
     lateinit var animationSet:IntArray
     var size:Float
     var type:String
@@ -36,8 +36,8 @@ class Bullet{
         attackValue = player.getAttackValue()
         isAlive = true
         friendly = true
-        setHeight(2)
-        setWidth(7)
+        setHeight(16)
+        setWidth(16)
         size = 1f
         type = "regular"
         if(player.accelerationX < 0f){
@@ -86,8 +86,8 @@ class Bullet{
         attackValue = enemy.getAttackValue()
         isAlive = true
         friendly = true
-        setHeight(2)
-        setWidth(7)
+        setHeight(16)
+        setWidth(16)
         size = 1f
         type = "regular"
         if(enemy.accelerationX < 0f){
@@ -115,8 +115,8 @@ class Bullet{
         attackValue = enemy.getAttackValue()
         isAlive = true
         friendly = false
-        setHeight(2)
-        setWidth(7)
+        setHeight(16)
+        setWidth(16)
         size = 1f
         type = bulletType
         xMovementSpeed = enemy.accelerationX+10f
@@ -171,8 +171,11 @@ class Bullet{
     }
 
     fun assignPictures(){
-        animationSet = IntArray(1)
-        animationSet[0] = R.drawable.line
+        animationSet = IntArray(4)
+        animationSet[0] = R.drawable.orange_bullet1
+        animationSet[1] = R.drawable.orange_bullet2
+        animationSet[2] = R.drawable.orange_bullet3
+        animationSet[3] = R.drawable.orange_bullet2
         /*
         if (type.equals("regular")){
             animationSet = IntArray(3)
