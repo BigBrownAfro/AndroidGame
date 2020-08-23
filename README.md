@@ -1,4 +1,4 @@
-
+### Message from the professor
 ## Things to keep in mind
 
 1. Never 'push' directly to 'develop' or 'master'. You can, however, push directly into the branch(es) that you've created.
